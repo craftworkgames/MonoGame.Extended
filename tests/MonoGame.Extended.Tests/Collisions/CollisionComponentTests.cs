@@ -32,19 +32,11 @@ namespace MonoGame.Extended.Collisions.Tests
             Vector2 pos1 = Vector2.Zero;
             Vector2 pos2 = Vector2.Zero;
 
-            IShapeF shape1 = new CircleF(pos1, 2.0f);
-            IShapeF shape2 = new CircleF(pos2, 2.0f);
+            BoundingCircle2D shape1 = new BoundingCircle2D(pos1, 2.0f);
+            BoundingCircle2D shape2 = new BoundingCircle2D(pos2, 2.0f);
 
-            var actor1 = new BasicActor()
-            {
-                Position = pos1,
-                Bounds = shape1
-            };
-            var actor2 = new BasicWall()
-            {
-                Position = pos2,
-                Bounds = shape2
-            };
+            var actor1 = new BasicActor(shape1);
+            var actor2 = new BasicWall(shape2);
 
             Assert.True(shape1.Intersects(shape2));
             _collisionComponent.Insert(actor1);
@@ -59,19 +51,11 @@ namespace MonoGame.Extended.Collisions.Tests
             Vector2 pos1 = new Vector2(0, 1.5f);
             Vector2 pos2 = Vector2.Zero;
 
-            IShapeF shape1 = new CircleF(pos1, 2.0f);
-            IShapeF shape2 = new CircleF(pos2, 2.0f);
+            BoundingCircle2D shape1 = new BoundingCircle2D(pos1, 2.0f);
+            BoundingCircle2D shape2 = new BoundingCircle2D(pos2, 2.0f);
 
-            var actor1 = new BasicActor()
-            {
-                Position = pos1,
-                Bounds = shape1
-            };
-            var actor2 = new BasicWall()
-            {
-                Position = pos2,
-                Bounds = shape2
-            };
+            var actor1 = new BasicActor(shape1);
+            var actor2 = new BasicWall(shape2);
 
             Assert.True(shape1.Intersects(shape2));
             _collisionComponent.Insert(actor1);
@@ -89,19 +73,11 @@ namespace MonoGame.Extended.Collisions.Tests
             Vector2 pos1 = new Vector2(2, 2.5f);
             Vector2 pos2 = new Vector2(2, 1);
 
-            IShapeF shape1 = new CircleF(pos1, 2.0f);
-            IShapeF shape2 = new CircleF(pos2, 2.0f);
+            BoundingCircle2D shape1 = new BoundingCircle2D(pos1, 2.0f);
+            BoundingCircle2D shape2 = new BoundingCircle2D(pos2, 2.0f);
 
-            var actor1 = new BasicActor()
-            {
-                Position = pos1,
-                Bounds = shape1
-            };
-            var actor2 = new BasicWall()
-            {
-                Position = pos2,
-                Bounds = shape2
-            };
+            var actor1 = new BasicActor(shape1);
+            var actor2 = new BasicWall(shape2);
 
             Assert.True(shape1.Intersects(shape2));
             _collisionComponent.Insert(actor1);
@@ -120,19 +96,11 @@ namespace MonoGame.Extended.Collisions.Tests
             Vector2 pos1 = new Vector2(0, 1.5f);
             Vector2 pos2 = Vector2.Zero;
 
-            IShapeF shape1 = new CircleF(pos1, 0);
-            IShapeF shape2 = new CircleF(pos2, 2.0f);
+            BoundingCircle2D shape1 = new BoundingCircle2D(pos1, 0);
+            BoundingCircle2D shape2 = new BoundingCircle2D(pos2, 2.0f);
 
-            var actor1 = new BasicActor()
-            {
-                Position = pos1,
-                Bounds = shape1
-            };
-            var actor2 = new BasicWall()
-            {
-                Position = pos2,
-                Bounds = shape2
-            };
+            var actor1 = new BasicActor(shape1);
+            var actor2 = new BasicWall(shape2);
 
             Assert.True(shape1.Intersects(shape2));
             _collisionComponent.Insert(actor1);
@@ -154,20 +122,11 @@ namespace MonoGame.Extended.Collisions.Tests
             Vector2 pos1 = new Vector2(0, 1);
             Vector2 pos2 = new Vector2(-2, -1);
 
-            IShapeF shape1 = new CircleF(pos1, 2.0f);
-            IShapeF shape2 = new RectangleF(pos2, new SizeF(4, 2));
+            BoundingCircle2D shape1 = new BoundingCircle2D(pos1, 2.0f);
+            BoundingBox2D shape2 = BoundingBox2D.CreateFromPositionAndSize(pos2, new Vector2(4f, 2f));
 
-
-            var actor1 = new BasicActor()
-            {
-                Position = pos1,
-                Bounds = shape1
-            };
-            var actor2 = new BasicWall()
-            {
-                Position = pos2,
-                Bounds = shape2
-            };
+            var actor1 = new BasicActor(shape1);
+            var actor2 = new BasicWall(shape2);
 
             Assert.True(shape1.Intersects(shape2));
             _collisionComponent.Insert(actor1);
@@ -183,20 +142,11 @@ namespace MonoGame.Extended.Collisions.Tests
             Vector2 pos1 = new Vector2(0, 0);
             Vector2 pos2 = new Vector2(-2, -1);
 
-            IShapeF shape1 = new CircleF(pos1, 1.0f);
-            IShapeF shape2 = new RectangleF(pos2, new SizeF(4, 2));
+            BoundingCircle2D shape1 = new BoundingCircle2D(pos1, 1.0f);
+            BoundingBox2D shape2 = BoundingBox2D.CreateFromPositionAndSize(pos2, new Vector2(4f, 2f));
 
-
-            var actor1 = new BasicActor()
-            {
-                Position = pos1,
-                Bounds = shape1
-            };
-            var actor2 = new BasicWall()
-            {
-                Position = pos2,
-                Bounds = shape2
-            };
+            var actor1 = new BasicActor(shape1);
+            var actor2 = new BasicWall(shape2);
 
             Assert.True(shape1.Intersects(shape2));
             _collisionComponent.Insert(actor1);
@@ -212,20 +162,11 @@ namespace MonoGame.Extended.Collisions.Tests
             Vector2 pos1 = new Vector2(2, 1);
             Vector2 pos2 = new Vector2(-2, -1);
 
-            IShapeF shape1 = new CircleF(pos1, 2.0f);
-            IShapeF shape2 = new RectangleF(pos2, new SizeF(4, 2));
+            BoundingCircle2D shape1 = new BoundingCircle2D(pos1, 2.0f);
+            BoundingBox2D shape2 = BoundingBox2D.CreateFromPositionAndSize(pos2, new Vector2(4f, 2f));
 
-
-            var actor1 = new BasicActor()
-            {
-                Position = pos1,
-                Bounds = shape1
-            };
-            var actor2 = new BasicWall()
-            {
-                Position = pos2,
-                Bounds = shape2
-            };
+            var actor1 = new BasicActor(shape1);
+            var actor2 = new BasicWall(shape2);
 
             Assert.True(shape1.Intersects(shape2));
             _collisionComponent.Insert(actor1);
@@ -245,20 +186,11 @@ namespace MonoGame.Extended.Collisions.Tests
             Vector2 pos1 = new Vector2(0, 0);
             Vector2 pos2 = new Vector2(-2, -1);
 
-            IShapeF shape1 = new RectangleF(pos1, new SizeF(4, 2));
-            IShapeF shape2 = new RectangleF(pos2, new SizeF(4, 2));
+            BoundingBox2D shape1 = BoundingBox2D.CreateFromPositionAndSize(pos1, new Vector2(4f, 2f));
+            BoundingBox2D shape2 = BoundingBox2D.CreateFromPositionAndSize(pos2, new Vector2(4f, 2f));
 
-
-            var actor1 = new BasicActor()
-            {
-                Position = pos1,
-                Bounds = shape1
-            };
-            var actor2 = new BasicWall()
-            {
-                Position = pos2,
-                Bounds = shape2
-            };
+            var actor1 = new BasicActor(shape1);
+            var actor2 = new BasicWall(shape2);
 
             Assert.True(shape1.Intersects(shape2));
             _collisionComponent.Insert(actor1);
@@ -274,20 +206,11 @@ namespace MonoGame.Extended.Collisions.Tests
             Vector2 pos1 = new Vector2(4, 2);
             Vector2 pos2 = new Vector2(3, 1);
 
-            IShapeF shape1 = new RectangleF(pos1, new SizeF(4, 2));
-            IShapeF shape2 = new RectangleF(pos2, new SizeF(4, 2));
+            BoundingBox2D shape1 = BoundingBox2D.CreateFromPositionAndSize(pos1, new Vector2(4f, 2f));
+            BoundingBox2D shape2 = BoundingBox2D.CreateFromPositionAndSize(pos2, new Vector2(4f, 2f));
 
-
-            var actor1 = new BasicActor()
-            {
-                Position = pos1,
-                Bounds = shape1
-            };
-            var actor2 = new BasicWall()
-            {
-                Position = pos2,
-                Bounds = shape2
-            };
+            var actor1 = new BasicActor(shape1);
+            var actor2 = new BasicWall(shape2);
 
             Assert.True(shape1.Intersects(shape2));
             _collisionComponent.Insert(actor1);
@@ -304,8 +227,8 @@ namespace MonoGame.Extended.Collisions.Tests
             [Fact]
             public void Actors_is_colliding()
             {
-                var staticBounds = new RectangleF(new Vector2(0, 0), new SizeF(1, 1));
-                var anotherStaticBounds = new RectangleF(new Vector2(0, 0), new SizeF(1, 1));
+                var staticBounds = BoundingBox2D.CreateFromPositionAndSize(new Vector2(0, 0), new Vector2(1, 1));
+                var anotherStaticBounds = BoundingBox2D.CreateFromPositionAndSize(new Vector2(0, 0), new Vector2(1, 1));
                 var staticActor = new CollisionIndicatingActor(staticBounds);
                 var anotherStaticActor = new CollisionIndicatingActor(anotherStaticBounds);
                 _collisionComponent.Insert(staticActor);
@@ -320,8 +243,8 @@ namespace MonoGame.Extended.Collisions.Tests
             [Fact]
             public void Actors_is_not_colliding_when_dynamic_actor_is_moved_out_of_collision_bounds()
             {
-                var staticBounds = new RectangleF(new Vector2(0, 0), new SizeF(1, 1));
-                var dynamicBounds = new RectangleF(new Vector2(0, 0), new SizeF(1, 1));
+                var staticBounds = BoundingBox2D.CreateFromPositionAndSize(new Vector2(0, 0), new Vector2(1, 1));
+                var dynamicBounds = BoundingBox2D.CreateFromPositionAndSize(new Vector2(0, 0), new Vector2(1, 1));
                 var staticActor = new CollisionIndicatingActor(staticBounds);
                 var dynamicActor = new CollisionIndicatingActor(dynamicBounds);
                 _collisionComponent.Insert(staticActor);
@@ -337,17 +260,17 @@ namespace MonoGame.Extended.Collisions.Tests
             [Fact]
             public void Actors_is_colliding_when_dynamic_actor_is_moved_after_update()
             {
-                var staticBounds = new RectangleF(new Vector2(0, 0), new SizeF(1, 1));
+                var staticBounds = BoundingBox2D.CreateFromPositionAndSize(new Vector2(0, 0), new Vector2(1, 1));
                 var staticActor = new CollisionIndicatingActor(staticBounds);
                 _collisionComponent.Insert(staticActor);
                 for (int i = 0; i < QuadTree.QuadTree.DefaultMaxObjectsPerNode; i++)
                 {
-                    var fillerBounds = new RectangleF(new Vector2(0, 2), new SizeF(.1f, .1f));
+                    var fillerBounds = BoundingBox2D.CreateFromPositionAndSize(new Vector2(0, 2), new Vector2(.1f, .1f));
                     var fillerActor = new CollisionIndicatingActor(fillerBounds);
                     _collisionComponent.Insert(fillerActor);
                 }
 
-                var dynamicBounds = new RectangleF(new Vector2(2, 2), new SizeF(1, 1));
+                var dynamicBounds = BoundingBox2D.CreateFromPositionAndSize(new Vector2(2, 2), new Vector2(1, 1));
                 var dynamicActor = new CollisionIndicatingActor(dynamicBounds);
                 _collisionComponent.Insert(dynamicActor);
 
@@ -365,8 +288,8 @@ namespace MonoGame.Extended.Collisions.Tests
             [Fact]
             public void Actors_is_colliding_when_dynamic_actor_is_moved_into_collision_bounds()
             {
-                var staticBounds = new RectangleF(new Vector2(0, 0), new SizeF(1, 1));
-                var dynamicBounds = new RectangleF(new Vector2(2, 2), new SizeF(1, 1));
+                var staticBounds = BoundingBox2D.CreateFromPositionAndSize(new Vector2(0, 0), new Vector2(1, 1));
+                var dynamicBounds = BoundingBox2D.CreateFromPositionAndSize(new Vector2(2, 2), new Vector2(1, 1));
                 var staticActor = new CollisionIndicatingActor(staticBounds);
                 var dynamicActor = new CollisionIndicatingActor(dynamicBounds);
                 _collisionComponent.Insert(staticActor);
@@ -384,7 +307,7 @@ namespace MonoGame.Extended.Collisions.Tests
             {
                 var sut = new CollisionComponent();
 
-                var act = () => sut.Insert(new CollisionIndicatingActor(RectangleF.Empty));
+                var act = () => sut.Insert(new CollisionIndicatingActor(new BoundingBox2D(Vector2.Zero, Vector2.Zero)));
 
                 Assert.Throws<UndefinedLayerException>(act);
             }
@@ -392,11 +315,11 @@ namespace MonoGame.Extended.Collisions.Tests
             [Fact]
             public void Actors_In_Same_Named_Layer_Collide()
             {
-                var namedLayer = new Layer(new QuadTreeSpace(new RectangleF(Vector2.Zero, new Vector2(10, 10))));
+                var namedLayer = new Layer(new QuadTreeSpace(new BoundingBox2D(Vector2.Zero, new Vector2(10, 10))));
                 _collisionComponent.Add("testLayer", namedLayer);
 
-                var bounds1 = new RectangleF(new Vector2(0, 0), new SizeF(1, 1));
-                var bounds2 = new RectangleF(new Vector2(0, 0), new SizeF(1, 1));
+                var bounds1 = BoundingBox2D.CreateFromPositionAndSize(new Vector2(0, 0), new Vector2(1, 1));
+                var bounds2 = BoundingBox2D.CreateFromPositionAndSize(new Vector2(0, 0), new Vector2(1, 1));
                 var actor1 = new CollisionIndicatingActor(bounds1, "testLayer");
                 var actor2 = new CollisionIndicatingActor(bounds2, "testLayer");
                 _collisionComponent.Insert(actor1);
@@ -411,13 +334,13 @@ namespace MonoGame.Extended.Collisions.Tests
             [Fact]
             public void Actors_In_Named_Layer_Do_Not_Collide_With_Actors_In_Different_Named_Layer_By_Default()
             {
-                var layerA = new Layer(new QuadTreeSpace(new RectangleF(Vector2.Zero, new Vector2(10, 10))));
-                var layerB = new Layer(new QuadTreeSpace(new RectangleF(Vector2.Zero, new Vector2(10, 10))));
+                var layerA = new Layer(new QuadTreeSpace(new BoundingBox2D(Vector2.Zero, new Vector2(10, 10))));
+                var layerB = new Layer(new QuadTreeSpace(new BoundingBox2D(Vector2.Zero, new Vector2(10, 10))));
                 _collisionComponent.Add("layerA", layerA);
                 _collisionComponent.Add("layerB", layerB);
 
-                var bounds1 = new RectangleF(new Vector2(0, 0), new SizeF(1, 1));
-                var bounds2 = new RectangleF(new Vector2(0, 0), new SizeF(1, 1));
+                var bounds1 = BoundingBox2D.CreateFromPositionAndSize(new Vector2(0, 0), new Vector2(1, 1));
+                var bounds2 = BoundingBox2D.CreateFromPositionAndSize(new Vector2(0, 0), new Vector2(1, 1));
                 var actor1 = new CollisionIndicatingActor(bounds1, "layerA");
                 var actor2 = new CollisionIndicatingActor(bounds2, "layerB");
                 _collisionComponent.Insert(actor1);
@@ -429,19 +352,113 @@ namespace MonoGame.Extended.Collisions.Tests
                 Assert.False(actor2.IsColliding);
             }
 
+            [Fact]
+            public void Actors_In_Different_Named_Layers_Collide_When_CrossLayerCollision_Is_Enabled()
+            {
+                Layer layerA = new Layer(new QuadTreeSpace(new BoundingBox2D(Vector2.Zero, new Vector2(10, 10))));
+                Layer layerB = new Layer(new QuadTreeSpace(new BoundingBox2D(Vector2.Zero, new Vector2(10, 10))));
+                _collisionComponent.Add("layerA", layerA);
+                _collisionComponent.Add("layerB", layerB);
+                _collisionComponent.EnableCollisionBetweenLayers("layerA", "layerB");
+
+                BoundingBox2D bounds1 = BoundingBox2D.CreateFromPositionAndSize(new Vector2(0, 0), new Vector2(1, 1));
+                BoundingBox2D bounds2 = BoundingBox2D.CreateFromPositionAndSize(new Vector2(0, 0), new Vector2(1, 1));
+                CollisionIndicatingActor actor1 = new CollisionIndicatingActor(bounds1, "layerA");
+                CollisionIndicatingActor actor2 = new CollisionIndicatingActor(bounds2, "layerB");
+                _collisionComponent.Insert(actor1);
+                _collisionComponent.Insert(actor2);
+
+                _collisionComponent.Update(_gameTime);
+
+                Assert.True(actor1.IsColliding);
+                Assert.True(actor2.IsColliding);
+            }
+
+            [Fact]
+            public void Actors_In_Same_Named_Layer_Do_Not_Collide_When_SelfCollision_Is_Disabled()
+            {
+                Layer namedLayer = new Layer(new QuadTreeSpace(new BoundingBox2D(Vector2.Zero, new Vector2(10, 10))));
+                _collisionComponent.Add("testLayer", namedLayer);
+                _collisionComponent.DisableSelfCollision("testLayer");
+
+                BoundingBox2D bounds1 = BoundingBox2D.CreateFromPositionAndSize(new Vector2(0, 0), new Vector2(1, 1));
+                BoundingBox2D bounds2 = BoundingBox2D.CreateFromPositionAndSize(new Vector2(0, 0), new Vector2(1, 1));
+                CollisionIndicatingActor actor1 = new CollisionIndicatingActor(bounds1, "testLayer");
+                CollisionIndicatingActor actor2 = new CollisionIndicatingActor(bounds2, "testLayer");
+                _collisionComponent.Insert(actor1);
+                _collisionComponent.Insert(actor2);
+
+                _collisionComponent.Update(_gameTime);
+
+                Assert.False(actor1.IsColliding);
+                Assert.False(actor2.IsColliding);
+            }
+
+            [Fact]
+            public void Actors_In_Different_Named_Layers_Do_Not_Collide_When_CrossLayerCollision_Is_Disabled()
+            {
+                Layer layerA = new Layer(new QuadTreeSpace(new BoundingBox2D(Vector2.Zero, new Vector2(10, 10))));
+                Layer layerB = new Layer(new QuadTreeSpace(new BoundingBox2D(Vector2.Zero, new Vector2(10, 10))));
+                _collisionComponent.Add("layerA", layerA);
+                _collisionComponent.Add("layerB", layerB);
+                _collisionComponent.EnableCollisionBetweenLayers("layerA", "layerB");
+                _collisionComponent.DisableCollisionBetweenLayers("layerA", "layerB");
+
+                BoundingBox2D bounds1 = BoundingBox2D.CreateFromPositionAndSize(new Vector2(0, 0), new Vector2(1, 1));
+                BoundingBox2D bounds2 = BoundingBox2D.CreateFromPositionAndSize(new Vector2(0, 0), new Vector2(1, 1));
+                CollisionIndicatingActor actor1 = new CollisionIndicatingActor(bounds1, "layerA");
+                CollisionIndicatingActor actor2 = new CollisionIndicatingActor(bounds2, "layerB");
+                _collisionComponent.Insert(actor1);
+                _collisionComponent.Insert(actor2);
+
+                _collisionComponent.Update(_gameTime);
+
+                Assert.False(actor1.IsColliding);
+                Assert.False(actor2.IsColliding);
+            }
+
+            [Fact]
+            public void ReAdded_Layer_Does_Not_Reuse_Removed_CrossLayer_Collision_Rules()
+            {
+                Layer layerA = new Layer(new QuadTreeSpace(new BoundingBox2D(Vector2.Zero, new Vector2(10, 10))));
+                Layer originalLayerB = new Layer(new QuadTreeSpace(new BoundingBox2D(Vector2.Zero, new Vector2(10, 10))));
+                _collisionComponent.Add("layerA", layerA);
+                _collisionComponent.Add("layerB", originalLayerB);
+                _collisionComponent.EnableCollisionBetweenLayers("layerA", "layerB");
+                _collisionComponent.Remove("layerB");
+
+                Layer replacementLayerB = new Layer(new QuadTreeSpace(new BoundingBox2D(Vector2.Zero, new Vector2(10, 10))));
+                _collisionComponent.Add("layerB", replacementLayerB);
+
+                BoundingBox2D bounds1 = BoundingBox2D.CreateFromPositionAndSize(new Vector2(0, 0), new Vector2(1, 1));
+                BoundingBox2D bounds2 = BoundingBox2D.CreateFromPositionAndSize(new Vector2(0, 0), new Vector2(1, 1));
+                CollisionIndicatingActor actor1 = new CollisionIndicatingActor(bounds1, "layerA");
+                CollisionIndicatingActor actor2 = new CollisionIndicatingActor(bounds2, "layerB");
+                _collisionComponent.Insert(actor1);
+                _collisionComponent.Insert(actor2);
+
+                _collisionComponent.Update(_gameTime);
+
+                Assert.False(actor1.IsColliding);
+                Assert.False(actor2.IsColliding);
+            }
+
             private class CollisionIndicatingActor : ICollisionActor
             {
-                private RectangleF _bounds;
+                private static int _nextId = 1;
+                private BoundingBox2D _bounds;
 
-                public CollisionIndicatingActor(RectangleF bounds, string layerName = null)
+                public CollisionIndicatingActor(BoundingBox2D bounds, string layerName = null)
                 {
                     _bounds = bounds;
                     LayerName = layerName;
                 }
 
+                public int Id { get; } = _nextId++;
+
                 public string LayerName { get; }
 
-                public IShapeF Bounds => _bounds;
+                public CollisionShape2D Shape => new CollisionShape2D(_bounds);
 
                 public void OnCollision(CollisionEventArgs collisionInfo)
                 {
@@ -452,7 +469,7 @@ namespace MonoGame.Extended.Collisions.Tests
 
                 public void MoveTo(Vector2 position)
                 {
-                    _bounds = new RectangleF(position, _bounds.Size);
+                    _bounds = BoundingBox2D.CreateFromPositionAndSize(position, _bounds.Size);
                 }
             }
         }

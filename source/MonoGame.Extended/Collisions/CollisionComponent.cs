@@ -1,7 +1,6 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Diagnostics;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using MonoGame.Extended.Collisions.Layers;
@@ -17,14 +16,13 @@ namespace MonoGame.Extended.Collisions
     {
         public const string DEFAULT_LAYER_NAME = "default";
 
-        private Dictionary<string, Layer> _layers = new();
+        private readonly Dictionary<string, Layer> _layers = new();
+        private readonly HashSet<LayerPair> _layerCollision = new();
 
         /// <summary>
         /// List of collision's layers
         /// </summary>
         public IReadOnlyDictionary<string, Layer> Layers => _layers;
-
-        private HashSet<(Layer, Layer)> _layerCollision = new();
 
         /// <summary>
         /// Creates component with default layer, which is a collision tree covering the specified area (using <see cref="QuadTree"/>.
@@ -32,7 +30,7 @@ namespace MonoGame.Extended.Collisions
         /// <param name="boundary">Boundary of the collision tree.</param>
         public CollisionComponent(RectangleF boundary)
         {
-            SetDefaultLayer(new Layer(new QuadTreeSpace(boundary)));
+            SetDefaultLayer(new Layer(new QuadTreeSpace(new BoundingBox2D(boundary.TopLeft, boundary.BottomRight))));
         }
 
         /// <summary>
@@ -47,17 +45,25 @@ namespace MonoGame.Extended.Collisions
         }
 
         /// <summary>
-        /// The main layer has the name from <see cref="DEFAULT_LAYER_NAME"/>.
-        /// The main layer collision with itself and all other layers.
+        /// Sets the layer used for actors whose <see cref="ICollisionActor.LayerName"/> is <see langword="null"/>.
         /// </summary>
+        /// <param name="layer">Layer to set default</param>
+        /// <remarks>
+        /// The default layer always has the name <see cref="DEFAULT_LAYER_NAME"/>.
+        /// When a default layer is set, collision is enabled between that layer and itself and between that layer and every currently registered layer.
+        /// When additional non-default layers are later added, collision is enabled between the new layer and itself and between the new layer and the current default layer.
+        /// No other cross-layer collision rules are created automatically.
+        /// </remarks>
         /// <param name="layer">Layer to set default</param>
         public void SetDefaultLayer(Layer layer)
         {
             if (_layers.ContainsKey(DEFAULT_LAYER_NAME))
                 Remove(DEFAULT_LAYER_NAME);
+
             Add(DEFAULT_LAYER_NAME, layer);
-            foreach (var otherLayer in _layers.Values)
-                AddCollisionBetweenLayer(layer, otherLayer);
+
+            foreach (Layer otherLayer in _layers.Values)
+                EnableCollisionBetweenLayers(layer, otherLayer);
         }
 
         /// <summary>
@@ -70,30 +76,38 @@ namespace MonoGame.Extended.Collisions
         /// <param name="gameTime"></param>
         public override void Update(GameTime gameTime)
         {
-            foreach (var layer in _layers.Values)
+            foreach (Layer layer in _layers.Values)
                 layer.Reset();
 
-            foreach (var (firstLayer, secondLayer) in _layerCollision)
-            foreach (var actor in firstLayer.Space)
+            foreach (LayerPair layerPair in _layerCollision)
             {
-                var collisions = secondLayer.Space.Query(actor.Bounds.BoundingRectangle);
-                foreach (var other in collisions)
-                    if (actor != other && actor.Bounds.Intersects(other.Bounds))
+                Layer firstLayer = layerPair.First;
+                Layer secondLayer = layerPair.Second;
+
+                foreach (ICollisionActor actor in firstLayer.Space)
+                {
+                    IEnumerable<ICollisionActor> collisions = secondLayer.Space.Query(actor.Shape.BoundingBox);
+
+                    foreach (ICollisionActor other in collisions)
                     {
-                        var penetrationVector = CalculatePenetrationVector(actor.Bounds, other.Bounds);
+                        if (actor == other)
+                            continue;
+
+                        if (!actor.Shape.TryGetCollision(other.Shape, out CollisionResult2D result))
+                            continue;
 
                         actor.OnCollision(new CollisionEventArgs
                         {
                             Other = other,
-                            PenetrationVector = penetrationVector
+                            PenetrationVector = -result.MinimumTranslationVector
                         });
                         other.OnCollision(new CollisionEventArgs
                         {
                             Other = actor,
-                            PenetrationVector = -penetrationVector
+                            PenetrationVector = result.MinimumTranslationVector
                         });
                     }
-
+                }
             }
         }
 
@@ -104,11 +118,9 @@ namespace MonoGame.Extended.Collisions
         /// <param name="target">Target to insert.</param>
         public void Insert(ICollisionActor target)
         {
-            var layerName = target.LayerName ?? DEFAULT_LAYER_NAME;
-            if (!_layers.TryGetValue(layerName, out var layer))
-            {
+            string layerName = target.LayerName ?? DEFAULT_LAYER_NAME;
+            if (!_layers.TryGetValue(layerName, out Layer layer))
                 throw new UndefinedLayerException(layerName);
-            }
 
             layer.Space.Insert(target);
         }
@@ -120,21 +132,31 @@ namespace MonoGame.Extended.Collisions
         public void Remove(ICollisionActor target)
         {
             if (target.LayerName is not null)
+            {
                 _layers[target.LayerName].Space.Remove(target);
-            else
-                foreach (var layer in _layers.Values)
-                    if (layer.Space.Remove(target))
-                        return;
+                return;
+            }
+
+            foreach (Layer layer in _layers.Values)
+            {
+                if (layer.Space.Remove(target))
+                    return;
+            }
         }
 
         #region Layers
 
         /// <summary>
-        /// Add the new layer. The name of layer must be unique.
+        /// Adds a named collision layer.
         /// </summary>
         /// <param name="name">Name of layer</param>
         /// <param name="layer">The new layer</param>
         /// <exception cref="ArgumentNullException"><paramref name="name"/> is null</exception>
+        /// <remarks>
+        /// If <paramref name="name"/> is not <see cref="DEFAULT_LAYER_NAME"/>, collision is enabled between the new layer and itself.
+        /// If a default layer is already present, collision is also enabled between the new layer and the default layer.
+        /// No other cross-layer collision rules are created automatically.
+        /// </remarks>
         public void Add(string name, Layer layer)
         {
             if (string.IsNullOrWhiteSpace(name))
@@ -145,8 +167,12 @@ namespace MonoGame.Extended.Collisions
 
             if (name != DEFAULT_LAYER_NAME)
             {
-                AddCollisionBetweenLayer(layer, layer);
-                AddCollisionBetweenLayer(_layers[DEFAULT_LAYER_NAME], layer);
+                EnableCollisionBetweenLayers(layer, layer);
+
+                if (_layers.TryGetValue(DEFAULT_LAYER_NAME, out Layer defaultLayer))
+                {
+                    EnableCollisionBetweenLayers(defaultLayer, layer);
+                }
             }
         }
 
@@ -159,185 +185,67 @@ namespace MonoGame.Extended.Collisions
         {
             name ??= _layers.First(x => x.Value == layer).Key;
             _layers.Remove(name, out layer);
-            _layerCollision.RemoveWhere(tuple => tuple.Item1 == layer || tuple.Item2 == layer);
+            _layerCollision.RemoveWhere(pair => ReferenceEquals(pair.First, layer) || ReferenceEquals(pair.Second, layer));
         }
 
-        public void AddCollisionBetweenLayer(Layer a, Layer b)
+        public void EnableCollisionBetweenLayers(Layer firstLayer, Layer secondLayer)
         {
-            _layerCollision.Add((a, b));
+            _layerCollision.Add(new LayerPair(firstLayer, secondLayer));
         }
 
-        public void AddCollisionBetweenLayer(string nameA, string nameB)
+        public void EnableCollisionBetweenLayers(string firstLayerName, string secondLayerName)
         {
-            _layerCollision.Add((_layers[nameA], _layers[nameB]));
+            _layerCollision.Add(new LayerPair(_layers[firstLayerName], _layers[secondLayerName]));
         }
 
-        #endregion
-
-        #region Penetration Vectors
-
-        /// <summary>
-        /// Calculate a's penetration into b
-        /// </summary>
-        /// <param name="a">The penetrating shape.</param>
-        /// <param name="b">The shape being penetrated.</param>
-        /// <returns>The distance vector from the edge of b to a's Position</returns>
-        private static Vector2 CalculatePenetrationVector(IShapeF a, IShapeF b)
+        public void DisableCollisionBetweenLayers(Layer firstLayer, Layer secondLayer)
         {
-            return a switch
-                {
-                    CircleF circleA when b is CircleF circleB => PenetrationVector(circleA, circleB),
-                    CircleF circleA when b is RectangleF rectangleB => PenetrationVector(circleA, rectangleB),
-                    CircleF circleA when b is OrientedRectangle orientedRectangleB => PenetrationVector(circleA, orientedRectangleB),
-
-                    RectangleF rectangleA when b is CircleF circleB => PenetrationVector(rectangleA, circleB),
-                    RectangleF rectangleA when b is RectangleF rectangleB => PenetrationVector(rectangleA, rectangleB),
-                    RectangleF rectangleA when b is OrientedRectangle orientedRectangleB => PenetrationVector(rectangleA, orientedRectangleB),
-
-                    OrientedRectangle orientedRectangleA when b is CircleF circleB => PenetrationVector(orientedRectangleA, circleB),
-                    OrientedRectangle orientedRectangleA when b is RectangleF rectangleB => PenetrationVector(orientedRectangleA, rectangleB),
-                    OrientedRectangle orientedRectangleA when b is OrientedRectangle orientedRectangleB => PenetrationVector(orientedRectangleA, orientedRectangleB),
-
-                    _ => throw new ArgumentOutOfRangeException(nameof(a))
-                };
+            _layerCollision.Remove(new LayerPair(firstLayer, secondLayer));
         }
 
-        private static Vector2 PenetrationVector(CircleF circ1, CircleF circ2)
+        public void DisableCollisionBetweenLayers(string firstLayerName, string secondLayerName)
         {
-            if (!circ1.Intersects(circ2))
-            {
-                return Vector2.Zero;
-            }
-
-            var displacement = circ1.Center - circ2.Center;
-
-            Vector2 desiredDisplacement;
-            if (displacement != Vector2.Zero)
-            {
-                desiredDisplacement = displacement.NormalizedCopy() * (circ1.Radius + circ2.Radius);
-            }
-            else
-            {
-                desiredDisplacement = -Vector2.UnitY * (circ1.Radius + circ2.Radius);
-            }
-
-
-            var penetration = displacement - desiredDisplacement;
-            return penetration;
+            _layerCollision.Remove(new LayerPair(_layers[firstLayerName], _layers[secondLayerName]));
         }
 
-        private static Vector2 PenetrationVector(CircleF circ, RectangleF rect)
+        public bool IsCollisionEnabledBetweenLayers(Layer firstLayer, Layer secondLayer)
         {
-            var collisionPoint = rect.ClosestPointTo(circ.Center);
-            var cToCollPoint = collisionPoint - circ.Center;
-
-            if (rect.Contains(circ.Center) || cToCollPoint.Equals(Vector2.Zero))
-            {
-                var displacement = circ.Center - rect.Center;
-
-                Vector2 desiredDisplacement;
-                if (displacement != Vector2.Zero)
-                {
-                    // Calculate penetration as only in X or Y direction.
-                    // Whichever is lower.
-                    var dispx = new Vector2(displacement.X, 0);
-                    var dispy = new Vector2(0, displacement.Y);
-                    dispx.Normalize();
-                    dispy.Normalize();
-
-                    dispx *= (circ.Radius + rect.Width / 2);
-                    dispy *= (circ.Radius + rect.Height / 2);
-
-                    if (dispx.LengthSquared() < dispy.LengthSquared())
-                    {
-                        desiredDisplacement = dispx;
-                        displacement.Y = 0;
-                    }
-                    else
-                    {
-                        desiredDisplacement = dispy;
-                        displacement.X = 0;
-                    }
-                }
-                else
-                {
-                    desiredDisplacement = -Vector2.UnitY * (circ.Radius + rect.Height / 2);
-                }
-
-                var penetration = displacement - desiredDisplacement;
-                return penetration;
-            }
-            else
-            {
-                var penetration = circ.Radius * cToCollPoint.NormalizedCopy() - cToCollPoint;
-                return penetration;
-            }
+            return _layerCollision.Contains(new LayerPair(firstLayer, secondLayer));
         }
 
-        private static Vector2 PenetrationVector(CircleF circleA, OrientedRectangle orientedRectangleB)
+        public bool IsCollisionEnabledBetweenLayers(string firstLayerName, string secondLayerName)
         {
-            orientedRectangleB.Orientation.Decompose(out _, out float orientationAngle, out _);
-            var rotation = Matrix3x2.CreateRotationZ(orientationAngle);
-            var circleCenterInRectangleSpace = rotation.Transform(circleA.Center - orientedRectangleB.Center);
-            var circleInRectangleSpace = new CircleF(circleCenterInRectangleSpace, circleA.Radius);
-            var boundingRectangle = new BoundingRectangle(new Vector2(), orientedRectangleB.Radii);
-
-            var penetrationVector = PenetrationVector(circleInRectangleSpace, boundingRectangle);
-            var inverseRotation = Matrix3x2.CreateRotationZ(-orientationAngle);
-            var transformedPenetration = inverseRotation.Transform(penetrationVector);
-
-            return transformedPenetration;
+            return _layerCollision.Contains(new LayerPair(_layers[firstLayerName], _layers[secondLayerName]));
         }
 
-        private static Vector2 PenetrationVector(RectangleF rect, CircleF circ)
+        public void EnableSelfCollision(Layer layer)
         {
-            return -PenetrationVector(circ, rect);
+            EnableCollisionBetweenLayers(layer, layer);
         }
 
-        private static Vector2 PenetrationVector(RectangleF rect1, RectangleF rect2)
+        public void EnableSelfCollision(string layerName)
         {
-            var intersectingRectangle = RectangleF.Intersect(rect1, rect2);
-            Debug.Assert(!intersectingRectangle.IsEmpty,
-                "Violation of: !intersect.IsEmpty; Rectangles must intersect to calculate a penetration vector.");
-
-            Vector2 penetration;
-            if (intersectingRectangle.Width < intersectingRectangle.Height)
-            {
-                var d = rect1.Center.X < rect2.Center.X
-                    ? intersectingRectangle.Width
-                    : -intersectingRectangle.Width;
-                penetration = new Vector2(d, 0);
-            }
-            else
-            {
-                var d = rect1.Center.Y < rect2.Center.Y
-                    ? intersectingRectangle.Height
-                    : -intersectingRectangle.Height;
-                penetration = new Vector2(0, d);
-            }
-
-            return penetration;
+            EnableCollisionBetweenLayers(layerName, layerName);
         }
 
-        private static Vector2 PenetrationVector(RectangleF rectangleA, OrientedRectangle orientedRectangleB)
+        public void DisableSelfCollision(Layer layer)
         {
-            return PenetrationVector((OrientedRectangle)rectangleA, orientedRectangleB);
+            DisableCollisionBetweenLayers(layer, layer);
         }
 
-        private static Vector2 PenetrationVector(OrientedRectangle orientedRectangleA, CircleF circleB)
+        public void DisableSelfCollision(string layerName)
         {
-            return -PenetrationVector(circleB, orientedRectangleA);
+            DisableCollisionBetweenLayers(layerName, layerName);
         }
 
-        private static Vector2 PenetrationVector(OrientedRectangle orientedRectangleA, RectangleF rectangleB)
+        public bool IsSelfCollisionEnabled(Layer layer)
         {
-            return -PenetrationVector(rectangleB, orientedRectangleA);
+            return IsCollisionEnabledBetweenLayers(layer, layer);
         }
 
-        private static Vector2 PenetrationVector(OrientedRectangle orientedRectangleA, OrientedRectangle orientedRectangleB)
+        public bool IsSelfCollisionEnabled(string layerName)
         {
-            return OrientedRectangle.Intersects(orientedRectangleA, orientedRectangleB)
-                .MinimumTranslationVector;
+            return IsCollisionEnabledBetweenLayers(layerName, layerName);
         }
 
         #endregion
