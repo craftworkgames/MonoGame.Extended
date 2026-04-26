@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
 using Microsoft.Xna.Framework;
-
+using MonoGame.Extended.Content;
 using MonoGame.Extended.Tilemaps.Ogmo.Document;
 
 namespace MonoGame.Extended.Tilemaps.Ogmo.Converters;
@@ -24,8 +24,15 @@ internal static class OgmoTilemapDataConverter
 
     public static TilemapData Convert(OgmoLevel level, OgmoProject project)
     {
+        return Convert(level, project, Directory.GetCurrentDirectory(), ExternalResourceResolvers.OpenFile);
+    }
+
+    public static TilemapData Convert(OgmoLevel level, OgmoProject project, string baseDirectory, ExternalResourceResolver resourceResolver)
+    {
         ArgumentNullException.ThrowIfNull(level);
         ArgumentNullException.ThrowIfNull(project);
+        ArgumentNullException.ThrowIfNull(baseDirectory);
+        ArgumentNullException.ThrowIfNull(resourceResolver);
 
         int gridSize = (int)(project.LayerGridDefaultSize?.X ?? 16);
         if (gridSize <= 0)
@@ -47,7 +54,7 @@ internal static class OgmoTilemapDataConverter
             data.BackgroundColor = OgmoColorParser.ParseColor(project.BackgroundColor);
         }
 
-        Dictionary<string, TilesetGidInfo> tilesetInfo = ConvertTilesets(project, data);
+        Dictionary<string, TilesetGidInfo> tilesetInfo = ConvertTilesets(project, data, baseDirectory, resourceResolver);
         ConvertLayers(level, project, data, tilesetInfo);
         ConvertLevelProperties(level, data);
 
@@ -56,7 +63,7 @@ internal static class OgmoTilemapDataConverter
 
     #region Tilesets
 
-    private static Dictionary<string, TilesetGidInfo> ConvertTilesets(OgmoProject project, TilemapData data)
+    private static Dictionary<string, TilesetGidInfo> ConvertTilesets(OgmoProject project, TilemapData data, string baseDirectory, ExternalResourceResolver resourceResolver)
     {
         Dictionary<string, TilesetGidInfo> tilesetInfo = new Dictionary<string, TilesetGidInfo>();
 
@@ -80,7 +87,7 @@ internal static class OgmoTilemapDataConverter
                 continue;
             }
 
-            Point imgSize = ReadImageDimensions(imagePath);
+            Point imgSize = ReadImageDimensions(imagePath, baseDirectory, resourceResolver);
             int columns = CalculateCount(imgSize.X, tilesetTemplate.TileWidth, tilesetTemplate.TileSeparationX);
             int rows = CalculateCount(imgSize.Y, tilesetTemplate.TileHeight, tilesetTemplate.TileSeparationY);
             int tileCount = columns * rows;
@@ -457,16 +464,11 @@ internal static class OgmoTilemapDataConverter
 
     #region Image Dimension Helpers
 
-    private static Point ReadImageDimensions(string imagePath)
+    private static Point ReadImageDimensions(string imagePath, string baseDirectory, ExternalResourceResolver resourceResolver)
     {
         if (imagePath.StartsWith("data:image", StringComparison.OrdinalIgnoreCase))
         {
             return ReadDimensionsFromDataUri(imagePath);
-        }
-
-        if (!File.Exists(imagePath))
-        {
-            return Point.Zero;
         }
 
         try
@@ -475,8 +477,12 @@ internal static class OgmoTilemapDataConverter
             // 16-19 = width (big-endian), 20-23 = height (big-endian).
             byte[] header = new byte[24];
 
-            using FileStream fs = File.OpenRead(imagePath);
-            int bytesRead = fs.Read(header, 0, 24);
+            string fullPath = Path.IsPathRooted(imagePath)
+                ? imagePath
+                : Path.Combine(baseDirectory, imagePath);
+
+            using Stream stream = resourceResolver(fullPath);
+            int bytesRead = stream.Read(header, 0, 24);
 
             if (bytesRead < 24)
             {

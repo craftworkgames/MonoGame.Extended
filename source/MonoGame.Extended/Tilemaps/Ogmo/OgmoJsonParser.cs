@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text.Json;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended.Content;
 using MonoGame.Extended.Tilemaps.Ogmo.Converters;
 using MonoGame.Extended.Tilemaps.Ogmo.Document;
 using MonoGame.Extended.Tilemaps.Parsers;
@@ -24,6 +25,7 @@ public sealed class OgmoJsonParser : ITilemapParser
 
     private readonly string _projectPath;
     private readonly string _baseDirectory;
+    private readonly ExternalResourceResolver _resourceResolver;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="OgmoJsonParser"/> class.
@@ -33,18 +35,17 @@ public sealed class OgmoJsonParser : ITilemapParser
     /// Optional base directory for resolving relative level file paths. If not provided,
     /// the project file's directory will be used.
     /// </param>
-    /// <exception cref="FileNotFoundException">The project file does not exist.</exception>
-    public OgmoJsonParser(string projectPath, string baseDirectory = null)
+    /// <param name="resourceResolver">
+    /// Optional resolver used to open external resources referenced by the project. If
+    /// <see langword="null"/>, resources are opened from the local file system.
+    /// </param>
+    public OgmoJsonParser(string projectPath, string baseDirectory = null, ExternalResourceResolver resourceResolver = null)
     {
         ArgumentNullException.ThrowIfNull(projectPath);
 
-        if (!File.Exists(projectPath))
-        {
-            throw new FileNotFoundException($"Ogmo project file not found: {projectPath}", projectPath);
-        }
-
         _projectPath = projectPath;
-        _baseDirectory = baseDirectory ?? Path.GetDirectoryName(projectPath);
+        _baseDirectory = baseDirectory ?? GetDirectoryOrCurrent(projectPath);
+        _resourceResolver = resourceResolver ?? ExternalResourceResolvers.OpenFile;
     }
 
     /// <summary>
@@ -86,17 +87,12 @@ public sealed class OgmoJsonParser : ITilemapParser
 
         string fullPath = Path.Combine(_baseDirectory, filePath);
 
-        if (!File.Exists(fullPath))
-        {
-            throw new FileNotFoundException($"Ogmo level file not found: {fullPath}", fullPath);
-        }
-
         try
         {
             OgmoProject project = LoadProject(_projectPath);
             OgmoLevel level = LoadLevel(fullPath);
 
-            string projectDirectory = Path.GetDirectoryName(_projectPath);
+            string projectDirectory = GetDirectoryOrCurrent(_projectPath);
 
             return ConvertLevel(level, project, graphicsDevice, projectDirectory);
         }
@@ -141,7 +137,7 @@ public sealed class OgmoJsonParser : ITilemapParser
 
             OgmoProject project = LoadProject(_projectPath);
 
-            string resolvedBasePath = basePath ?? Path.GetDirectoryName(_projectPath);
+            string resolvedBasePath = basePath ?? GetDirectoryOrCurrent(_projectPath);
 
             return ConvertLevel(level, project, graphicsDevice, resolvedBasePath);
         }
@@ -159,17 +155,12 @@ public sealed class OgmoJsonParser : ITilemapParser
         }
     }
 
-    private static OgmoProject LoadProject(string projectPath)
+    private OgmoProject LoadProject(string projectPath)
     {
-        if (!File.Exists(projectPath))
-        {
-            throw new FileNotFoundException($"Ogmo project file not found: {projectPath}", projectPath);
-        }
-
         try
         {
-            string json = File.ReadAllText(projectPath);
-            OgmoProject project = JsonSerializer.Deserialize<OgmoProject>(json, s_jsonOptions);
+            using Stream stream = OpenProjectStream(projectPath);
+            OgmoProject project = JsonSerializer.Deserialize<OgmoProject>(stream, s_jsonOptions);
 
             if (project == null)
             {
@@ -184,10 +175,10 @@ public sealed class OgmoJsonParser : ITilemapParser
         }
     }
 
-    private static OgmoLevel LoadLevel(string levelPath)
+    private OgmoLevel LoadLevel(string levelPath)
     {
-        string json = File.ReadAllText(levelPath);
-        OgmoLevel level = JsonSerializer.Deserialize<OgmoLevel>(json, s_jsonOptions);
+        using Stream stream = OpenLevelStream(levelPath);
+        OgmoLevel level = JsonSerializer.Deserialize<OgmoLevel>(stream, s_jsonOptions);
 
         if (level == null)
         {
@@ -197,9 +188,61 @@ public sealed class OgmoJsonParser : ITilemapParser
         return level;
     }
 
-    private static Tilemap ConvertLevel(OgmoLevel level, OgmoProject project, GraphicsDevice graphicsDevice, string baseDirectory)
+    private Tilemap ConvertLevel(OgmoLevel level, OgmoProject project, GraphicsDevice graphicsDevice, string baseDirectory)
     {
-        TilemapData data = OgmoTilemapDataConverter.Convert(level, project);
-        return TilemapFactory.Build(data, graphicsDevice, baseDirectory);
+        TilemapData data = OgmoTilemapDataConverter.Convert(level, project, baseDirectory, _resourceResolver);
+        return TilemapFactory.Build(data, graphicsDevice, baseDirectory, _resourceResolver);
+    }
+
+    private Stream OpenProjectStream(string projectPath)
+    {
+        try
+        {
+            return _resourceResolver(projectPath);
+        }
+        catch (FileNotFoundException)
+        {
+            throw;
+        }
+        catch (TilemapParseException)
+        {
+            throw;
+        }
+        catch (Exception ex)
+        {
+            throw new TilemapParseException($"Failed to open Ogmo project file: {projectPath}", ex);
+        }
+    }
+
+    private Stream OpenLevelStream(string levelPath)
+    {
+        try
+        {
+            return _resourceResolver(levelPath);
+        }
+        catch (FileNotFoundException)
+        {
+            throw;
+        }
+        catch (TilemapParseException)
+        {
+            throw;
+        }
+        catch (Exception ex)
+        {
+            throw new TilemapParseException($"Failed to open Ogmo level file: {levelPath}", ex);
+        }
+    }
+
+    private static string GetDirectoryOrCurrent(string path)
+    {
+        string directory = Path.GetDirectoryName(path);
+
+        if (string.IsNullOrEmpty(directory))
+        {
+            return Directory.GetCurrentDirectory();
+        }
+
+        return directory;
     }
 }

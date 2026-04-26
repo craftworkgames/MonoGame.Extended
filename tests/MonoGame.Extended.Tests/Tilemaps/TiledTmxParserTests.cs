@@ -1,6 +1,8 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Tests.Fixtures;
@@ -512,6 +514,71 @@ public class TiledTmxParserTests
         Assert.Contains("sky.png", ex.Message);
     }
 
+    [Fact]
+    public void ParseFromStream_WithExternalResourceResolver_LoadsExternalTileset()
+    {
+        string testDataPath = GetTestDataPath();
+        byte[] textureBytes = File.ReadAllBytes(Path.Combine(testDataPath, "test-tileset.png"));
+
+        string tmx = @"<?xml version=""1.0"" encoding=""UTF-8""?>
+<map version=""1.0"" orientation=""orthogonal"" renderorder=""right-down""
+     width=""1"" height=""1"" tilewidth=""32"" tileheight=""32"">
+ <tileset firstgid=""1"" source=""external.tsx""/>
+ <layer name=""Layer 1"" width=""1"" height=""1"">
+  <data encoding=""csv"">1</data>
+ </layer>
+</map>";
+
+        string tsx = @"<?xml version=""1.0"" encoding=""UTF-8""?>
+<tileset version=""1.0"" name=""ExternalTiles"" tilewidth=""32"" tileheight=""32"" tilecount=""9"" columns=""3"">
+ <image source=""test-tileset.png"" width=""104"" height=""104""/>
+</tileset>";
+
+        Dictionary<string, byte[]> resources = new Dictionary<string, byte[]>
+        {
+            ["external.tsx"] = Encoding.UTF8.GetBytes(tsx),
+            ["test-tileset.png"] = textureBytes
+        };
+
+        TiledTmxParser parser = new TiledTmxParser(resourceResolver: path => OpenResourceByFileName(resources, path));
+        using MemoryStream stream = CreateXmlStream(tmx);
+
+        Tilemap tilemap = parser.ParseFromStream(stream, _graphicsDevice, "virtual");
+
+        TilemapTileset tileset = Assert.Single(tilemap.Tilesets);
+        Assert.Equal("ExternalTiles", tileset.Name);
+        Assert.NotNull(tileset.Texture);
+    }
+
+    [Fact]
+    public void ParseFromStream_WithExternalResourceResolver_LoadsImageLayerTexture()
+    {
+        string testDataPath = GetTestDataPath();
+        byte[] textureBytes = File.ReadAllBytes(Path.Combine(testDataPath, "test-tileset.png"));
+
+        string xml = @"<?xml version=""1.0"" encoding=""UTF-8""?>
+<map version=""1.0"" orientation=""orthogonal"" renderorder=""right-down""
+     width=""1"" height=""1"" tilewidth=""32"" tileheight=""32"">
+ <imagelayer name=""Background"">
+  <image source=""background.png"" width=""104"" height=""104""/>
+ </imagelayer>
+</map>";
+
+        Dictionary<string, byte[]> resources = new Dictionary<string, byte[]>
+        {
+            ["background.png"] = textureBytes
+        };
+
+        TiledTmxParser parser = new TiledTmxParser(resourceResolver: path => OpenResourceByFileName(resources, path));
+        using MemoryStream stream = CreateXmlStream(xml);
+
+        Tilemap tilemap = parser.ParseFromStream(stream, _graphicsDevice, "virtual");
+
+        TilemapImageLayer layer = Assert.IsType<TilemapImageLayer>(Assert.Single(tilemap.Layers));
+        Assert.Equal("Background", layer.Name);
+        Assert.NotNull(layer.Texture);
+    }
+
     // Added while investigating issue #1138:
     // https://github.com/MonoGame-Extended/Monogame-Extended/issues/1138
     [Fact]
@@ -587,5 +654,22 @@ public class TiledTmxParserTests
         }
 
         return testDataPath;
+    }
+
+    private static MemoryStream CreateXmlStream(string xml)
+    {
+        return new MemoryStream(Encoding.UTF8.GetBytes(xml));
+    }
+
+    private static Stream OpenResourceByFileName(Dictionary<string, byte[]> resources, string path)
+    {
+        string fileName = Path.GetFileName(path);
+
+        if (!resources.TryGetValue(fileName, out byte[] bytes))
+        {
+            throw new FileNotFoundException($"Resource not found: {path}", path);
+        }
+
+        return new MemoryStream(bytes, writable: false);
     }
 }

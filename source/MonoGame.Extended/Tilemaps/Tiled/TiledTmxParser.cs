@@ -4,6 +4,7 @@ using System.IO;
 using System.Xml;
 using System.Xml.Serialization;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended.Content;
 using MonoGame.Extended.Tilemaps.Parsers;
 using MonoGame.Extended.Tilemaps.Tiled.Converters;
 using MonoGame.Extended.Tilemaps.Tiled.Document;
@@ -16,6 +17,7 @@ namespace MonoGame.Extended.Tilemaps.Tiled;
 public class TiledTmxParser : ITilemapParser
 {
     private readonly string _baseDirectory;
+    private readonly ExternalResourceResolver _resourceResolver;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="TiledTmxParser"/> class.
@@ -25,9 +27,14 @@ public class TiledTmxParser : ITilemapParser
     /// <see cref="ParseFromFile"/> will be resolved relative to this directory.
     /// If <see langword="null"/>, paths are resolved from the file's own location.
     /// </param>
-    public TiledTmxParser(string baseDirectory = null)
+    /// <param name="resourceResolver">
+    /// Optional resolver used to open external resources referenced by the map. If
+    /// <see langword="null"/>, resources are opened from the local file system.
+    /// </param>
+    public TiledTmxParser(string baseDirectory = null, ExternalResourceResolver resourceResolver = null)
     {
         _baseDirectory = baseDirectory;
+        _resourceResolver = resourceResolver ?? ExternalResourceResolvers.OpenFile;
     }
 
     /// <inheritdoc/>
@@ -74,7 +81,7 @@ public class TiledTmxParser : ITilemapParser
             LoadExternalTilesets(mapXml, baseDirectory);
 
             TilemapData data = TiledTilemapDataConverter.Convert(mapXml);
-            return TilemapFactory.Build(data, graphicsDevice, baseDirectory);
+            return TilemapFactory.Build(data, graphicsDevice, baseDirectory, _resourceResolver);
         }
         catch (TilemapParseException)
         {
@@ -111,7 +118,7 @@ public class TiledTmxParser : ITilemapParser
             LoadExternalTilesets(mapXml, baseDirectory);
 
             TilemapData data = TiledTilemapDataConverter.Convert(mapXml);
-            return TilemapFactory.Build(data, graphicsDevice, baseDirectory);
+            return TilemapFactory.Build(data, graphicsDevice, baseDirectory, _resourceResolver);
         }
         catch (TilemapParseException)
         {
@@ -147,7 +154,7 @@ public class TiledTmxParser : ITilemapParser
         }
     }
 
-    private static void LoadExternalTilesets(TiledMapXml mapXml, string baseDirectory)
+    private void LoadExternalTilesets(TiledMapXml mapXml, string baseDirectory)
     {
         if (mapXml.Tilesets == null)
         {
@@ -163,16 +170,9 @@ public class TiledTmxParser : ITilemapParser
 
             string tsxPath = Path.Combine(baseDirectory, tilesetRef.Source);
 
-            if (!File.Exists(tsxPath))
-            {
-                throw new TilemapParseException(
-                    $"External tileset '{tilesetRef.Source}' (firstgid={tilesetRef.FirstGlobalId}) " +
-                    $"could not be found. Expected at: {tsxPath}");
-            }
-
             TiledTilesetXml tilesetXml;
 
-            using (Stream stream = File.OpenRead(tsxPath))
+            using (Stream stream = OpenExternalTilesetStream(tilesetRef, tsxPath))
             {
                 try
                 {
@@ -197,6 +197,24 @@ public class TiledTmxParser : ITilemapParser
 
             tilesetXml.FirstGlobalId = tilesetRef.FirstGlobalId;
             tilesetRef.TilesetData = tilesetXml;
+        }
+    }
+
+    private Stream OpenExternalTilesetStream(TiledTilesetRefXml tilesetRef, string tsxPath)
+    {
+        try
+        {
+            return _resourceResolver(tsxPath);
+        }
+        catch (TilemapParseException)
+        {
+            throw;
+        }
+        catch (Exception ex)
+        {
+            throw new TilemapParseException(
+                $"External tileset '{tilesetRef.Source}' (firstgid={tilesetRef.FirstGlobalId}) " +
+                $"could not be opened. Expected at: {tsxPath}", ex);
         }
     }
 }

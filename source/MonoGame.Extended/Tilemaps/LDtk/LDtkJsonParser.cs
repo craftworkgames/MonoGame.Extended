@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text.Json;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended.Content;
 using MonoGame.Extended.Tilemaps.LDtk.Converters;
 using MonoGame.Extended.Tilemaps.LDtk.Document;
 using MonoGame.Extended.Tilemaps.Parsers;
@@ -24,6 +25,7 @@ public class LDtkJsonParser : ITilemapParser
     };
 
     private readonly string _baseDirectory;
+    private readonly ExternalResourceResolver _resourceResolver;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="LDtkJsonParser"/> class.
@@ -33,9 +35,14 @@ public class LDtkJsonParser : ITilemapParser
     /// <see cref="ParseFromFile"/> will be resolved relative to this directory.
     /// If <see langword="null"/>, paths are resolved from the file's own location.
     /// </param>
-    public LDtkJsonParser(string baseDirectory = null)
+    /// <param name="resourceResolver">
+    /// Optional resolver used to open external resources referenced by the project. If
+    /// <see langword="null"/>, resources are opened from the local file system.
+    /// </param>
+    public LDtkJsonParser(string baseDirectory = null, ExternalResourceResolver resourceResolver = null)
     {
         _baseDirectory = baseDirectory;
+        _resourceResolver = resourceResolver ?? ExternalResourceResolvers.OpenFile;
     }
 
     /// <summary>
@@ -76,16 +83,15 @@ public class LDtkJsonParser : ITilemapParser
             ? Path.Combine(_baseDirectory, filePath)
             : filePath;
 
-        if (!File.Exists(fullPath))
-        {
-            throw new FileNotFoundException($"LDtk file not found: {fullPath}", fullPath);
-        }
-
         try
         {
-            using FileStream stream = File.OpenRead(fullPath);
+            using Stream stream = OpenProjectStream(fullPath);
             string directory = Path.GetDirectoryName(fullPath);
             return ParseFromStream(stream, graphicsDevice, directory);
+        }
+        catch (FileNotFoundException)
+        {
+            throw;
         }
         catch (TilemapParseException)
         {
@@ -166,11 +172,6 @@ public class LDtkJsonParser : ITilemapParser
             ? Path.Combine(_baseDirectory, filePath)
             : filePath;
 
-        if (!File.Exists(fullPath))
-        {
-            throw new FileNotFoundException($"LDtk file not found: {fullPath}", fullPath);
-        }
-
         try
         {
             string projectDirectory = Path.GetDirectoryName(fullPath);
@@ -183,6 +184,10 @@ public class LDtkJsonParser : ITilemapParser
             }
 
             return ConvertLevel(level, project, graphicsDevice, projectDirectory);
+        }
+        catch (FileNotFoundException)
+        {
+            throw;
         }
         catch (TilemapParseException)
         {
@@ -211,11 +216,6 @@ public class LDtkJsonParser : ITilemapParser
             ? Path.Combine(_baseDirectory, filePath)
             : filePath;
 
-        if (!File.Exists(fullPath))
-        {
-            throw new FileNotFoundException($"LDtk file not found: {fullPath}", fullPath);
-        }
-
         try
         {
             string projectDirectory = Path.GetDirectoryName(fullPath);
@@ -229,6 +229,10 @@ public class LDtkJsonParser : ITilemapParser
             }
 
             return tilemaps;
+        }
+        catch (FileNotFoundException)
+        {
+            throw;
         }
         catch (TilemapParseException)
         {
@@ -296,11 +300,6 @@ public class LDtkJsonParser : ITilemapParser
             ? Path.Combine(_baseDirectory, filePath)
             : filePath;
 
-        if (!File.Exists(fullPath))
-        {
-            throw new FileNotFoundException($"LDtk file not found: {fullPath}", fullPath);
-        }
-
         try
         {
             LDtkProject project = LoadProject(fullPath);
@@ -319,6 +318,10 @@ public class LDtkJsonParser : ITilemapParser
             }
 
             return toc;
+        }
+        catch (FileNotFoundException)
+        {
+            throw;
         }
         catch (TilemapParseException)
         {
@@ -349,11 +352,6 @@ public class LDtkJsonParser : ITilemapParser
         string fullPath = _baseDirectory != null
             ? Path.Combine(_baseDirectory, filePath)
             : filePath;
-
-        if (!File.Exists(fullPath))
-        {
-            throw new FileNotFoundException($"LDtk file not found: {fullPath}", fullPath);
-        }
 
         try
         {
@@ -396,6 +394,10 @@ public class LDtkJsonParser : ITilemapParser
         {
             throw;
         }
+        catch (FileNotFoundException)
+        {
+            throw;
+        }
         catch (InvalidOperationException)
         {
             throw;
@@ -421,11 +423,6 @@ public class LDtkJsonParser : ITilemapParser
             ? Path.Combine(_baseDirectory, filePath)
             : filePath;
 
-        if (!File.Exists(fullPath))
-        {
-            throw new FileNotFoundException($"LDtk file not found: {fullPath}", fullPath);
-        }
-
         try
         {
             LDtkProject project = LoadProject(fullPath);
@@ -440,6 +437,10 @@ public class LDtkJsonParser : ITilemapParser
 
             return new List<string>();
         }
+        catch (FileNotFoundException)
+        {
+            throw;
+        }
         catch (TilemapParseException)
         {
             throw;
@@ -450,10 +451,10 @@ public class LDtkJsonParser : ITilemapParser
         }
     }
 
-    private static LDtkProject LoadProject(string filePath)
+    private LDtkProject LoadProject(string filePath)
     {
-        string json = File.ReadAllText(filePath);
-        LDtkProject project = JsonSerializer.Deserialize<LDtkProject>(json, s_jsonOptions);
+        using Stream stream = OpenProjectStream(filePath);
+        LDtkProject project = JsonSerializer.Deserialize<LDtkProject>(stream, s_jsonOptions);
 
         if (project == null)
         {
@@ -463,7 +464,7 @@ public class LDtkJsonParser : ITilemapParser
         return project;
     }
 
-    private static Tilemap ConvertLevel(LDtkLevel level, LDtkProject project, GraphicsDevice graphicsDevice, string projectDirectory)
+    private Tilemap ConvertLevel(LDtkLevel level, LDtkProject project, GraphicsDevice graphicsDevice, string projectDirectory)
     {
         string baseDirectory = projectDirectory ?? Directory.GetCurrentDirectory();
 
@@ -471,15 +472,7 @@ public class LDtkJsonParser : ITilemapParser
         {
             string levelPath = Path.Combine(baseDirectory, level.ExternalRelPath);
 
-            if (!File.Exists(levelPath))
-            {
-                throw new TilemapParseException(
-                    $"Level '{level.Identifier}' references external file '{level.ExternalRelPath}' " +
-                    $"which could not be found. Expected at: {levelPath}");
-            }
-
-            string levelJson = File.ReadAllText(levelPath);
-            LDtkLevel externalLevel = JsonSerializer.Deserialize<LDtkLevel>(levelJson, s_jsonOptions);
+            LDtkLevel externalLevel = LoadExternalLevel(level, levelPath);
 
             if (externalLevel != null)
             {
@@ -488,6 +481,45 @@ public class LDtkJsonParser : ITilemapParser
         }
 
         TilemapData data = LDtkTilemapDataConverter.Convert(level, project);
-        return TilemapFactory.Build(data, graphicsDevice, baseDirectory);
+        return TilemapFactory.Build(data, graphicsDevice, baseDirectory, _resourceResolver);
+    }
+
+    private Stream OpenProjectStream(string filePath)
+    {
+        try
+        {
+            return _resourceResolver(filePath);
+        }
+        catch (FileNotFoundException)
+        {
+            throw;
+        }
+        catch (TilemapParseException)
+        {
+            throw;
+        }
+        catch (Exception ex)
+        {
+            throw new TilemapParseException($"Failed to open LDtk file: {filePath}", ex);
+        }
+    }
+
+    private LDtkLevel LoadExternalLevel(LDtkLevel level, string levelPath)
+    {
+        try
+        {
+            using Stream stream = _resourceResolver(levelPath);
+            return JsonSerializer.Deserialize<LDtkLevel>(stream, s_jsonOptions);
+        }
+        catch (TilemapParseException)
+        {
+            throw;
+        }
+        catch (Exception ex)
+        {
+            throw new TilemapParseException(
+                $"Level '{level.Identifier}' references external file '{level.ExternalRelPath}' " +
+                $"which could not be opened. Expected at: {levelPath}", ex);
+        }
     }
 }
