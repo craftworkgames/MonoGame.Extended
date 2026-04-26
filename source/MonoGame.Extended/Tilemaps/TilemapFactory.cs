@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.IO;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended.Content;
 using MonoGame.Extended.Tilemaps.Parsers;
 
 namespace MonoGame.Extended.Tilemaps;
 
 /// <summary>
 /// Constructs a <see cref="Tilemap"/> from a <see cref="TilemapData"/> intermediate
-/// representation, loading textures from disk using the provided graphics device.
+/// representation, loading textures using the provided graphics device.
 /// </summary>
 public static class TilemapFactory
 {
@@ -23,9 +24,24 @@ public static class TilemapFactory
     /// <exception cref="TilemapParseException">Thrown when a texture cannot be loaded.</exception>
     public static Tilemap Build(TilemapData data, GraphicsDevice graphicsDevice, string baseDirectory)
     {
+        return Build(data, graphicsDevice, baseDirectory, ExternalResourceResolvers.OpenFile);
+    }
+
+    /// <summary>
+    /// Builds a <see cref="Tilemap"/> from the given <see cref="TilemapData"/>.
+    /// </summary>
+    /// <param name="data">The tilemap data.</param>
+    /// <param name="graphicsDevice">The graphics device used to load textures.</param>
+    /// <param name="baseDirectory">The directory used to resolve relative texture paths.</param>
+    /// <param name="resourceResolver">The resolver used to open texture streams.</param>
+    /// <returns>The constructed tilemap.</returns>
+    /// <exception cref="TilemapParseException">Thrown when a texture cannot be loaded.</exception>
+    public static Tilemap Build(TilemapData data, GraphicsDevice graphicsDevice, string baseDirectory, ExternalResourceResolver resourceResolver)
+    {
         ArgumentNullException.ThrowIfNull(data);
         ArgumentNullException.ThrowIfNull(graphicsDevice);
         ArgumentNullException.ThrowIfNull(baseDirectory);
+        ArgumentNullException.ThrowIfNull(resourceResolver);
 
         Tilemap tilemap = new Tilemap(
             name: data.Name ?? "Untitled",
@@ -54,19 +70,19 @@ public static class TilemapFactory
                 continue;
             }
 
-            TilemapTileset tileset = BuildTileset(entry, graphicsDevice, baseDirectory);
+            TilemapTileset tileset = BuildTileset(entry, graphicsDevice, baseDirectory, resourceResolver);
             tilemap.Tilesets.Add(tileset);
         }
 
         foreach (TilemapLayerData layerData in data.Layers)
         {
-            FlattenLayers(layerData, string.Empty, data, graphicsDevice, baseDirectory, tilemap.Layers);
+            FlattenLayers(layerData, string.Empty, data, graphicsDevice, baseDirectory, resourceResolver, tilemap.Layers);
         }
 
         return tilemap;
     }
 
-    private static void FlattenLayers(TilemapLayerData layerData, string pathPrefix, TilemapData mapData, GraphicsDevice graphicsDevice, string baseDirectory, TilemapLayerCollection layers)
+    private static void FlattenLayers(TilemapLayerData layerData, string pathPrefix, TilemapData mapData, GraphicsDevice graphicsDevice, string baseDirectory, ExternalResourceResolver resourceResolver, TilemapLayerCollection layers)
     {
         if (layerData is TilemapGroupLayerData groupData)
         {
@@ -76,7 +92,7 @@ public static class TilemapFactory
 
             foreach (TilemapLayerData child in groupData.Layers)
             {
-                FlattenLayers(child, groupPath, mapData, graphicsDevice, baseDirectory, layers);
+                FlattenLayers(child, groupPath, mapData, graphicsDevice, baseDirectory, resourceResolver, layers);
             }
         }
         else
@@ -88,7 +104,7 @@ public static class TilemapFactory
                 layerData.Name = pathPrefix + "/" + (layerData.Name ?? string.Empty);
             }
 
-            TilemapLayer layer = BuildLayer(layerData, mapData, graphicsDevice, baseDirectory);
+            TilemapLayer layer = BuildLayer(layerData, mapData, graphicsDevice, baseDirectory, resourceResolver);
 
             if (layer != null)
             {
@@ -99,7 +115,7 @@ public static class TilemapFactory
 
     #region Tilesets
 
-    private static TilemapTileset BuildTileset(TilemapTilesetEntry entry, GraphicsDevice graphicsDevice, string baseDirectory)
+    private static TilemapTileset BuildTileset(TilemapTilesetEntry entry, GraphicsDevice graphicsDevice, string baseDirectory, ExternalResourceResolver resourceResolver)
     {
         TilemapTilesetData tilesetData = entry.InlineData;
         Texture2D texture = null;
@@ -108,7 +124,7 @@ public static class TilemapFactory
         {
             try
             {
-                texture = LoadTexture(tilesetData.TexturePath, graphicsDevice, baseDirectory);
+                texture = LoadTexture(tilesetData.TexturePath, graphicsDevice, baseDirectory, resourceResolver);
             }
             catch (TilemapParseException ex)
             {
@@ -135,14 +151,14 @@ public static class TilemapFactory
 
         foreach (TilemapTileEntryData tileEntry in tilesetData.Tiles)
         {
-            TilemapTileData tileData = BuildTileData(tileEntry, graphicsDevice, baseDirectory);
+            TilemapTileData tileData = BuildTileData(tileEntry, graphicsDevice, baseDirectory, resourceResolver);
             tileset.AddTileData(tileData);
         }
 
         return tileset;
     }
 
-    private static TilemapTileData BuildTileData(TilemapTileEntryData entryData, GraphicsDevice graphicsDevice, string baseDirectory)
+    private static TilemapTileData BuildTileData(TilemapTileEntryData entryData, GraphicsDevice graphicsDevice, string baseDirectory, ExternalResourceResolver resourceResolver)
     {
         TilemapTileData tileData = new TilemapTileData(entryData.LocalId);
         tileData.Class = entryData.Class ?? string.Empty;
@@ -154,7 +170,7 @@ public static class TilemapFactory
         {
             try
             {
-                tileData.CustomImage = LoadTexture(entryData.ImagePath, graphicsDevice, baseDirectory);
+                tileData.CustomImage = LoadTexture(entryData.ImagePath, graphicsDevice, baseDirectory, resourceResolver);
             }
             catch (TilemapParseException ex)
             {
@@ -193,7 +209,7 @@ public static class TilemapFactory
 
     #region Layers
 
-    private static TilemapLayer BuildLayer(TilemapLayerData layerData, TilemapData mapData, GraphicsDevice graphicsDevice, string baseDirectory)
+    private static TilemapLayer BuildLayer(TilemapLayerData layerData, TilemapData mapData, GraphicsDevice graphicsDevice, string baseDirectory, ExternalResourceResolver resourceResolver)
     {
         TilemapLayer layer;
 
@@ -208,7 +224,7 @@ public static class TilemapFactory
                 break;
 
             case TilemapImageLayerData imageLayerData:
-                layer = BuildImageLayer(imageLayerData, graphicsDevice, baseDirectory);
+                layer = BuildImageLayer(imageLayerData, graphicsDevice, baseDirectory, resourceResolver);
                 break;
 
             case TilemapDataLayerData dataLayerData:
@@ -278,7 +294,7 @@ public static class TilemapFactory
         return layer;
     }
 
-    private static TilemapImageLayer BuildImageLayer(TilemapImageLayerData data, GraphicsDevice graphicsDevice, string baseDirectory)
+    private static TilemapImageLayer BuildImageLayer(TilemapImageLayerData data, GraphicsDevice graphicsDevice, string baseDirectory, ExternalResourceResolver resourceResolver)
     {
         if (string.IsNullOrEmpty(data.TexturePath))
         {
@@ -289,7 +305,7 @@ public static class TilemapFactory
 
         try
         {
-            texture = LoadTexture(data.TexturePath, graphicsDevice, baseDirectory);
+            texture = LoadTexture(data.TexturePath, graphicsDevice, baseDirectory, resourceResolver);
         }
         catch (TilemapParseException ex)
         {
@@ -446,7 +462,7 @@ public static class TilemapFactory
 
     #region Texture Loading
 
-    private static Texture2D LoadTexture(string path, GraphicsDevice graphicsDevice, string baseDirectory)
+    private static Texture2D LoadTexture(string path, GraphicsDevice graphicsDevice, string baseDirectory, ExternalResourceResolver resourceResolver)
     {
         // Support Ogmo-style embedded tileset images stored as base64 data URIs.
         if (path.StartsWith("data:image", StringComparison.OrdinalIgnoreCase))
@@ -458,14 +474,9 @@ public static class TilemapFactory
             ? path
             : Path.Combine(baseDirectory, path);
 
-        if (!File.Exists(fullPath))
-        {
-            throw new TilemapParseException($"Texture file not found: {fullPath}");
-        }
-
         try
         {
-            using FileStream stream = File.OpenRead(fullPath);
+            using Stream stream = resourceResolver(fullPath);
             return Texture2D.FromStream(graphicsDevice, stream);
         }
         catch (Exception ex)
