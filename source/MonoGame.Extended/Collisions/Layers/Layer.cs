@@ -16,14 +16,14 @@ public class Layer
     /// <summary>
     /// The space, which contain actors.
     /// </summary>
-    public readonly ISpaceAlgorithm Space;
+    public readonly ICollisionBroadphase2D Space;
 
     /// <summary>
     /// Constructor for layer
     /// </summary>
     /// <param name="spaceAlgorithm">A space algorithm for actors</param>
     /// <exception cref="ArgumentNullException"><paramref name="spaceAlgorithm"/> is null</exception>
-    public Layer(ISpaceAlgorithm spaceAlgorithm)
+    public Layer(ICollisionBroadphase2D spaceAlgorithm)
     {
         Space = spaceAlgorithm ?? throw new ArgumentNullException(nameof(spaceAlgorithm));
     }

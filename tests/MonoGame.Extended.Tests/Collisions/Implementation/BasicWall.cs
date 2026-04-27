@@ -1,19 +1,27 @@
-﻿using System;
-using Microsoft.Xna.Framework;
-
 namespace MonoGame.Extended.Collisions.Tests
 {
-    public class BasicWall : ICollisionActor
+    public class BasicWall : BasicActor
     {
-        public Vector2 Position { get; set; }
-        public IShapeF Bounds { get; set; }
-        public Vector2 Velocity { get; set; }
-
         public BasicWall()
         {
-            Bounds = new RectangleF(0f, 0f, 1f, 1f);
         }
-        public void OnCollision(CollisionEventArgs collisionInfo)
+
+        public BasicWall(BoundingBox2D bounds)
+            : base(bounds)
+        {
+        }
+
+        public BasicWall(BoundingCircle2D bounds)
+            : base(bounds)
+        {
+        }
+
+        public BasicWall(OrientedBoundingBox2D bounds)
+            : base(bounds)
+        {
+        }
+
+        public override void OnCollision(CollisionEventArgs collisionInfo)
         {
         }
     }

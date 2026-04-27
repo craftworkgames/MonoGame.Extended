@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace MonoGame.Extended.Collisions.QuadTree;
@@ -19,7 +19,7 @@ public class QuadtreeData
     public QuadtreeData(ICollisionActor target)
     {
         _target = target;
-        Bounds = _target.Bounds.BoundingRectangle;
+        Bounds = _target.Shape.BoundingBox;
     }
 
     /// <summary>
@@ -38,7 +38,7 @@ public class QuadtreeData
     public void AddParent(QuadTree parent)
     {
         _parents.Add(parent);
-        Bounds = _target.Bounds.BoundingRectangle;
+        Bounds = _target.Shape.BoundingBox;
     }
 
     /// <summary>
@@ -46,10 +46,8 @@ public class QuadtreeData
     /// </summary>
     public void RemoveFromAllParents()
     {
-        foreach (var parent in _parents.ToList())
-        {
+        foreach (QuadTree parent in _parents.ToList())
             parent.Remove(this);
-        }
 
         _parents.Clear();
     }
@@ -57,7 +55,7 @@ public class QuadtreeData
     /// <summary>
     /// Gets the bounding box for collision detection.
     /// </summary>
-    public RectangleF Bounds { get; set; }
+    public BoundingBox2D Bounds { get; set; }
 
     /// <summary>
     /// Gets the collision actor target.

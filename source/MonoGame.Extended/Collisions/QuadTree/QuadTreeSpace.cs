@@ -3,13 +3,17 @@ using System.Linq;
 
 namespace MonoGame.Extended.Collisions.QuadTree;
 
-public class QuadTreeSpace: ISpaceAlgorithm
+public class QuadTreeSpace : ICollisionBroadphase2D
 {
     private readonly QuadTree _collisionTree;
     private readonly List<ICollisionActor> _actors = new();
     private readonly Dictionary<ICollisionActor, QuadtreeData> _targetDataDictionary = new();
 
-    public QuadTreeSpace(RectangleF boundary)
+    /// <summary>
+    /// Initializes a new quadtree-backed collision space for the specified axis-aligned boundary.
+    /// </summary>
+    /// <param name="boundary">The axis-aligned world boundary covered by the quadtree.</param>
+    public QuadTreeSpace(BoundingBox2D boundary)
     {
         _collisionTree = new QuadTree(boundary);
     }
@@ -69,8 +73,8 @@ public class QuadTreeSpace: ISpaceAlgorithm
     public List<ICollisionActor>.Enumerator GetEnumerator() => _actors.GetEnumerator();
 
     /// <inheritdoc cref="QuadTree.Query"/>
-    public IEnumerable<ICollisionActor> Query(RectangleF boundsBoundingRectangle)
+    public IEnumerable<ICollisionActor> Query(BoundingBox2D bounds)
     {
-        return _collisionTree.Query(ref boundsBoundingRectangle).Select(x => x.Target);
+        return _collisionTree.Query(bounds).Select(x => x.Target);
     }
 }

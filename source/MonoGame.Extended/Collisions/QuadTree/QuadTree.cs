@@ -33,7 +33,7 @@ namespace MonoGame.Extended.Collisions.QuadTree
         /// Creates a quad tree with the given bounds.
         /// </summary>
         /// <param name="bounds">The bounds of the new quad tree.</param>
-        public QuadTree(RectangleF bounds)
+        public QuadTree(BoundingBox2D bounds)
         {
             CurrentDepth = 0;
             NodeBounds = bounds;
@@ -55,7 +55,7 @@ namespace MonoGame.Extended.Collisions.QuadTree
         /// <summary>
         /// Gets the bounds of the area contained in this quad tree.
         /// </summary>
-        public  RectangleF NodeBounds { get; protected set; }
+        public BoundingBox2D NodeBounds { get; protected set; }
 
         /// <summary>
         /// Gets whether the current node is a leaf node.
@@ -110,7 +110,7 @@ namespace MonoGame.Extended.Collisions.QuadTree
         /// <param name="data">Data being inserted.</param>
         public void Insert(QuadtreeData data)
         {
-            var actorBounds = data.Bounds;
+            BoundingBox2D actorBounds = data.Bounds;
 
             // Object doesn't fit into this node.
             if (!NodeBounds.Intersects(actorBounds))
@@ -219,16 +219,16 @@ namespace MonoGame.Extended.Collisions.QuadTree
         {
             if (CurrentDepth + 1 >= MaxDepth) return;
 
-            var min = NodeBounds.TopLeft;
-            var max = NodeBounds.BottomRight;
-            var center = NodeBounds.Center;
+            Vector2 min = NodeBounds.Min;
+            Vector2 max = NodeBounds.Max;
+            Vector2 center = NodeBounds.Center;
 
-            RectangleF[] childAreas =
+            BoundingBox2D[] childAreas =
             {
-                RectangleF.CreateFrom(min, center),
-                RectangleF.CreateFrom(new Vector2(center.X, min.Y), new Vector2(max.X, center.Y)),
-                RectangleF.CreateFrom(center, max),
-                RectangleF.CreateFrom(new Vector2(min.X, center.Y), new Vector2(center.X, max.Y))
+                new BoundingBox2D(min, center),
+                new BoundingBox2D(new Vector2(center.X, min.Y), new Vector2(max.X, center.Y)),
+                new BoundingBox2D(center, max),
+                new BoundingBox2D(new Vector2(min.X, center.Y), new Vector2(center.X, max.Y))
             };
 
             for (var i = 0; i < childAreas.Length; ++i)
@@ -272,18 +272,18 @@ namespace MonoGame.Extended.Collisions.QuadTree
         /// </summary>
         /// <param name="area">The area to query for overlapping targets</param>
         /// <returns>A unique list of targets intersected by area.</returns>
-        public List<QuadtreeData> Query(ref RectangleF area)
+        public List<QuadtreeData> Query(BoundingBox2D area)
         {
-            var recursiveResult = new List<QuadtreeData>();
-            QueryWithoutReset(ref area, recursiveResult);
-            foreach (var quadtreeData in recursiveResult)
+            List<QuadtreeData> recursiveResult = new List<QuadtreeData>();
+            QueryWithoutReset(area, recursiveResult);
+            foreach (QuadtreeData quadtreeData in recursiveResult)
             {
                 quadtreeData.MarkClean();
             }
             return recursiveResult;
         }
 
-        private void QueryWithoutReset(ref RectangleF area, List<QuadtreeData> recursiveResult)
+        private void QueryWithoutReset(BoundingBox2D area, List<QuadtreeData> recursiveResult)
         {
             if (!NodeBounds.Intersects(area))
                 return;
@@ -303,7 +303,7 @@ namespace MonoGame.Extended.Collisions.QuadTree
             {
                 for (int i = 0, size = Children.Count; i < size; i++)
                 {
-                    Children[i].QueryWithoutReset(ref area, recursiveResult);
+                    Children[i].QueryWithoutReset(area, recursiveResult);
                 }
             }
         }

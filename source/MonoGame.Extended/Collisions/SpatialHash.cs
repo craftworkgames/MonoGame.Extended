@@ -1,14 +1,12 @@
-using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 
 namespace MonoGame.Extended.Collisions;
 
-public class SpatialHash: ISpaceAlgorithm
+public class SpatialHash : ICollisionBroadphase2D
 {
     private readonly Dictionary<int, List<ICollisionActor>> _dictionary = new();
     private readonly List<ICollisionActor> _actors = new();
-
     private readonly SizeF _size;
 
     public SpatialHash(SizeF size)
@@ -25,20 +23,21 @@ public class SpatialHash: ISpaceAlgorithm
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private void InsertToHash(ICollisionActor actor)
     {
-        var rect = actor.Bounds.BoundingRectangle;
-        for (var x = rect.Left; x < rect.Right; x+=_size.Width)
-        for (var y = rect.Top; y < rect.Bottom; y+=_size.Height)
+        RectangleF rect = ToRectangleF(actor.Shape.BoundingBox);
+
+        for (float x = rect.Left; x < rect.Right; x += _size.Width)
+        for (float y = rect.Top; y < rect.Bottom; y += _size.Height)
             AddToCell(x, y, actor);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private void AddToCell(float x, float y, ICollisionActor actor)
     {
-        var index = GetIndex(x, y);
-        if (_dictionary.TryGetValue(index, out var actors))
+        int index = GetIndex(x, y);
+        if (_dictionary.TryGetValue(index, out List<ICollisionActor> actors))
             actors.Add(actor);
         else
-            _dictionary[index] = new() { actor };
+            _dictionary[index] = new List<ICollisionActor> { actor };
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -49,22 +48,31 @@ public class SpatialHash: ISpaceAlgorithm
 
     public bool Remove(ICollisionActor actor)
     {
-        foreach (var actors in _dictionary.Values)
+        foreach (List<ICollisionActor> actors in _dictionary.Values)
             actors.Remove(actor);
+
         return _actors.Remove(actor);
     }
 
-    public IEnumerable<ICollisionActor> Query(RectangleF boundsBoundingRectangle)
+    public IEnumerable<ICollisionActor> Query(BoundingBox2D boundsBoundingBox)
     {
-        var results = new HashSet<ICollisionActor>();
-        var bounds = boundsBoundingRectangle.BoundingRectangle;
+        HashSet<ICollisionActor> results = new();
+        RectangleF boundsBoundingRectangle = ToRectangleF(boundsBoundingBox);
+        RectangleF bounds = boundsBoundingRectangle.BoundingRectangle;
 
-        for (var x = boundsBoundingRectangle.Left; x < boundsBoundingRectangle.Right; x+=_size.Width)
-        for (var y = boundsBoundingRectangle.Top; y < boundsBoundingRectangle.Bottom; y+=_size.Height)
-            if (_dictionary.TryGetValue(GetIndex(x, y), out var actors))
-                foreach (var actor in actors)
-                    if (bounds.Intersects(actor.Bounds))
+        for (float x = boundsBoundingRectangle.Left; x < boundsBoundingRectangle.Right; x += _size.Width)
+        for (float y = boundsBoundingRectangle.Top; y < boundsBoundingRectangle.Bottom; y += _size.Height)
+        {
+            if (_dictionary.TryGetValue(GetIndex(x, y), out List<ICollisionActor> actors))
+            {
+                foreach (ICollisionActor actor in actors)
+                {
+                    if (bounds.Intersects(ToRectangleF(actor.Shape.BoundingBox)))
                         results.Add(actor);
+                }
+            }
+        }
+
         return results;
     }
 
@@ -73,7 +81,12 @@ public class SpatialHash: ISpaceAlgorithm
     public void Reset()
     {
         _dictionary.Clear();
-        foreach (var actor in _actors)
+        foreach (ICollisionActor actor in _actors)
             InsertToHash(actor);
+    }
+
+    private static RectangleF ToRectangleF(BoundingBox2D boundingBox)
+    {
+        return new RectangleF(boundingBox.Min, new SizeF(boundingBox.Size.X, boundingBox.Size.Y));
     }
 }
