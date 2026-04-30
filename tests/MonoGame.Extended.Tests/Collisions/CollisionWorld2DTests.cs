@@ -250,53 +250,347 @@ public class CollisionWorld2DTests
     }
 
     [Fact]
-    public void AddLayer_WhenDefaultLayerExists_EnablesCollisionWithDefaultLayer()
+    public void QueryCandidates_WhenLayerNameIsNull_UsesDefaultLayerBroadphase()
+    {
+        Layer defaultLayer = new Layer(new SpatialHash(new SizeF(64, 64)));
+        CollisionWorld2D world = new CollisionWorld2D(defaultLayer);
+        BasicActor actor = new BasicActor(BoundingBox2D.CreateFromPositionAndSize(Vector2.Zero, new Vector2(1f, 1f)));
+
+        world.Insert(actor);
+
+        ICollisionActor candidate = world.QueryCandidates(actor.Shape.BoundingBox).Single();
+        Assert.Same(actor, candidate);
+    }
+
+    [Fact]
+    public void QueryCandidates_WhenNamedLayerIsProvided_UsesMatchingLayerBroadphase()
     {
         Layer defaultLayer = new Layer(new SpatialHash(new SizeF(64, 64)));
         Layer namedLayer = new Layer(new SpatialHash(new SizeF(64, 64)));
         CollisionWorld2D world = new CollisionWorld2D(defaultLayer);
+        NamedLayerActor actor = new NamedLayerActor(
+            1,
+            new CollisionShape2D(BoundingBox2D.CreateFromPositionAndSize(Vector2.Zero, new Vector2(1f, 1f))));
 
         world.AddLayer("actors", namedLayer);
+        world.Insert(actor, "actors");
 
-        Assert.True(world.IsCollisionEnabledBetweenLayers(CollisionWorld2D.DefaultLayerName, "actors"));
+        ICollisionActor candidate = world.QueryCandidates(actor.Shape.BoundingBox, "actors").Single();
+        Assert.Same(actor, candidate);
     }
 
     [Fact]
-    public void AddLayer_WhenNamedLayerIsRegistered_EnablesSelfCollision()
-    {
-        Layer namedLayer = new Layer(new SpatialHash(new SizeF(64, 64)));
-        CollisionWorld2D world = new CollisionWorld2D();
-
-        world.AddLayer("actors", namedLayer);
-
-        Assert.True(world.IsCollisionEnabledBetweenLayers("actors", "actors"));
-    }
-
-    [Fact]
-    public void DisableCollisionBetweenLayers_WhenCalled_DisablesExistingRule()
+    public void QueryCandidates_WhenCrossLayerCollisionIsDisabled_ReturnsNoCandidates()
     {
         Layer defaultLayer = new Layer(new SpatialHash(new SizeF(64, 64)));
         Layer namedLayer = new Layer(new SpatialHash(new SizeF(64, 64)));
         CollisionWorld2D world = new CollisionWorld2D(defaultLayer);
+        BasicActor defaultActor = new BasicActor(BoundingBox2D.CreateFromPositionAndSize(Vector2.Zero, new Vector2(1f, 1f)));
+        NamedLayerActor namedActor = new NamedLayerActor(
+            1,
+            new CollisionShape2D(BoundingBox2D.CreateFromPositionAndSize(Vector2.Zero, new Vector2(1f, 1f))));
 
         world.AddLayer("actors", namedLayer);
         world.DisableCollisionBetweenLayers(CollisionWorld2D.DefaultLayerName, "actors");
+        world.Insert(defaultActor);
+        world.Insert(namedActor, "actors");
 
-        Assert.False(world.IsCollisionEnabledBetweenLayers(CollisionWorld2D.DefaultLayerName, "actors"));
+        ICollisionActor[] candidates = world.QueryCandidates(defaultActor, "actors").ToArray();
+
+        Assert.Empty(candidates);
     }
 
     [Fact]
-    public void EnableCollisionBetweenLayers_WhenCalledAfterDisable_ReenablesExistingRule()
+    public void QueryCollisions_WhenCrossLayerCollisionIsDisabled_DoesNotTouchOtherActorShape()
     {
         Layer defaultLayer = new Layer(new SpatialHash(new SizeF(64, 64)));
         Layer namedLayer = new Layer(new SpatialHash(new SizeF(64, 64)));
         CollisionWorld2D world = new CollisionWorld2D(defaultLayer);
+        CountingShapeActor defaultActor = new CountingShapeActor(
+            1,
+            new CollisionShape2D(BoundingBox2D.CreateFromPositionAndSize(Vector2.Zero, new Vector2(2f, 2f))));
+        CountingShapeActor namedActor = new CountingShapeActor(
+            2,
+            new CollisionShape2D(BoundingBox2D.CreateFromPositionAndSize(Vector2.Zero, new Vector2(2f, 2f))));
+
+        world.AddLayer("actors", namedLayer);
+        world.DisableCollisionBetweenLayers(CollisionWorld2D.DefaultLayerName, "actors");
+        world.Insert(defaultActor);
+        world.Insert(namedActor, "actors");
+        defaultActor.ResetShapeAccessCount();
+        namedActor.ResetShapeAccessCount();
+
+        CollisionEvent2D[] collisions = world.QueryCollisions(defaultActor, "actors").ToArray();
+
+        Assert.Empty(collisions);
+        Assert.Equal(0, defaultActor.ShapeAccessCount);
+        Assert.Equal(0, namedActor.ShapeAccessCount);
+    }
+
+    [Fact]
+    public void QueryCandidates_WhenCrossLayerCollisionIsEnabled_ReturnsCandidates()
+    {
+        Layer defaultLayer = new Layer(new SpatialHash(new SizeF(64, 64)));
+        Layer namedLayer = new Layer(new SpatialHash(new SizeF(64, 64)));
+        CollisionWorld2D world = new CollisionWorld2D(defaultLayer);
+        BasicActor defaultActor = new BasicActor(BoundingBox2D.CreateFromPositionAndSize(Vector2.Zero, new Vector2(1f, 1f)));
+        NamedLayerActor namedActor = new NamedLayerActor(
+            1,
+            new CollisionShape2D(BoundingBox2D.CreateFromPositionAndSize(Vector2.Zero, new Vector2(1f, 1f))));
 
         world.AddLayer("actors", namedLayer);
         world.DisableCollisionBetweenLayers(CollisionWorld2D.DefaultLayerName, "actors");
         world.EnableCollisionBetweenLayers(CollisionWorld2D.DefaultLayerName, "actors");
+        world.Insert(defaultActor);
+        world.Insert(namedActor, "actors");
 
-        Assert.True(world.IsCollisionEnabledBetweenLayers(CollisionWorld2D.DefaultLayerName, "actors"));
+        ICollisionActor candidate = world.QueryCandidates(defaultActor, "actors").Single();
+
+        Assert.Same(namedActor, candidate);
+    }
+
+    [Fact]
+    public void QueryCollisionPairs_WhenCrossLayerCollisionIsDisabled_DoesNotTouchActorShapes()
+    {
+        Layer defaultLayer = new Layer(new SpatialHash(new SizeF(64, 64)));
+        Layer namedLayer = new Layer(new SpatialHash(new SizeF(64, 64)));
+        CollisionWorld2D world = new CollisionWorld2D(defaultLayer);
+        CountingShapeActor defaultActor = new CountingShapeActor(
+            1,
+            new CollisionShape2D(BoundingBox2D.CreateFromPositionAndSize(Vector2.Zero, new Vector2(2f, 2f))));
+        CountingShapeActor namedActor = new CountingShapeActor(
+            2,
+            new CollisionShape2D(BoundingBox2D.CreateFromPositionAndSize(Vector2.Zero, new Vector2(2f, 2f))));
+
+        world.AddLayer("actors", namedLayer);
+        world.DisableCollisionBetweenLayers(CollisionWorld2D.DefaultLayerName, "actors");
+        world.Insert(defaultActor);
+        world.Insert(namedActor, "actors");
+        defaultActor.ResetShapeAccessCount();
+        namedActor.ResetShapeAccessCount();
+
+        CollisionPair2D[] pairs = world.QueryCollisionPairs(CollisionWorld2D.DefaultLayerName, "actors").ToArray();
+
+        Assert.Empty(pairs);
+        Assert.Equal(0, defaultActor.ShapeAccessCount);
+        Assert.Equal(0, namedActor.ShapeAccessCount);
+    }
+
+    [Fact]
+    public void QueryCollisions_WhenShapesOverlap_ReturnsCollisionResult()
+    {
+        Layer defaultLayer = new Layer(new SpatialHash(new SizeF(64, 64)));
+        Layer namedLayer = new Layer(new SpatialHash(new SizeF(64, 64)));
+        CollisionWorld2D world = new CollisionWorld2D(defaultLayer);
+        BasicActor defaultActor = new BasicActor(BoundingBox2D.CreateFromPositionAndSize(Vector2.Zero, new Vector2(2f, 2f)));
+        NamedLayerActor namedActor = new NamedLayerActor(
+            1,
+            new CollisionShape2D(BoundingBox2D.CreateFromPositionAndSize(new Vector2(1f, 0f), new Vector2(2f, 2f))));
+
+        world.AddLayer("actors", namedLayer);
+        world.Insert(defaultActor);
+        world.Insert(namedActor, "actors");
+
+        CollisionEvent2D collision = world.QueryCollisions(defaultActor, "actors").Single();
+
+        Assert.Same(namedActor, collision.Other);
+        Assert.True(collision.Result.Intersects);
+    }
+
+    [Fact]
+    public void QueryCollisions_WhenCandidateDoesNotProduceCollisionResult_SkipsCandidate()
+    {
+        Layer defaultLayer = new Layer(new SpatialHash(new SizeF(64, 64)));
+        Layer namedLayer = new Layer(new SpatialHash(new SizeF(64, 64)));
+        CollisionWorld2D world = new CollisionWorld2D(defaultLayer);
+        BasicActor defaultActor = new BasicActor(BoundingBox2D.CreateFromPositionAndSize(Vector2.Zero, new Vector2(2f, 2f)));
+        NamedLayerActor namedActor = new NamedLayerActor(
+            1,
+            new CollisionShape2D(new BoundingCapsule2D(new Vector2(1f, -1f), new Vector2(1f, 1f), 0.5f)));
+
+        world.AddLayer("actors", namedLayer);
+        world.Insert(defaultActor);
+        world.Insert(namedActor, "actors");
+
+        CollisionEvent2D[] collisions = world.QueryCollisions(defaultActor, "actors").ToArray();
+
+        Assert.Empty(collisions);
+    }
+
+    [Fact]
+    public void QueryCollisions_WhenCircleAndBoxShapesOverlap_ReturnsCollisionResult()
+    {
+        Layer defaultLayer = new Layer(new SpatialHash(new SizeF(64, 64)));
+        Layer namedLayer = new Layer(new SpatialHash(new SizeF(64, 64)));
+        CollisionWorld2D world = new CollisionWorld2D(defaultLayer);
+        NamedLayerActor circleActor = new NamedLayerActor(
+            1,
+            new CollisionShape2D(new BoundingCircle2D(Vector2.Zero, 2.0f)));
+        NamedLayerActor boxActor = new NamedLayerActor(
+            2,
+            new CollisionShape2D(BoundingBox2D.CreateFromPositionAndSize(new Vector2(1.0f, -2.0f), new Vector2(4.0f, 4.0f))));
+
+        world.AddLayer("actors", namedLayer);
+        world.Insert(circleActor);
+        world.Insert(boxActor, "actors");
+
+        CollisionEvent2D collision = world.QueryCollisions(circleActor, "actors").Single();
+
+        Assert.Same(boxActor, collision.Other);
+        Assert.True(collision.Result.Intersects);
+        Assert.NotEqual(Vector2.Zero, collision.Result.MinimumTranslationVector);
+    }
+
+    [Fact]
+    public void QueryCollisions_WhenObbAndBoxShapesOverlap_ReturnsCollisionResult()
+    {
+        Layer defaultLayer = new Layer(new SpatialHash(new SizeF(64, 64)));
+        Layer namedLayer = new Layer(new SpatialHash(new SizeF(64, 64)));
+        CollisionWorld2D world = new CollisionWorld2D(defaultLayer);
+        NamedLayerActor obbActor = new NamedLayerActor(
+            1,
+            new CollisionShape2D(OrientedBoundingBox2D.CreateFromRotation(
+                new Vector2(3.0f, 2.0f),
+                MathHelper.PiOver4,
+                new Vector2(2.0f, 2.0f))));
+        NamedLayerActor boxActor = new NamedLayerActor(
+            2,
+            new CollisionShape2D(BoundingBox2D.CreateFromPositionAndSize(Vector2.Zero, new Vector2(4.0f, 4.0f))));
+
+        world.AddLayer("actors", namedLayer);
+        world.Insert(obbActor);
+        world.Insert(boxActor, "actors");
+
+        CollisionEvent2D collision = world.QueryCollisions(obbActor, "actors").Single();
+
+        Assert.Same(boxActor, collision.Other);
+        Assert.True(collision.Result.Intersects);
+        Assert.NotEqual(Vector2.Zero, collision.Result.MinimumTranslationVector);
+    }
+
+    [Fact]
+    public void QueryCollisionPairs_WhenWorldContainsMixedShapes_ReturnsOnlySupportedPairs()
+    {
+        Layer defaultLayer = new Layer(new SpatialHash(new SizeF(64, 64)));
+        CollisionWorld2D world = new CollisionWorld2D(defaultLayer);
+        NamedLayerActor circleActor = new NamedLayerActor(
+            1,
+            new CollisionShape2D(new BoundingCircle2D(Vector2.Zero, 2.0f)));
+        NamedLayerActor polygonActor = new NamedLayerActor(
+            2,
+            new CollisionShape2D(new BoundingPolygon2D(
+                new[]
+                {
+                    new Vector2(1.0f, -1.0f),
+                    new Vector2(3.0f, -1.0f),
+                    new Vector2(3.0f, 1.0f),
+                    new Vector2(1.0f, 1.0f)
+                },
+                new[]
+                {
+                    -Vector2.UnitY,
+                    Vector2.UnitX,
+                    Vector2.UnitY,
+                    -Vector2.UnitX
+                })));
+        NamedLayerActor unsupportedCapsuleActor = new NamedLayerActor(
+            3,
+            new CollisionShape2D(new BoundingCapsule2D(new Vector2(0.5f, -1.0f), new Vector2(0.5f, 1.0f), 0.5f)));
+
+        world.Insert(circleActor);
+        world.Insert(polygonActor);
+        world.Insert(unsupportedCapsuleActor);
+
+        CollisionPair2D[] pairs = world.QueryCollisionPairs(
+            CollisionWorld2D.DefaultLayerName,
+            CollisionWorld2D.DefaultLayerName).ToArray();
+
+        Assert.Single(pairs);
+        Assert.Equal(circleActor.Id, pairs[0].FirstId);
+        Assert.Equal(unsupportedCapsuleActor.Id, pairs[0].SecondId);
+        Assert.True(pairs[0].FirstResult.Intersects);
+    }
+
+    [Fact]
+    public void QueryCollisionPairs_WhenCollisionDataIsNeeded_ReturnsPairWithResults()
+    {
+        Layer defaultLayer = new Layer(new SpatialHash(new SizeF(64, 64)));
+        Layer namedLayer = new Layer(new SpatialHash(new SizeF(64, 64)));
+        CollisionWorld2D world = new CollisionWorld2D(defaultLayer);
+        BasicActor defaultActor = new BasicActor(BoundingBox2D.CreateFromPositionAndSize(Vector2.Zero, new Vector2(2f, 2f)));
+        NamedLayerActor namedActor = new NamedLayerActor(
+            7,
+            new CollisionShape2D(BoundingBox2D.CreateFromPositionAndSize(new Vector2(1f, 0f), new Vector2(2f, 2f))));
+
+        world.AddLayer("actors", namedLayer);
+        world.Insert(defaultActor);
+        world.Insert(namedActor, "actors");
+
+        CollisionPair2D pair = world.QueryCollisionPairs(CollisionWorld2D.DefaultLayerName, "actors").Single();
+
+        Assert.Same(defaultActor, pair.First);
+        Assert.Same(namedActor, pair.Second);
+        Assert.True(pair.FirstResult.Intersects);
+        Assert.Equal(defaultActor.Id, pair.FirstId);
+        Assert.Equal(namedActor.Id, pair.SecondId);
+    }
+
+    [Fact]
+    public void QueryCollisionPairs_WhenSecondResultIsRequested_ReturnsOppositeResultDirection()
+    {
+        Layer defaultLayer = new Layer(new SpatialHash(new SizeF(64, 64)));
+        Layer namedLayer = new Layer(new SpatialHash(new SizeF(64, 64)));
+        CollisionWorld2D world = new CollisionWorld2D(defaultLayer);
+        BasicActor defaultActor = new BasicActor(BoundingBox2D.CreateFromPositionAndSize(Vector2.Zero, new Vector2(2f, 2f)));
+        NamedLayerActor namedActor = new NamedLayerActor(
+            7,
+            new CollisionShape2D(BoundingBox2D.CreateFromPositionAndSize(new Vector2(1f, 0f), new Vector2(2f, 2f))));
+
+        world.AddLayer("actors", namedLayer);
+        world.Insert(defaultActor);
+        world.Insert(namedActor, "actors");
+
+        CollisionPair2D pair = world.QueryCollisionPairs(CollisionWorld2D.DefaultLayerName, "actors").Single();
+
+        Assert.Equal(-pair.FirstResult.Normal, pair.SecondResult.Normal);
+        Assert.Equal(pair.FirstResult.PenetrationDepth, pair.SecondResult.PenetrationDepth);
+        Assert.Equal(-pair.FirstResult.MinimumTranslationVector, pair.SecondResult.MinimumTranslationVector);
+    }
+
+    [Fact]
+    public void QueryCollisionPairs_WhenActorsShareLayer_ReturnsPairOnlyOnce()
+    {
+        Layer defaultLayer = new Layer(new SpatialHash(new SizeF(64, 64)));
+        CollisionWorld2D world = new CollisionWorld2D(defaultLayer);
+        BasicActor firstActor = new BasicActor(BoundingBox2D.CreateFromPositionAndSize(Vector2.Zero, new Vector2(2f, 2f)));
+        BasicActor secondActor = new BasicActor(BoundingBox2D.CreateFromPositionAndSize(new Vector2(1f, 0f), new Vector2(2f, 2f)));
+
+        world.Insert(firstActor);
+        world.Insert(secondActor);
+
+        CollisionPair2D[] pairs = world.QueryCollisionPairs(CollisionWorld2D.DefaultLayerName, CollisionWorld2D.DefaultLayerName).ToArray();
+
+        Assert.Single(pairs);
+        Assert.Equal(firstActor.Id, pairs[0].FirstId);
+        Assert.Equal(secondActor.Id, pairs[0].SecondId);
+    }
+
+    [Fact]
+    public void QueryCollisionPairs_WhenActorsSpanMultipleBroadphaseCells_SuppressesDuplicates()
+    {
+        Layer defaultLayer = new Layer(new SpatialHash(new SizeF(32, 32)));
+        CollisionWorld2D world = new CollisionWorld2D(defaultLayer);
+        BasicActor firstActor = new BasicActor(BoundingBox2D.CreateFromPositionAndSize(new Vector2(16f, 16f), new Vector2(48f, 48f)));
+        BasicActor secondActor = new BasicActor(BoundingBox2D.CreateFromPositionAndSize(new Vector2(32f, 32f), new Vector2(32f, 32f)));
+
+        world.Insert(firstActor);
+        world.Insert(secondActor);
+
+        CollisionPair2D[] pairs = world.QueryCollisionPairs(CollisionWorld2D.DefaultLayerName, CollisionWorld2D.DefaultLayerName).ToArray();
+
+        Assert.Single(pairs);
+        Assert.Equal(firstActor.Id, pairs[0].FirstId);
+        Assert.Equal(secondActor.Id, pairs[0].SecondId);
     }
 
     private sealed class NamedLayerActor : ICollisionActor
@@ -310,6 +604,35 @@ public class CollisionWorld2DTests
         public int Id { get; }
 
         public CollisionShape2D Shape { get; }
+    }
+
+    private sealed class CountingShapeActor : ICollisionActor
+    {
+        private readonly CollisionShape2D _shape;
+
+        public CountingShapeActor(int id, CollisionShape2D shape)
+        {
+            Id = id;
+            _shape = shape;
+        }
+
+        public int Id { get; }
+
+        public int ShapeAccessCount { get; private set; }
+
+        public CollisionShape2D Shape
+        {
+            get
+            {
+                ShapeAccessCount++;
+                return _shape;
+            }
+        }
+
+        public void ResetShapeAccessCount()
+        {
+            ShapeAccessCount = 0;
+        }
     }
 
     private sealed class ResetTrackingLayer : Layer
