@@ -1,11 +1,12 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
+
 using Microsoft.Xna.Framework;
 
 namespace MonoGame.Extended.Collisions.QuadTree
 {
     /// <summary>
-    /// Class for doing collision handling with a quad tree.
+    /// Stores collision actors in a hierarchical quadtree for broadphase overlap queries.
     /// </summary>
     public class QuadTree
     {
@@ -20,19 +21,50 @@ namespace MonoGame.Extended.Collisions.QuadTree
         public const int DefaultMaxObjectsPerNode = 25;
 
         /// <summary>
-        /// Contains the children of this node.
+        /// Contains the child nodes of this node.
         /// </summary>
         protected List<QuadTree> Children = new List<QuadTree>();
 
         /// <summary>
-        /// Contains the data for this node in the quadtree.
+        /// Contains the quadtree data stored directly in this node.
         /// </summary>
         protected HashSet<QuadtreeData> Contents = new HashSet<QuadtreeData>();
 
         /// <summary>
-        /// Creates a quad tree with the given bounds.
+        /// Gets or sets the current depth for this node in the quadtree.
         /// </summary>
-        /// <param name="bounds">The bounds of the new quad tree.</param>
+        protected int CurrentDepth { get; set; }
+
+        /// <summary>
+        /// Gets or sets the maximum depth of the quadtree.
+        /// </summary>
+        protected int MaxDepth { get; set; } = DefaultMaxDepth;
+
+        /// <summary>
+        /// Gets or sets the maximum objects per node in this quadtree.
+        /// </summary>
+        protected int MaxObjectsPerNode { get; set; } = DefaultMaxObjectsPerNode;
+
+        /// <summary>
+        /// Gets the bounds of the area covered by this quadtree node.
+        /// </summary>
+        public BoundingBox2D NodeBounds { get; protected set; }
+
+        /// <summary>
+        /// Gets a value indicating whether the current node has no child nodes.
+        /// </summary>
+        public bool IsLeaf
+        {
+            get
+            {
+                return Children.Count == 0;
+            }
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="QuadTree"/> class.
+        /// </summary>
+        /// <param name="bounds">The bounds covered by this quadtree node.</param>
         public QuadTree(BoundingBox2D bounds)
         {
             CurrentDepth = 0;
@@ -40,55 +72,32 @@ namespace MonoGame.Extended.Collisions.QuadTree
         }
 
         /// <summary>
-        /// Gets or sets the current depth for this node in the quadtree.
+        /// Counts the number of distinct actors stored beneath this node.
         /// </summary>
-        protected int CurrentDepth { get; set; }
-        /// <summary>
-        /// Gets or sets the maximum depth of the quadtree.
-        /// </summary>
-        protected int MaxDepth { get; set; } = DefaultMaxDepth;
-        /// <summary>
-        /// Gets or sets the maximum objects per node in this quadtree.
-        /// </summary>
-        protected int MaxObjectsPerNode { get; set; } = DefaultMaxObjectsPerNode;
-
-        /// <summary>
-        /// Gets the bounds of the area contained in this quad tree.
-        /// </summary>
-        public BoundingBox2D NodeBounds { get; protected set; }
-
-        /// <summary>
-        /// Gets whether the current node is a leaf node.
-        /// </summary>
-        public bool IsLeaf => Children.Count == 0;
-
-        /// <summary>
-        /// Counts the number of unique targets in the current Quadtree.
-        /// </summary>
-        /// <returns>Returns the targets of objects found.</returns>
+        /// <returns>The number of unique actors stored beneath this node.</returns>
         public int NumTargets()
         {
             List<QuadtreeData> dirtyItems = new List<QuadtreeData>();
-            var objectCount = 0;
-
-            // Do BFS on nodes to count children.
-            var process = new Queue<QuadTree>();
+            int objectCount = 0;
+            Queue<QuadTree> process = new Queue<QuadTree>();
             process.Enqueue(this);
+
             while (process.Count > 0)
             {
-                var processing = process.Dequeue();
+                QuadTree processing = process.Dequeue();
+
                 if (!processing.IsLeaf)
                 {
-                    foreach (var child in processing.Children)
+                    foreach (QuadTree child in processing.Children)
                     {
                         process.Enqueue(child);
                     }
                 }
                 else
                 {
-                    foreach (var data in processing.Contents)
+                    foreach (QuadtreeData data in processing.Contents)
                     {
-                        if (data.Dirty == false)
+                        if (!data.Dirty)
                         {
                             objectCount++;
                             data.MarkDirty();
@@ -97,22 +106,26 @@ namespace MonoGame.Extended.Collisions.QuadTree
                     }
                 }
             }
-            foreach (var quadtreeData in dirtyItems)
+
+            foreach (QuadtreeData quadtreeData in dirtyItems)
             {
                 quadtreeData.MarkClean();
             }
+
             return objectCount;
         }
 
         /// <summary>
-        /// Inserts the data into the tree.
+        /// Inserts the specified quadtree data into this node or one of its descendants.
         /// </summary>
-        /// <param name="data">Data being inserted.</param>
+        /// <param name="data">The quadtree data to insert.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="data"/> is <see langword="null"/>.</exception>
         public void Insert(QuadtreeData data)
         {
+            ArgumentNullException.ThrowIfNull(data);
+
             BoundingBox2D actorBounds = data.Bounds;
 
-            // Object doesn't fit into this node.
             if (!NodeBounds.Intersects(actorBounds))
             {
                 return;
@@ -129,7 +142,7 @@ namespace MonoGame.Extended.Collisions.QuadTree
             }
             else
             {
-                foreach (var child in Children)
+                foreach (QuadTree child in Children)
                 {
                     child.Insert(data);
                 }
@@ -137,11 +150,15 @@ namespace MonoGame.Extended.Collisions.QuadTree
         }
 
         /// <summary>
-        /// Removes data from the Quadtree
+        /// Removes the specified quadtree data from this node.
         /// </summary>
-        /// <param name="data">The data to be removed.</param>
+        /// <param name="data">The quadtree data to remove.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="data"/> is <see langword="null"/>.</exception>
+        /// <exception cref="InvalidOperationException">The current node is not a leaf node.</exception>
         public void Remove(QuadtreeData data)
         {
+            ArgumentNullException.ThrowIfNull(data);
+
             if (IsLeaf)
             {
                 data.RemoveParent(this);
@@ -149,12 +166,12 @@ namespace MonoGame.Extended.Collisions.QuadTree
             }
             else
             {
-                throw new InvalidOperationException($"Cannot remove from a non leaf {nameof(QuadTree)}");
+                throw new InvalidOperationException($"Cannot remove from a non-leaf {nameof(QuadTree)}.");
             }
         }
 
         /// <summary>
-        /// Removes unnecessary leaf nodes and simplifies the quad tree.
+        /// Removes unnecessary leaf nodes and simplifies the quadtree.
         /// </summary>
         public void Shake()
         {
@@ -164,31 +181,33 @@ namespace MonoGame.Extended.Collisions.QuadTree
             }
 
             List<QuadtreeData> dirtyItems = new List<QuadtreeData>();
+            int numObjects = NumTargets();
 
-            var numObjects = NumTargets();
             if (numObjects == 0)
             {
                 Children.Clear();
             }
             else if (numObjects < MaxObjectsPerNode)
             {
-                var process = new Queue<QuadTree>();
+                Queue<QuadTree> process = new Queue<QuadTree>();
                 process.Enqueue(this);
+
                 while (process.Count > 0)
                 {
-                    var processing = process.Dequeue();
+                    QuadTree processing = process.Dequeue();
+
                     if (!processing.IsLeaf)
                     {
-                        foreach (var subTree in processing.Children)
+                        foreach (QuadTree subTree in processing.Children)
                         {
                             process.Enqueue(subTree);
                         }
                     }
                     else
                     {
-                        foreach (var data in processing.Contents)
+                        foreach (QuadtreeData data in processing.Contents)
                         {
-                            if (data.Dirty == false)
+                            if (!data.Dirty)
                             {
                                 AddToLeaf(data);
                                 data.MarkDirty();
@@ -197,27 +216,25 @@ namespace MonoGame.Extended.Collisions.QuadTree
                         }
                     }
                 }
+
                 Children.Clear();
             }
 
-            foreach (var quadtreeData in dirtyItems)
+            foreach (QuadtreeData quadtreeData in dirtyItems)
             {
                 quadtreeData.MarkClean();
             }
         }
 
-        private void AddToLeaf(QuadtreeData data)
-        {
-            data.AddParent(this);
-            Contents.Add(data);
-        }
-
         /// <summary>
-        /// Splits a quadtree into quadrants.
+        /// Splits the current leaf node into four child quadrants when additional depth is available.
         /// </summary>
         public void Split()
         {
-            if (CurrentDepth + 1 >= MaxDepth) return;
+            if (CurrentDepth + 1 >= MaxDepth)
+            {
+                return;
+            }
 
             Vector2 min = NodeBounds.Min;
             Vector2 max = NodeBounds.Max;
@@ -231,9 +248,9 @@ namespace MonoGame.Extended.Collisions.QuadTree
                 new BoundingBox2D(new Vector2(min.X, center.Y), new Vector2(center.X, max.Y))
             };
 
-            for (var i = 0; i < childAreas.Length; ++i)
+            for (int i = 0; i < childAreas.Length; ++i)
             {
-                var node = new QuadTree(childAreas[i]);
+                QuadTree node = new QuadTree(childAreas[i]);
                 Children.Add(node);
                 Children[i].CurrentDepth = CurrentDepth + 1;
             }
@@ -245,17 +262,45 @@ namespace MonoGame.Extended.Collisions.QuadTree
                     childQuadtree.Insert(contentQuadtree);
                 }
             }
+
             Clear();
         }
 
         /// <summary>
-        /// Clear current node and all children
+        /// Removes all contents from this node and every descendant node.
         /// </summary>
         public void ClearAll()
         {
             foreach (QuadTree childQuadtree in Children)
+            {
                 childQuadtree.ClearAll();
+            }
+
             Clear();
+        }
+
+        /// <summary>
+        /// Queries the quadtree for targets that intersect with the given area.
+        /// </summary>
+        /// <param name="area">The area to query for overlapping targets.</param>
+        /// <returns>A unique list of targets intersected by <paramref name="area"/>.</returns>
+        public List<QuadtreeData> Query(BoundingBox2D area)
+        {
+            List<QuadtreeData> recursiveResult = new List<QuadtreeData>();
+            QueryWithoutReset(area, recursiveResult);
+
+            foreach (QuadtreeData quadtreeData in recursiveResult)
+            {
+                quadtreeData.MarkClean();
+            }
+
+            return recursiveResult;
+        }
+
+        private void AddToLeaf(QuadtreeData data)
+        {
+            data.AddParent(this);
+            Contents.Add(data);
         }
 
         private void Clear()
@@ -264,35 +309,22 @@ namespace MonoGame.Extended.Collisions.QuadTree
             {
                 quadtreeData.RemoveParent(this);
             }
-            Contents.Clear();
-        }
 
-        /// <summary>
-        /// Queries the quadtree for targets that intersect with the given area.
-        /// </summary>
-        /// <param name="area">The area to query for overlapping targets</param>
-        /// <returns>A unique list of targets intersected by area.</returns>
-        public List<QuadtreeData> Query(BoundingBox2D area)
-        {
-            List<QuadtreeData> recursiveResult = new List<QuadtreeData>();
-            QueryWithoutReset(area, recursiveResult);
-            foreach (QuadtreeData quadtreeData in recursiveResult)
-            {
-                quadtreeData.MarkClean();
-            }
-            return recursiveResult;
+            Contents.Clear();
         }
 
         private void QueryWithoutReset(BoundingBox2D area, List<QuadtreeData> recursiveResult)
         {
             if (!NodeBounds.Intersects(area))
+            {
                 return;
+            }
 
             if (IsLeaf)
             {
                 foreach (QuadtreeData quadtreeData in Contents)
                 {
-                    if (quadtreeData.Dirty == false && quadtreeData.Bounds.Intersects(area))
+                    if (!quadtreeData.Dirty && quadtreeData.Bounds.Intersects(area))
                     {
                         recursiveResult.Add(quadtreeData);
                         quadtreeData.MarkDirty();

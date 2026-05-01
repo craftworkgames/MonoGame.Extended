@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using MonoGame.Extended.Collisions.QuadTree;
-using Xunit;
 
 namespace MonoGame.Extended.Collisions.Tests;
 
@@ -19,7 +18,7 @@ public class QuadTreeSpaceTests
     }
 
     [Fact]
-    public void InsertThenQueryReturnsActor()
+    public void Insert_WhenActorIsInsertedAndQueried_ReturnsActor()
     {
         QuadTreeSpace space = CreateQuadTreeSpace();
         BasicActor actor = new BasicActor(_box);
@@ -32,7 +31,7 @@ public class QuadTreeSpaceTests
     }
 
     [Fact]
-    public void RemoveAfterInsertThenQueryReturnsNoActors()
+    public void Remove_WhenActorWasInsertedAndThenRemoved_ReturnsNoActorsFromQuery()
     {
         QuadTreeSpace space = CreateQuadTreeSpace();
         BasicActor actor = new BasicActor(_box);
@@ -47,7 +46,7 @@ public class QuadTreeSpaceTests
     }
 
     [Fact]
-    public void ResetAfterActorMovesThenQueryUsesUpdatedBounds()
+    public void Reset_WhenActorMovesBeforeReset_UsesUpdatedBoundsForQuery()
     {
         QuadTreeSpace space = CreateQuadTreeSpace();
         BasicActor actor = new BasicActor(_box);
@@ -65,7 +64,7 @@ public class QuadTreeSpaceTests
     }
 
     [Fact]
-    public void QueryWhenActorOverlapsMultipleQuadrantsReturnsUniqueActor()
+    public void Query_WhenActorOverlapsMultipleQuadrants_ReturnsUniqueActor()
     {
         QuadTreeSpace space = CreateQuadTreeSpace();
         BasicActor actor = new BasicActor(BoundingBox2D.CreateFromPositionAndSize(new Vector2(120f, 120f), new Vector2(32f, 32f)));
@@ -79,7 +78,7 @@ public class QuadTreeSpaceTests
     }
 
     [Fact]
-    public void QueryWithCircleActorUsesBroadphaseBoundingBox()
+    public void Query_WhenActorUsesCircleBounds_UsesBroadphaseBoundingBox()
     {
         QuadTreeSpace space = CreateQuadTreeSpace();
         BasicActor actor = new BasicActor(new BoundingCircle2D(new Vector2(100f, 100f), 20f));
@@ -93,7 +92,7 @@ public class QuadTreeSpaceTests
     }
 
     [Fact]
-    public void QueryWithOrientedRectangleActorCanReturnBroadphaseFalsePositive()
+    public void Query_WhenActorUsesOrientedRectangleBounds_CanReturnBroadphaseFalsePositive()
     {
         QuadTreeSpace space = CreateQuadTreeSpace();
         BasicActor actor = new BasicActor(OrientedBoundingBox2D.CreateFromRotation(

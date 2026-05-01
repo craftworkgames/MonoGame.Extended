@@ -5,16 +5,13 @@ namespace MonoGame.Extended.Collisions;
 /// <summary>
 /// Defines a broadphase structure for collision actors.
 /// </summary>
-/// <remarks>
-/// This contract belongs to the actor/world collision layer.
-/// Low-level collision math remains in <see cref="Collision2D"/> and the bounding volume types.
-/// </remarks>
 public interface ICollisionBroadphase2D
 {
     /// <summary>
     /// Inserts the specified actor into the broadphase structure.
     /// </summary>
     /// <param name="actor">The actor to insert.</param>
+    /// <exception cref="ArgumentNullException"><paramref name="actor"/> is <see langword="null"/>.</exception>
     void Insert(ICollisionActor actor);
 
     /// <summary>
@@ -24,6 +21,7 @@ public interface ICollisionBroadphase2D
     /// <returns>
     /// <see langword="true"/> if the actor was removed; otherwise, <see langword="false"/>.
     /// </returns>
+    /// <exception cref="ArgumentNullException"><paramref name="actor"/> is <see langword="null"/>.</exception>
     bool Remove(ICollisionActor actor);
 
     /// <summary>

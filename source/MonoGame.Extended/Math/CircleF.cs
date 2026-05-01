@@ -20,7 +20,7 @@ namespace MonoGame.Extended
     /// <seealso cref="IEquatable{T}" />
     /// <seealso cref="IEquatableByRef{T}" />
     [DataContract]
-    public struct CircleF : IEquatable<CircleF>, IEquatableByRef<CircleF>, IShapeF
+    public struct CircleF : IEquatable<CircleF>, IEquatableByRef<CircleF>
     {
         /// <summary>
         ///     The centre position of this <see cref="CircleF" />.

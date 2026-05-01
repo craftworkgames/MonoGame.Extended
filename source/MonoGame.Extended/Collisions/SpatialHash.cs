@@ -1,74 +1,109 @@
+using System;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 
 namespace MonoGame.Extended.Collisions;
 
+/// <summary>
+/// Stores collision actors in a fixed-size spatial hash for broadphase overlap queries.
+/// </summary>
 public class SpatialHash : ICollisionBroadphase2D
 {
-    private readonly Dictionary<int, List<ICollisionActor>> _dictionary = new();
+    private readonly Dictionary<CellKey, List<ICollisionActor>> _cells = new();
+    private readonly Dictionary<ICollisionActor, List<CellKey>> _actorCells = new();
     private readonly List<ICollisionActor> _actors = new();
-    private readonly SizeF _size;
+    private readonly SizeF _cellSize;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="SpatialHash"/> class.
+    /// </summary>
+    /// <param name="size">The width and height of each hash cell in world units.</param>
+    /// <exception cref="ArgumentOutOfRangeException">
+    /// <paramref name="size"/> has a width or height less than or equal to zero.
+    /// </exception>
     public SpatialHash(SizeF size)
     {
-        _size = size;
+        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(size.Width);
+        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(size.Height);
+
+        _cellSize = size;
     }
 
+    /// <summary>
+    /// Inserts the specified actor into the spatial hash.
+    /// </summary>
+    /// <param name="actor">The actor to insert.</param>
+    /// <exception cref="ArgumentNullException"><paramref name="actor"/> is <see langword="null"/>.</exception>
     public void Insert(ICollisionActor actor)
     {
-        InsertToHash(actor);
+        ArgumentNullException.ThrowIfNull(actor);
+
+        if (_actorCells.ContainsKey(actor))
+        {
+            return;
+        }
+
         _actors.Add(actor);
+        InsertIntoCells(actor);
     }
 
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    private void InsertToHash(ICollisionActor actor)
-    {
-        RectangleF rect = ToRectangleF(actor.Shape.BoundingBox);
-
-        for (float x = rect.Left; x < rect.Right; x += _size.Width)
-        for (float y = rect.Top; y < rect.Bottom; y += _size.Height)
-            AddToCell(x, y, actor);
-    }
-
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    private void AddToCell(float x, float y, ICollisionActor actor)
-    {
-        int index = GetIndex(x, y);
-        if (_dictionary.TryGetValue(index, out List<ICollisionActor> actors))
-            actors.Add(actor);
-        else
-            _dictionary[index] = new List<ICollisionActor> { actor };
-    }
-
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    private int GetIndex(float x, float y)
-    {
-        return (int)(x / _size.Width) << 16 + (int)(y / _size.Height);
-    }
-
+    /// <summary>
+    /// Removes the specified actor from the spatial hash.
+    /// </summary>
+    /// <param name="actor">The actor to remove.</param>
+    /// <returns><see langword="true"/> if the actor was removed; otherwise, <see langword="false"/>.</returns>
+    /// <exception cref="ArgumentNullException"><paramref name="actor"/> is <see langword="null"/>.</exception>
     public bool Remove(ICollisionActor actor)
     {
-        foreach (List<ICollisionActor> actors in _dictionary.Values)
-            actors.Remove(actor);
+        ArgumentNullException.ThrowIfNull(actor);
 
-        return _actors.Remove(actor);
+        if (!_actorCells.TryGetValue(actor, out List<CellKey> occupiedCells))
+        {
+            return false;
+        }
+
+        foreach (CellKey cell in occupiedCells)
+        {
+            if (_cells.TryGetValue(cell, out List<ICollisionActor> actors))
+            {
+                actors.Remove(actor);
+
+                if (actors.Count == 0)
+                {
+                    _cells.Remove(cell);
+                }
+            }
+        }
+
+        _actorCells.Remove(actor);
+        _actors.Remove(actor);
+        return true;
     }
 
-    public IEnumerable<ICollisionActor> Query(BoundingBox2D boundsBoundingBox)
+    /// <summary>
+    /// Queries the spatial hash for actors whose broadphase bounds overlap the specified area.
+    /// </summary>
+    /// <param name="bounds">The axis-aligned query bounds in world space.</param>
+    /// <returns>The actors whose broadphase bounds overlap <paramref name="bounds"/>.</returns>
+    public IEnumerable<ICollisionActor> Query(BoundingBox2D bounds)
     {
         HashSet<ICollisionActor> results = new();
-        RectangleF boundsBoundingRectangle = ToRectangleF(boundsBoundingBox);
-        RectangleF bounds = boundsBoundingRectangle.BoundingRectangle;
+        GetCellRange(bounds, out int minX, out int minY, out int maxX, out int maxY);
 
-        for (float x = boundsBoundingRectangle.Left; x < boundsBoundingRectangle.Right; x += _size.Width)
-        for (float y = boundsBoundingRectangle.Top; y < boundsBoundingRectangle.Bottom; y += _size.Height)
+        for (int x = minX; x <= maxX; x++)
         {
-            if (_dictionary.TryGetValue(GetIndex(x, y), out List<ICollisionActor> actors))
+            for (int y = minY; y <= maxY; y++)
             {
-                foreach (ICollisionActor actor in actors)
+                CellKey cell = new CellKey(x, y);
+
+                if (_cells.TryGetValue(cell, out List<ICollisionActor> actors))
                 {
-                    if (bounds.Intersects(ToRectangleF(actor.Shape.BoundingBox)))
-                        results.Add(actor);
+                    foreach (ICollisionActor actor in actors)
+                    {
+                        if (bounds.Intersects(actor.Shape.BoundingBox))
+                        {
+                            results.Add(actor);
+                        }
+                    }
                 }
             }
         }
@@ -76,17 +111,99 @@ public class SpatialHash : ICollisionBroadphase2D
         return results;
     }
 
-    public List<ICollisionActor>.Enumerator GetEnumerator() => _actors.GetEnumerator();
-
-    public void Reset()
+    /// <summary>
+    /// Returns an enumerator for the actors currently stored in the spatial hash.
+    /// </summary>
+    /// <returns>An enumerator over the stored actors.</returns>
+    public List<ICollisionActor>.Enumerator GetEnumerator()
     {
-        _dictionary.Clear();
-        foreach (ICollisionActor actor in _actors)
-            InsertToHash(actor);
+        return _actors.GetEnumerator();
     }
 
-    private static RectangleF ToRectangleF(BoundingBox2D boundingBox)
+    /// <summary>
+    /// Rebuilds the spatial hash using the actors' current broadphase bounds.
+    /// </summary>
+    public void Reset()
     {
-        return new RectangleF(boundingBox.Min, new SizeF(boundingBox.Size.X, boundingBox.Size.Y));
+        _cells.Clear();
+        _actorCells.Clear();
+
+        foreach (ICollisionActor actor in _actors)
+        {
+            InsertIntoCells(actor);
+        }
+    }
+
+    private void InsertIntoCells(ICollisionActor actor)
+    {
+        BoundingBox2D actorBounds = actor.Shape.BoundingBox;
+        List<CellKey> occupiedCells = new();
+        GetCellRange(actorBounds, out int minX, out int minY, out int maxX, out int maxY);
+
+        for (int x = minX; x <= maxX; x++)
+        {
+            for (int y = minY; y <= maxY; y++)
+            {
+                AddToCell(x, y, actor);
+                occupiedCells.Add(new CellKey(x, y));
+            }
+        }
+
+        _actorCells[actor] = occupiedCells;
+    }
+
+    private void AddToCell(int x, int y, ICollisionActor actor)
+    {
+        CellKey cell = new CellKey(x, y);
+
+        if (_cells.TryGetValue(cell, out List<ICollisionActor> actors))
+        {
+            actors.Add(actor);
+        }
+        else
+        {
+            _cells[cell] = new List<ICollisionActor> { actor };
+        }
+    }
+
+    private void GetCellRange(BoundingBox2D bounds, out int minX, out int minY, out int maxX, out int maxY)
+    {
+        minX = GetCellIndex(bounds.Min.X, _cellSize.Width);
+        minY = GetCellIndex(bounds.Min.Y, _cellSize.Height);
+        maxX = GetCellIndex(bounds.Max.X, _cellSize.Width);
+        maxY = GetCellIndex(bounds.Max.Y, _cellSize.Height);
+    }
+
+    private static int GetCellIndex(float value, float cellSize)
+    {
+        return (int)MathF.Floor(value / cellSize);
+    }
+
+    private readonly struct CellKey : IEquatable<CellKey>
+    {
+        public int X { get; }
+
+        public int Y { get; }
+
+        public CellKey(int x, int y)
+        {
+            X = x;
+            Y = y;
+        }
+
+        public bool Equals(CellKey other)
+        {
+            return X == other.X && Y == other.Y;
+        }
+
+        public override bool Equals(object obj)
+        {
+            return obj is CellKey other && Equals(other);
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(X, Y);
+        }
     }
 }

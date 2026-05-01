@@ -17,6 +17,9 @@ public readonly struct CollisionResult2D
     /// <summary>
     /// A collision result that represents no intersection.
     /// </summary>
+    /// <value>
+    /// A result whose <see cref="Intersects"/> value is <see langword="false"/> and whose direction data is zero.
+    /// </value>
     public static readonly CollisionResult2D None;
 
     /// <summary>
@@ -27,6 +30,10 @@ public readonly struct CollisionResult2D
     /// <summary>
     /// The collision normal used to resolve the intersection.
     /// </summary>
+    /// <value>
+    /// A unit-length direction when collision-producing code provides one.
+    /// For <see cref="None"/>, this value is <see cref="Vector2.Zero"/>.
+    /// </value>
     public readonly Vector2 Normal;
 
     /// <summary>
@@ -37,6 +44,10 @@ public readonly struct CollisionResult2D
     /// <summary>
     /// The translation vector that resolves the collision using the result direction convention.
     /// </summary>
+    /// <value>
+    /// The translation that resolves the overlap according to the static or instance direction convention documented on this type.
+    /// For <see cref="None"/>, this value is <see cref="Vector2.Zero"/>.
+    /// </value>
     public readonly Vector2 MinimumTranslationVector;
 
     /// <summary>

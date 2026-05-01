@@ -1,104 +1,52 @@
 using Microsoft.Xna.Framework;
 
-namespace MonoGame.Extended.Collisions.Tests
+namespace MonoGame.Extended.Collisions.Tests;
+
+public class BasicActor : ICollisionActor
 {
-    public class BasicActor : ICollisionActor
+    private static int s_nextId = 1;
+
+    public int Id { get; } = s_nextId++;
+
+    public Vector2 Position { get; private set; }
+
+    public CollisionShape2D Shape { get; private set; }
+
+    public BasicActor()
     {
-        private enum TestShapeKind
-        {
-            Box,
-            Circle,
-            OrientedBox
-        }
+        SetBounds(BoundingBox2D.CreateFromPositionAndSize(Vector2.Zero, new Vector2(1f, 1f)));
+    }
 
-        private static int _nextId = 1;
+    public BasicActor(BoundingBox2D bounds)
+    {
+        SetBounds(bounds);
+    }
 
-        private TestShapeKind _shapeKind;
-        private BoundingBox2D _boxBounds;
-        private BoundingCircle2D _circleBounds;
-        private OrientedBoundingBox2D _orientedBoxBounds;
+    public BasicActor(BoundingCircle2D bounds)
+    {
+        SetBounds(bounds);
+    }
 
-        public BasicActor()
-        {
-            SetBounds(BoundingBox2D.CreateFromPositionAndSize(Vector2.Zero, new Vector2(1f, 1f)));
-        }
+    public BasicActor(OrientedBoundingBox2D bounds)
+    {
+        SetBounds(bounds);
+    }
 
-        public BasicActor(BoundingBox2D bounds)
-        {
-            SetBounds(bounds);
-        }
+    public void SetBounds(BoundingBox2D bounds)
+    {
+        Position = bounds.Min;
+        Shape = new CollisionShape2D(bounds);
+    }
 
-        public BasicActor(BoundingCircle2D bounds)
-        {
-            SetBounds(bounds);
-        }
+    public void SetBounds(BoundingCircle2D bounds)
+    {
+        Position = bounds.Center;
+        Shape = new CollisionShape2D(bounds);
+    }
 
-        public BasicActor(OrientedBoundingBox2D bounds)
-        {
-            SetBounds(bounds);
-        }
-
-        public int Id { get; } = _nextId++;
-
-        public Vector2 Position { get; private set; }
-
-        public CollisionShape2D Shape { get; private set; }
-
-        public Vector2 Velocity { get; set; }
-
-        public int CollisionCount { get; set; }
-
-        public void SetBounds(BoundingBox2D bounds)
-        {
-            _shapeKind = TestShapeKind.Box;
-            _boxBounds = bounds;
-            Position = bounds.Min;
-            Shape = new CollisionShape2D(bounds);
-        }
-
-        public void SetBounds(BoundingCircle2D bounds)
-        {
-            _shapeKind = TestShapeKind.Circle;
-            _circleBounds = bounds;
-            Position = bounds.Center;
-            Shape = new CollisionShape2D(bounds);
-        }
-
-        public void SetBounds(OrientedBoundingBox2D bounds)
-        {
-            _shapeKind = TestShapeKind.OrientedBox;
-            _orientedBoxBounds = bounds;
-            Position = bounds.Center;
-            Shape = new CollisionShape2D(bounds);
-        }
-
-        public virtual void OnCollision(CollisionEventArgs collisionInfo)
-        {
-            Translate(-collisionInfo.PenetrationVector);
-            if (collisionInfo.Other is BasicActor)
-                CollisionCount++;
-        }
-
-        private void Translate(Vector2 translation)
-        {
-            Position += translation;
-
-            switch (_shapeKind)
-            {
-                case TestShapeKind.Box:
-                    _boxBounds.Min += translation;
-                    _boxBounds.Max += translation;
-                    Shape = new CollisionShape2D(_boxBounds);
-                    break;
-                case TestShapeKind.Circle:
-                    _circleBounds.Center += translation;
-                    Shape = new CollisionShape2D(_circleBounds);
-                    break;
-                case TestShapeKind.OrientedBox:
-                    _orientedBoxBounds.Center += translation;
-                    Shape = new CollisionShape2D(_orientedBoxBounds);
-                    break;
-            }
-        }
+    public void SetBounds(OrientedBoundingBox2D bounds)
+    {
+        Position = bounds.Center;
+        Shape = new CollisionShape2D(bounds);
     }
 }
