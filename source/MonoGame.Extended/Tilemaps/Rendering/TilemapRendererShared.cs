@@ -16,13 +16,32 @@ internal static class TilemapRendererShared
             BufferUsage.WriteOnly);
         vertexBuffer.SetData(vertices);
 
-        // 32-bit indices support groups larger than 16,383 tiles (the 16-bit limit).
-        IndexBuffer indexBuffer = new IndexBuffer(
-            graphicsDevice,
-            IndexElementSize.ThirtyTwoBits,
-            indices.Length,
-            BufferUsage.WriteOnly);
-        indexBuffer.SetData(indices);
+        IndexBuffer indexBuffer;
+        if (CanUseSixteenBitIndices(vertices, indices))
+        {
+            ushort[] shortIndices = new ushort[indices.Length];
+            for (int i = 0; i < indices.Length; i++)
+            {
+                shortIndices[i] = (ushort)indices[i];
+            }
+
+            indexBuffer = new IndexBuffer(
+                graphicsDevice,
+                IndexElementSize.SixteenBits,
+                shortIndices.Length,
+                BufferUsage.WriteOnly);
+            indexBuffer.SetData(shortIndices);
+        }
+        else
+        {
+            // 32-bit indices support groups larger than 16,383 tiles (the 16-bit limit).
+            indexBuffer = new IndexBuffer(
+                graphicsDevice,
+                IndexElementSize.ThirtyTwoBits,
+                indices.Length,
+                BufferUsage.WriteOnly);
+            indexBuffer.SetData(indices);
+        }
 
         return new LayerModel
         {
@@ -31,6 +50,24 @@ internal static class TilemapRendererShared
             Texture = texture,
             PrimitiveCount = indices.Length / 3
         };
+    }
+
+    private static bool CanUseSixteenBitIndices(VertexPositionColorTexture[] vertices, int[] indices)
+    {
+        if (vertices.Length > ushort.MaxValue)
+        {
+            return false;
+        }
+
+        for (int i = 0; i < indices.Length; i++)
+        {
+            if ((uint)indices[i] > ushort.MaxValue)
+            {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     internal static void AddTileQuad(List<VertexPositionColorTexture> vertices, List<int> indices, Vector2 position, int width, int height, Rectangle sourceRect, TilemapTileFlipFlags flipFlags, Texture2D texture, Color color)

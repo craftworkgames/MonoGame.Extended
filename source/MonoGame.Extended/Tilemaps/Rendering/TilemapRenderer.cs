@@ -970,10 +970,10 @@ public sealed class TilemapRenderer : IDisposable
 
         IndexBuffer ib = new IndexBuffer(
             _graphicsDevice,
-            IndexElementSize.ThirtyTwoBits,
+            IndexElementSize.SixteenBits,
             6,
             BufferUsage.WriteOnly);
-        ib.SetData(new int[] { 0, 1, 2, 1, 3, 2 });
+        ib.SetData(new ushort[] { 0, 1, 2, 1, 3, 2 });
 
         return new RepeatImageLayerModel
         {
