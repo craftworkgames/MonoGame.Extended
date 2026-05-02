@@ -9,6 +9,11 @@
     </ItemGroup>
 
     <ItemGroup>
+        <PackageReference Include="nkast.Kni.Platform.SDL2.GL"
+                          Version="$(KNIVersion)" />
+    </ItemGroup>
+
+    <ItemGroup>
         <Folder Include="Content\" />
     </ItemGroup>
 
