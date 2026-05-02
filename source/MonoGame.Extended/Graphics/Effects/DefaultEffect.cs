@@ -88,7 +88,7 @@ namespace MonoGame.Extended.Graphics.Effects
                 if (_textureEnabled == value)
                     return;
                 _textureEnabled = value;
-                Flags[DirtyShaderIndexBitMask] = true;
+                UpdateCurrentTechnique();
             }
         }
 
@@ -104,7 +104,7 @@ namespace MonoGame.Extended.Graphics.Effects
                 if (_vertexColorEnabled == value)
                     return;
                 _vertexColorEnabled = value;
-                Flags[DirtyShaderIndexBitMask] = true;
+                UpdateCurrentTechnique();
             }
         }
 
@@ -113,7 +113,7 @@ namespace MonoGame.Extended.Graphics.Effects
         /// </summary>
         /// <param name="graphicsDevice">The graphics device.</param>
         public DefaultEffect(GraphicsDevice graphicsDevice)
-            : base(graphicsDevice, EffectResource.DefaultEffect.Bytecode)
+            : base(graphicsDevice, EffectResource.GetDefaultEffect(graphicsDevice).Bytecode)
         {
             Initialize();
         }
@@ -144,6 +144,7 @@ namespace MonoGame.Extended.Graphics.Effects
             Flags[DirtyMaterialColorBitMask] = true;
             _textureParameter = Parameters["Texture"];
             _diffuseColorParameter = Parameters["DiffuseColor"];
+            UpdateCurrentTechnique();
         }
 
         /// <summary>
@@ -166,20 +167,24 @@ namespace MonoGame.Extended.Graphics.Effects
                 Flags[DirtyMaterialColorBitMask] = false;
             }
 
-            // ReSharper disable once InvertIf
-            if (Flags[DirtyShaderIndexBitMask])
+        }
+
+        private void UpdateCurrentTechnique()
+        {
+            int shaderIndex = 0;
+
+            if (_textureEnabled)
             {
-                var shaderIndex = 0;
-
-                if (_textureEnabled)
-                    shaderIndex += 1;
-
-                if (_vertexColorEnabled)
-                    shaderIndex += 2;
-
-                Flags[DirtyShaderIndexBitMask] = false;
-                CurrentTechnique = Techniques[shaderIndex];
+                shaderIndex += 1;
             }
+
+            if (_vertexColorEnabled)
+            {
+                shaderIndex += 2;
+            }
+
+            CurrentTechnique = Techniques[shaderIndex];
+            Flags[DirtyShaderIndexBitMask] = false;
         }
 
         /// <summary>
