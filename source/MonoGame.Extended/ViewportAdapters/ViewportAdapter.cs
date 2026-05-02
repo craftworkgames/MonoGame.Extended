@@ -8,6 +8,7 @@ namespace MonoGame.Extended.ViewportAdapters
     {
         protected ViewportAdapter(GraphicsDevice graphicsDevice)
         {
+            ArgumentNullException.ThrowIfNull(graphicsDevice);
             GraphicsDevice = graphicsDevice;
         }
 
