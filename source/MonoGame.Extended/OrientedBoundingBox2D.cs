@@ -482,6 +482,101 @@ namespace MonoGame.Extended
         }
 
         /// <summary>
+        /// Tests whether this oriented bounding box intersects with a circle, and returns collision resolution data
+        /// when they intersect.
+        /// </summary>
+        /// <param name="circle">The circle to test against.</param>
+        /// <param name="result">
+        /// When this method returns <see langword="true"/>, contains the collision result whose minimum translation vector
+        /// moves this box out of <paramref name="circle"/>. When this method returns <see langword="false"/>, contains
+        /// <see cref="CollisionResult2D.None"/>.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the box and circle overlap or touch; otherwise, <see langword="false"/>.
+        /// </returns>
+        public readonly bool TryGetCollision(BoundingCircle2D circle, out CollisionResult2D result)
+        {
+            if (!Collision2D.TryGetCollisionCircleObb(circle.Center, circle.Radius, Center, AxisX, AxisY, HalfExtents, out CollisionResult2D circleResult))
+            {
+                result = CollisionResult2D.None;
+                return false;
+            }
+
+            result = circleResult.Invert();
+            return true;
+        }
+
+        /// <summary>
+        /// Tests whether this oriented bounding box intersects with another oriented bounding box, and returns collision
+        /// resolution data when they intersect.
+        /// </summary>
+        /// <param name="other">The other oriented bounding box to test against.</param>
+        /// <param name="result">
+        /// When this method returns <see langword="true"/>, contains the collision result whose minimum translation vector
+        /// moves this box out of <paramref name="other"/>. When this method returns <see langword="false"/>, contains
+        /// <see cref="CollisionResult2D.None"/>.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the boxes overlap or touch; otherwise, <see langword="false"/>.
+        /// </returns>
+        public readonly bool TryGetCollision(OrientedBoundingBox2D other, out CollisionResult2D result)
+        {
+            return Collision2D.TryGetCollisionObbObb(
+                Center,
+                AxisX,
+                AxisY,
+                HalfExtents,
+                other.Center,
+                other.AxisX,
+                other.AxisY,
+                other.HalfExtents,
+                out result);
+        }
+
+        /// <summary>
+        /// Tests whether this oriented bounding box intersects with an axis-aligned bounding box, and returns collision
+        /// resolution data when they intersect.
+        /// </summary>
+        /// <param name="box">The bounding box to test against.</param>
+        /// <param name="result">
+        /// When this method returns <see langword="true"/>, contains the collision result whose minimum translation vector
+        /// moves this box out of <paramref name="box"/>. When this method returns <see langword="false"/>, contains
+        /// <see cref="CollisionResult2D.None"/>.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the boxes overlap or touch; otherwise, <see langword="false"/>.
+        /// </returns>
+        public readonly bool TryGetCollision(BoundingBox2D box, out CollisionResult2D result)
+        {
+            if (!Collision2D.TryGetCollisionAabbObb(box.Center, box.HalfExtents, Center, AxisX, AxisY, HalfExtents, out CollisionResult2D boxResult))
+            {
+                result = CollisionResult2D.None;
+                return false;
+            }
+
+            result = boxResult.Invert();
+            return true;
+        }
+
+        /// <summary>
+        /// Tests whether this oriented bounding box intersects with a polygon, and returns collision resolution data
+        /// when they intersect.
+        /// </summary>
+        /// <param name="polygon">The polygon to test against.</param>
+        /// <param name="result">
+        /// When this method returns <see langword="true"/>, contains the collision result whose minimum translation vector
+        /// moves this box out of <paramref name="polygon"/>. When this method returns <see langword="false"/>, contains
+        /// <see cref="CollisionResult2D.None"/>.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the box and polygon overlap or touch; otherwise, <see langword="false"/>.
+        /// </returns>
+        public readonly bool TryGetCollision(BoundingPolygon2D polygon, out CollisionResult2D result)
+        {
+            return Collision2D.TryGetCollisionObbConvexPolygon(Center, AxisX, AxisY, HalfExtents, polygon.Vertices, polygon.Normals, out result);
+        }
+
+        /// <summary>
         /// Applies a matrix transformation to this oriented bounding box and creates a new transformed box.
         /// </summary>
         /// <param name="matrix">The transformation matrix to apply.</param>

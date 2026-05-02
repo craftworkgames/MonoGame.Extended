@@ -3,37 +3,40 @@ using System;
 namespace MonoGame.Extended.Collisions.Layers;
 
 /// <summary>
-/// Layer is a group of collision's actors.
+/// Groups collision actors that share one broadphase structure and one set of layer-level rules.
 /// </summary>
 public class Layer
 {
     /// <summary>
-    /// If this property equals true, layer always will reset collision space.
+    /// Gets the broadphase structure that stores the layer's actors.
+    /// </summary>
+    public readonly ICollisionBroadphase2D Space;
+
+    /// <summary>
+    /// Gets or sets a value indicating whether the broadphase is rebuilt during each reset.
     /// </summary>
     public bool IsDynamic { get; set; } = true;
 
-
     /// <summary>
-    /// The space, which contain actors.
+    /// Initializes a new instance of the <see cref="Layer"/> class.
     /// </summary>
-    public readonly ISpaceAlgorithm Space;
-
-    /// <summary>
-    /// Constructor for layer
-    /// </summary>
-    /// <param name="spaceAlgorithm">A space algorithm for actors</param>
-    /// <exception cref="ArgumentNullException"><paramref name="spaceAlgorithm"/> is null</exception>
-    public Layer(ISpaceAlgorithm spaceAlgorithm)
+    /// <param name="space">The broadphase structure used to store and query actors in this layer.</param>
+    /// <exception cref="ArgumentNullException"><paramref name="space"/> is <see langword="null"/>.</exception>
+    public Layer(ICollisionBroadphase2D space)
     {
-        Space = spaceAlgorithm ?? throw new ArgumentNullException(nameof(spaceAlgorithm));
+        ArgumentNullException.ThrowIfNull(space);
+
+        Space = space;
     }
 
     /// <summary>
-    /// Restructure a inner collection, if layer is dynamic, because actors can change own position
+    /// Rebuilds the layer broadphase when the layer is dynamic.
     /// </summary>
     public virtual void Reset()
     {
         if (IsDynamic)
+        {
             Space.Reset();
+        }
     }
 }

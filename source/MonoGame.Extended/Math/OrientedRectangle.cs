@@ -13,7 +13,7 @@ namespace MonoGame.Extended
     /// </summary>
     /// <seealso cref="IEquatable{T}" />
     [DebuggerDisplay($"{{{nameof(DebugDisplayString)},nq}}")]
-    public struct OrientedRectangle : IEquatable<OrientedRectangle>, IShapeF
+    public struct OrientedRectangle : IEquatable<OrientedRectangle>
     {
         /// <summary>
         /// The centre position of this <see cref="OrientedRectangle" />.

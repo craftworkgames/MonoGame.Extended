@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework;
 namespace MonoGame.Extended
 {
     [DataContract]
-    public struct EllipseF : IEquatable<EllipseF>, IEquatableByRef<EllipseF>, IShapeF
+    public struct EllipseF : IEquatable<EllipseF>, IEquatableByRef<EllipseF>
     {
         [DataMember] public Vector2 Center { get; set; }
         [DataMember] public float RadiusX { get; set; }

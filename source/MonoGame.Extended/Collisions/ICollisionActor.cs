@@ -1,27 +1,18 @@
-﻿using System;
-
 namespace MonoGame.Extended.Collisions
 {
     /// <summary>
-    /// An actor that can be collided with.
+    /// Defines an actor that participates in collision queries.
     /// </summary>
     public interface ICollisionActor
     {
         /// <summary>
-        /// A name of layer, which will contains this actor.
-        /// If it equals null, an actor will insert into a default layer
+        /// Gets the stable identity of this actor for collision reporting.
         /// </summary>
-        string LayerName { get => null; }
+        int Id { get; }
 
         /// <summary>
-        /// A bounds of an actor. It is using for collision calculating
+        /// Gets the collision shape used for broadphase and narrowphase collision queries.
         /// </summary>
-        IShapeF Bounds { get; }
-
-        /// <summary>
-        /// It will called, when collision with an another actor fires
-        /// </summary>
-        /// <param name="collisionInfo">Data about collision</param>
-        void OnCollision(CollisionEventArgs collisionInfo);
+        CollisionShape2D Shape { get; }
     }
 }

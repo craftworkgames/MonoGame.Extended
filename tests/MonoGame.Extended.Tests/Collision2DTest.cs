@@ -101,6 +101,155 @@ namespace MonoGame.Extended.Tests
 
         #endregion
 
+        #region TryGetProjectionOverlap Tests
+
+        [Fact]
+        public void TryGetProjectionOverlap_OverlappingIntervals_ReturnsTrueAndOverlap()
+        {
+            bool result = Collision2D.TryGetProjectionOverlap(0.0f, 10.0f, 4.0f, 12.0f, out float overlap);
+
+            Assert.True(result);
+            Assert.Equal(6.0f, overlap);
+        }
+
+        [Fact]
+        public void TryGetProjectionOverlap_TouchingIntervals_ReturnsTrueAndZeroOverlap()
+        {
+            bool result = Collision2D.TryGetProjectionOverlap(0.0f, 10.0f, 10.0f, 12.0f, out float overlap);
+
+            Assert.True(result);
+            Assert.Equal(0.0f, overlap);
+        }
+
+        [Fact]
+        public void TryGetProjectionOverlap_SeparatedIntervals_ReturnsFalseAndZeroOverlap()
+        {
+            bool result = Collision2D.TryGetProjectionOverlap(0.0f, 10.0f, 12.0f, 14.0f, out float overlap);
+
+            Assert.False(result);
+            Assert.Equal(0.0f, overlap);
+        }
+
+        [Fact]
+        public void TryGetProjectionOverlap_ReversedIntervalOrder_ReturnsSameOverlap()
+        {
+            bool result = Collision2D.TryGetProjectionOverlap(4.0f, 12.0f, 0.0f, 10.0f, out float overlap);
+
+            Assert.True(result);
+            Assert.Equal(6.0f, overlap);
+        }
+
+        #endregion
+
+        #region UpdateMinimumOverlap Tests
+
+        [Fact]
+        public void UpdateMinimumOverlap_WithSmallerOverlap_UpdatesTrackedValues()
+        {
+            float minimumOverlap = 10.0f;
+            Vector2 minimumOverlapAxis = Vector2.UnitX;
+            Vector2 candidateAxis = Vector2.UnitY;
+
+            bool result = Collision2D.UpdateMinimumOverlap(5.0f, candidateAxis, ref minimumOverlap, ref minimumOverlapAxis);
+
+            Assert.True(result);
+            Assert.Equal(5.0f, minimumOverlap);
+            Assert.Equal(candidateAxis, minimumOverlapAxis);
+        }
+
+        [Fact]
+        public void UpdateMinimumOverlap_WithEqualOverlap_DoesNotUpdateTrackedValues()
+        {
+            float minimumOverlap = 5.0f;
+            Vector2 minimumOverlapAxis = Vector2.UnitX;
+
+            bool result = Collision2D.UpdateMinimumOverlap(5.0f, Vector2.UnitY, ref minimumOverlap, ref minimumOverlapAxis);
+
+            Assert.False(result);
+            Assert.Equal(5.0f, minimumOverlap);
+            Assert.Equal(Vector2.UnitX, minimumOverlapAxis);
+        }
+
+        [Fact]
+        public void UpdateMinimumOverlap_WithLargerOverlap_DoesNotUpdateTrackedValues()
+        {
+            float minimumOverlap = 5.0f;
+            Vector2 minimumOverlapAxis = Vector2.UnitX;
+
+            bool result = Collision2D.UpdateMinimumOverlap(6.0f, Vector2.UnitY, ref minimumOverlap, ref minimumOverlapAxis);
+
+            Assert.False(result);
+            Assert.Equal(5.0f, minimumOverlap);
+            Assert.Equal(Vector2.UnitX, minimumOverlapAxis);
+        }
+
+        [Fact]
+        public void UpdateMinimumOverlap_WithZeroOverlap_UpdatesTrackedValues()
+        {
+            float minimumOverlap = 5.0f;
+            Vector2 minimumOverlapAxis = Vector2.UnitX;
+            Vector2 candidateAxis = Vector2.UnitY;
+
+            bool result = Collision2D.UpdateMinimumOverlap(0.0f, candidateAxis, ref minimumOverlap, ref minimumOverlapAxis);
+
+            Assert.True(result);
+            Assert.Equal(0.0f, minimumOverlap);
+            Assert.Equal(candidateAxis, minimumOverlapAxis);
+        }
+
+        #endregion
+
+        #region OrientNormal Tests
+
+        [Fact]
+        public void OrientNormal_WhenNormalPointsFromBToA_ReturnsNormal()
+        {
+            Vector2 normal = Vector2.UnitX;
+            Vector2 centerA = new Vector2(10.0f, 0.0f);
+            Vector2 centerB = Vector2.Zero;
+
+            Vector2 result = Collision2D.OrientNormal(normal, centerA, centerB);
+
+            Assert.Equal(normal, result);
+        }
+
+        [Fact]
+        public void OrientNormal_WhenNormalPointsFromAToB_ReturnsInvertedNormal()
+        {
+            Vector2 normal = -Vector2.UnitX;
+            Vector2 centerA = new Vector2(10.0f, 0.0f);
+            Vector2 centerB = Vector2.Zero;
+
+            Vector2 result = Collision2D.OrientNormal(normal, centerA, centerB);
+
+            Assert.Equal(Vector2.UnitX, result);
+        }
+
+        [Fact]
+        public void OrientNormal_WhenCentersAreEqual_ReturnsNormal()
+        {
+            Vector2 normal = Vector2.UnitY;
+            Vector2 center = new Vector2(5.0f, 5.0f);
+
+            Vector2 result = Collision2D.OrientNormal(normal, center, center);
+
+            Assert.Equal(normal, result);
+        }
+
+        [Fact]
+        public void OrientNormal_WhenNormalIsPerpendicularToCenterDelta_ReturnsNormal()
+        {
+            Vector2 normal = Vector2.UnitY;
+            Vector2 centerA = new Vector2(10.0f, 0.0f);
+            Vector2 centerB = Vector2.Zero;
+
+            Vector2 result = Collision2D.OrientNormal(normal, centerA, centerB);
+
+            Assert.Equal(normal, result);
+        }
+
+        #endregion
+
         #region ClipInterval Tests (ref overload)
 
         [Fact]
@@ -3019,6 +3168,419 @@ namespace MonoGame.Extended.Tests
 
         #endregion
 
+        #region TryGetCollisionAabbAabb Tests
+
+        [Fact]
+        public void TryGetCollisionAabbAabb_Overlapping_ReturnsTrueAndCollisionResult()
+        {
+            Vector2 aMin = new Vector2(-2.0f, -2.0f);
+            Vector2 aMax = new Vector2(2.0f, 2.0f);
+            Vector2 bMin = new Vector2(1.0f, -2.0f);
+            Vector2 bMax = new Vector2(5.0f, 2.0f);
+
+            bool intersects = Collision2D.TryGetCollisionAabbAabb(aMin, aMax, bMin, bMax, out CollisionResult2D result);
+
+            Assert.True(intersects);
+            Assert.True(result.Intersects);
+            Assert.Equal(-Vector2.UnitX, result.Normal);
+            Assert.Equal(1.0f, result.PenetrationDepth);
+            Assert.Equal(new Vector2(-1.0f, 0.0f), result.MinimumTranslationVector);
+        }
+
+        [Fact]
+        public void TryGetCollisionAabbAabb_Separated_ReturnsFalseAndNone()
+        {
+            Vector2 aMin = new Vector2(-1.0f, -1.0f);
+            Vector2 aMax = new Vector2(1.0f, 1.0f);
+            Vector2 bMin = new Vector2(4.0f, -1.0f);
+            Vector2 bMax = new Vector2(6.0f, 1.0f);
+
+            bool intersects = Collision2D.TryGetCollisionAabbAabb(aMin, aMax, bMin, bMax, out CollisionResult2D result);
+
+            Assert.False(intersects);
+            Assert.False(result.Intersects);
+            Assert.Equal(CollisionResult2D.None, result);
+        }
+
+        [Fact]
+        public void TryGetCollisionAabbAabb_Touching_ReturnsTrueAndZeroDepth()
+        {
+            Vector2 aMin = new Vector2(-1.0f, -1.0f);
+            Vector2 aMax = new Vector2(1.0f, 1.0f);
+            Vector2 bMin = new Vector2(1.0f, -1.0f);
+            Vector2 bMax = new Vector2(3.0f, 1.0f);
+
+            bool intersects = Collision2D.TryGetCollisionAabbAabb(aMin, aMax, bMin, bMax, out CollisionResult2D result);
+
+            Assert.True(intersects);
+            Assert.True(result.Intersects);
+            Assert.Equal(-Vector2.UnitX, result.Normal);
+            Assert.Equal(0.0f, result.PenetrationDepth);
+            Assert.Equal(Vector2.Zero, result.MinimumTranslationVector);
+        }
+
+        [Fact]
+        public void TryGetCollisionAabbAabb_WhenFirstBoxIsContained_ReturnsSeparatingMinimumTranslationVector()
+        {
+            Vector2 aMin = new Vector2(-1.0f, -1.0f);
+            Vector2 aMax = new Vector2(1.0f, 1.0f);
+            Vector2 bMin = new Vector2(-10.0f, -10.0f);
+            Vector2 bMax = new Vector2(10.0f, 10.0f);
+
+            bool intersects = Collision2D.TryGetCollisionAabbAabb(aMin, aMax, bMin, bMax, out CollisionResult2D result);
+
+            Assert.True(intersects);
+            Assert.True(result.Intersects);
+            Assert.Equal(-Vector2.UnitX, result.Normal);
+            Assert.Equal(11.0f, result.PenetrationDepth);
+            Assert.Equal(new Vector2(-11.0f, 0.0f), result.MinimumTranslationVector);
+        }
+
+        [Fact]
+        public void TryGetCollisionAabbAabb_WhenInputsAreReversedThenMinimumTranslationVectorIsOpposite()
+        {
+            Vector2 aMin = new Vector2(-2.0f, -2.0f);
+            Vector2 aMax = new Vector2(2.0f, 2.0f);
+            Vector2 bMin = new Vector2(1.0f, -2.0f);
+            Vector2 bMax = new Vector2(5.0f, 2.0f);
+
+            bool intersects = Collision2D.TryGetCollisionAabbAabb(aMin, aMax, bMin, bMax, out CollisionResult2D result);
+            bool reversedIntersects = Collision2D.TryGetCollisionAabbAabb(bMin, bMax, aMin, aMax, out CollisionResult2D reversedResult);
+
+            Assert.True(intersects);
+            Assert.True(reversedIntersects);
+            Assert.Equal(-result.MinimumTranslationVector, reversedResult.MinimumTranslationVector);
+        }
+
+        #endregion
+
+        #region TryGetCollisionAabbConvexPolygon Tests
+
+        [Fact]
+        public void TryGetCollisionAabbConvexPolygon_Overlapping_ReturnsTrueAndCollisionResult()
+        {
+            Vector2 aabbCenter = Vector2.Zero;
+            Vector2 aabbHalfExtents = new Vector2(2.0f, 2.0f);
+            Vector2[] vertices =
+            {
+                new Vector2(1.0f, -2.0f),
+                new Vector2(5.0f, -2.0f),
+                new Vector2(5.0f, 2.0f),
+                new Vector2(1.0f, 2.0f)
+            };
+            Vector2[] normals =
+            {
+                -Vector2.UnitY,
+                Vector2.UnitX,
+                Vector2.UnitY,
+                -Vector2.UnitX
+            };
+
+            bool intersects = Collision2D.TryGetCollisionAabbConvexPolygon(
+                aabbCenter,
+                aabbHalfExtents,
+                vertices,
+                normals,
+                out CollisionResult2D result);
+
+            Assert.True(intersects);
+            Assert.True(result.Intersects);
+            Assert.Equal(-Vector2.UnitX, result.Normal);
+            Assert.Equal(1.0f, result.PenetrationDepth);
+            Assert.Equal(new Vector2(-1.0f, 0.0f), result.MinimumTranslationVector);
+        }
+
+        [Fact]
+        public void TryGetCollisionAabbConvexPolygon_Separated_ReturnsFalseAndNone()
+        {
+            Vector2 aabbCenter = Vector2.Zero;
+            Vector2 aabbHalfExtents = new Vector2(1.0f, 1.0f);
+            Vector2[] vertices =
+            {
+                new Vector2(4.0f, -1.0f),
+                new Vector2(6.0f, -1.0f),
+                new Vector2(6.0f, 1.0f),
+                new Vector2(4.0f, 1.0f)
+            };
+            Vector2[] normals =
+            {
+                -Vector2.UnitY,
+                Vector2.UnitX,
+                Vector2.UnitY,
+                -Vector2.UnitX
+            };
+
+            bool intersects = Collision2D.TryGetCollisionAabbConvexPolygon(
+                aabbCenter,
+                aabbHalfExtents,
+                vertices,
+                normals,
+                out CollisionResult2D result);
+
+            Assert.False(intersects);
+            Assert.False(result.Intersects);
+            Assert.Equal(CollisionResult2D.None, result);
+        }
+
+        [Fact]
+        public void TryGetCollisionAabbConvexPolygon_Touching_ReturnsTrueAndZeroDepth()
+        {
+            Vector2 aabbCenter = Vector2.Zero;
+            Vector2 aabbHalfExtents = new Vector2(1.0f, 1.0f);
+            Vector2[] vertices =
+            {
+                new Vector2(1.0f, -1.0f),
+                new Vector2(3.0f, -1.0f),
+                new Vector2(3.0f, 1.0f),
+                new Vector2(1.0f, 1.0f)
+            };
+            Vector2[] normals =
+            {
+                -Vector2.UnitY,
+                Vector2.UnitX,
+                Vector2.UnitY,
+                -Vector2.UnitX
+            };
+
+            bool intersects = Collision2D.TryGetCollisionAabbConvexPolygon(
+                aabbCenter,
+                aabbHalfExtents,
+                vertices,
+                normals,
+                out CollisionResult2D result);
+
+            Assert.True(intersects);
+            Assert.True(result.Intersects);
+            Assert.Equal(-Vector2.UnitX, result.Normal);
+            Assert.Equal(0.0f, result.PenetrationDepth);
+            Assert.Equal(Vector2.Zero, result.MinimumTranslationVector);
+        }
+
+        [Fact]
+        public void TryGetCollisionAabbConvexPolygon_PolygonOnLeft_MovesAabbRight()
+        {
+            Vector2 aabbCenter = Vector2.Zero;
+            Vector2 aabbHalfExtents = new Vector2(2.0f, 2.0f);
+            Vector2[] vertices =
+            {
+                new Vector2(-5.0f, -2.0f),
+                new Vector2(-1.0f, -2.0f),
+                new Vector2(-1.0f, 2.0f),
+                new Vector2(-5.0f, 2.0f)
+            };
+            Vector2[] normals =
+            {
+                -Vector2.UnitY,
+                Vector2.UnitX,
+                Vector2.UnitY,
+                -Vector2.UnitX
+            };
+
+            bool intersects = Collision2D.TryGetCollisionAabbConvexPolygon(
+                aabbCenter,
+                aabbHalfExtents,
+                vertices,
+                normals,
+                out CollisionResult2D result);
+
+            Assert.True(intersects);
+            Assert.Equal(Vector2.UnitX, result.Normal);
+            Assert.Equal(1.0f, result.PenetrationDepth);
+            Assert.Equal(new Vector2(1.0f, 0.0f), result.MinimumTranslationVector);
+        }
+
+        #endregion
+
+        #region TryGetCollisionAabbObb Tests
+
+        [Fact]
+        public void TryGetCollisionAabbObb_Overlapping_ReturnsTrueAndCollisionResult()
+        {
+            Vector2 aabbCenter = Vector2.Zero;
+            Vector2 aabbHalfExtents = new Vector2(2.0f, 2.0f);
+            Vector2 obbCenter = new Vector2(3.0f, 0.0f);
+            Vector2 obbAxisX = Vector2.UnitX;
+            Vector2 obbAxisY = Vector2.UnitY;
+            Vector2 obbHalfExtents = new Vector2(2.0f, 2.0f);
+
+            bool intersects = Collision2D.TryGetCollisionAabbObb(
+                aabbCenter,
+                aabbHalfExtents,
+                obbCenter,
+                obbAxisX,
+                obbAxisY,
+                obbHalfExtents,
+                out CollisionResult2D result);
+
+            Assert.True(intersects);
+            Assert.True(result.Intersects);
+            Assert.Equal(-Vector2.UnitX, result.Normal);
+            Assert.Equal(1.0f, result.PenetrationDepth);
+            Assert.Equal(new Vector2(-1.0f, 0.0f), result.MinimumTranslationVector);
+        }
+
+        [Fact]
+        public void TryGetCollisionAabbObb_Separated_ReturnsFalseAndNone()
+        {
+            Vector2 aabbCenter = Vector2.Zero;
+            Vector2 aabbHalfExtents = new Vector2(1.0f, 1.0f);
+            Vector2 obbCenter = new Vector2(5.0f, 0.0f);
+            Vector2 obbAxisX = Vector2.UnitX;
+            Vector2 obbAxisY = Vector2.UnitY;
+            Vector2 obbHalfExtents = new Vector2(1.0f, 1.0f);
+
+            bool intersects = Collision2D.TryGetCollisionAabbObb(
+                aabbCenter,
+                aabbHalfExtents,
+                obbCenter,
+                obbAxisX,
+                obbAxisY,
+                obbHalfExtents,
+                out CollisionResult2D result);
+
+            Assert.False(intersects);
+            Assert.False(result.Intersects);
+            Assert.Equal(CollisionResult2D.None, result);
+        }
+
+        [Fact]
+        public void TryGetCollisionAabbObb_Touching_ReturnsTrueAndZeroDepth()
+        {
+            Vector2 aabbCenter = Vector2.Zero;
+            Vector2 aabbHalfExtents = new Vector2(1.0f, 1.0f);
+            Vector2 obbCenter = new Vector2(2.0f, 0.0f);
+            Vector2 obbAxisX = Vector2.UnitX;
+            Vector2 obbAxisY = Vector2.UnitY;
+            Vector2 obbHalfExtents = new Vector2(1.0f, 1.0f);
+
+            bool intersects = Collision2D.TryGetCollisionAabbObb(
+                aabbCenter,
+                aabbHalfExtents,
+                obbCenter,
+                obbAxisX,
+                obbAxisY,
+                obbHalfExtents,
+                out CollisionResult2D result);
+
+            Assert.True(intersects);
+            Assert.True(result.Intersects);
+            Assert.Equal(-Vector2.UnitX, result.Normal);
+            Assert.Equal(0.0f, result.PenetrationDepth);
+            Assert.Equal(Vector2.Zero, result.MinimumTranslationVector);
+        }
+
+        [Fact]
+        public void TryGetCollisionAabbObb_ObbOnLeft_MovesAabbRight()
+        {
+            Vector2 aabbCenter = Vector2.Zero;
+            Vector2 aabbHalfExtents = new Vector2(2.0f, 2.0f);
+            Vector2 obbCenter = new Vector2(-3.0f, 0.0f);
+            Vector2 obbAxisX = Vector2.UnitX;
+            Vector2 obbAxisY = Vector2.UnitY;
+            Vector2 obbHalfExtents = new Vector2(2.0f, 2.0f);
+
+            bool intersects = Collision2D.TryGetCollisionAabbObb(
+                aabbCenter,
+                aabbHalfExtents,
+                obbCenter,
+                obbAxisX,
+                obbAxisY,
+                obbHalfExtents,
+                out CollisionResult2D result);
+
+            Assert.True(intersects);
+            Assert.Equal(Vector2.UnitX, result.Normal);
+            Assert.Equal(1.0f, result.PenetrationDepth);
+            Assert.Equal(new Vector2(1.0f, 0.0f), result.MinimumTranslationVector);
+        }
+
+        #endregion
+
+        #region TryGetCollisionCircleCircle Tests
+
+        [Fact]
+        public void TryGetCollisionCircleCircle_Overlapping_ReturnsTrueAndCollisionResult()
+        {
+            Vector2 aCenter = Vector2.Zero;
+            float aRadius = 5.0f;
+            Vector2 bCenter = new Vector2(8.0f, 0.0f);
+            float bRadius = 5.0f;
+
+            bool intersects = Collision2D.TryGetCollisionCircleCircle(aCenter, aRadius, bCenter, bRadius, out CollisionResult2D result);
+
+            Assert.True(intersects);
+            Assert.True(result.Intersects);
+            Assert.Equal(-Vector2.UnitX, result.Normal);
+            Assert.Equal(2.0f, result.PenetrationDepth);
+            Assert.Equal(new Vector2(-2.0f, 0.0f), result.MinimumTranslationVector);
+        }
+
+        [Fact]
+        public void TryGetCollisionCircleCircle_Separated_ReturnsFalseAndNone()
+        {
+            Vector2 aCenter = Vector2.Zero;
+            float aRadius = 5.0f;
+            Vector2 bCenter = new Vector2(20.0f, 0.0f);
+            float bRadius = 5.0f;
+
+            bool intersects = Collision2D.TryGetCollisionCircleCircle(aCenter, aRadius, bCenter, bRadius, out CollisionResult2D result);
+
+            Assert.False(intersects);
+            Assert.False(result.Intersects);
+            Assert.Equal(CollisionResult2D.None, result);
+        }
+
+        [Fact]
+        public void TryGetCollisionCircleCircle_Touching_ReturnsTrueAndZeroDepth()
+        {
+            Vector2 aCenter = Vector2.Zero;
+            float aRadius = 5.0f;
+            Vector2 bCenter = new Vector2(10.0f, 0.0f);
+            float bRadius = 5.0f;
+
+            bool intersects = Collision2D.TryGetCollisionCircleCircle(aCenter, aRadius, bCenter, bRadius, out CollisionResult2D result);
+
+            Assert.True(intersects);
+            Assert.True(result.Intersects);
+            Assert.Equal(-Vector2.UnitX, result.Normal);
+            Assert.Equal(0.0f, result.PenetrationDepth);
+            Assert.Equal(Vector2.Zero, result.MinimumTranslationVector);
+        }
+
+        [Fact]
+        public void TryGetCollisionCircleCircle_SecondCircleOnLeft_MovesFirstCircleRight()
+        {
+            Vector2 aCenter = Vector2.Zero;
+            float aRadius = 5.0f;
+            Vector2 bCenter = new Vector2(-8.0f, 0.0f);
+            float bRadius = 5.0f;
+
+            bool intersects = Collision2D.TryGetCollisionCircleCircle(aCenter, aRadius, bCenter, bRadius, out CollisionResult2D result);
+
+            Assert.True(intersects);
+            Assert.Equal(Vector2.UnitX, result.Normal);
+            Assert.Equal(2.0f, result.PenetrationDepth);
+            Assert.Equal(new Vector2(2.0f, 0.0f), result.MinimumTranslationVector);
+        }
+
+        [Fact]
+        public void TryGetCollisionCircleCircle_CoincidentCenters_UsesStableNormal()
+        {
+            Vector2 aCenter = Vector2.Zero;
+            float aRadius = 3.0f;
+            Vector2 bCenter = Vector2.Zero;
+            float bRadius = 2.0f;
+
+            bool intersects = Collision2D.TryGetCollisionCircleCircle(aCenter, aRadius, bCenter, bRadius, out CollisionResult2D result);
+
+            Assert.True(intersects);
+            Assert.Equal(Vector2.UnitX, result.Normal);
+            Assert.Equal(5.0f, result.PenetrationDepth);
+            Assert.Equal(new Vector2(5.0f, 0.0f), result.MinimumTranslationVector);
+        }
+
+        #endregion
+
         #region IntersectsCircleCircle Tests
 
         [Fact]
@@ -3062,6 +3624,91 @@ namespace MonoGame.Extended.Tests
 
         #endregion
 
+        #region TryGetCollisionCircleAabb Tests
+
+        [Fact]
+        public void TryGetCollisionCircleAabb_Overlapping_ReturnsTrueAndCollisionResult()
+        {
+            Vector2 circleCenter = new Vector2(14.0f, 5.0f);
+            float circleRadius = 5.0f;
+            Vector2 boxMin = Vector2.Zero;
+            Vector2 boxMax = new Vector2(10.0f, 10.0f);
+
+            bool intersects = Collision2D.TryGetCollisionCircleAabb(circleCenter, circleRadius, boxMin, boxMax, out CollisionResult2D result);
+
+            Assert.True(intersects);
+            Assert.True(result.Intersects);
+            Assert.Equal(Vector2.UnitX, result.Normal);
+            Assert.Equal(1.0f, result.PenetrationDepth);
+            Assert.Equal(new Vector2(1.0f, 0.0f), result.MinimumTranslationVector);
+        }
+
+        [Fact]
+        public void TryGetCollisionCircleAabb_Separated_ReturnsFalseAndNone()
+        {
+            Vector2 circleCenter = new Vector2(16.0f, 5.0f);
+            float circleRadius = 5.0f;
+            Vector2 boxMin = Vector2.Zero;
+            Vector2 boxMax = new Vector2(10.0f, 10.0f);
+
+            bool intersects = Collision2D.TryGetCollisionCircleAabb(circleCenter, circleRadius, boxMin, boxMax, out CollisionResult2D result);
+
+            Assert.False(intersects);
+            Assert.False(result.Intersects);
+            Assert.Equal(CollisionResult2D.None, result);
+        }
+
+        [Fact]
+        public void TryGetCollisionCircleAabb_Touching_ReturnsTrueAndZeroDepth()
+        {
+            Vector2 circleCenter = new Vector2(15.0f, 5.0f);
+            float circleRadius = 5.0f;
+            Vector2 boxMin = Vector2.Zero;
+            Vector2 boxMax = new Vector2(10.0f, 10.0f);
+
+            bool intersects = Collision2D.TryGetCollisionCircleAabb(circleCenter, circleRadius, boxMin, boxMax, out CollisionResult2D result);
+
+            Assert.True(intersects);
+            Assert.True(result.Intersects);
+            Assert.Equal(Vector2.UnitX, result.Normal);
+            Assert.Equal(0.0f, result.PenetrationDepth);
+            Assert.Equal(Vector2.Zero, result.MinimumTranslationVector);
+        }
+
+        [Fact]
+        public void TryGetCollisionCircleAabb_CircleOnLeft_MovesCircleLeft()
+        {
+            Vector2 circleCenter = new Vector2(-4.0f, 5.0f);
+            float circleRadius = 5.0f;
+            Vector2 boxMin = Vector2.Zero;
+            Vector2 boxMax = new Vector2(10.0f, 10.0f);
+
+            bool intersects = Collision2D.TryGetCollisionCircleAabb(circleCenter, circleRadius, boxMin, boxMax, out CollisionResult2D result);
+
+            Assert.True(intersects);
+            Assert.Equal(-Vector2.UnitX, result.Normal);
+            Assert.Equal(1.0f, result.PenetrationDepth);
+            Assert.Equal(new Vector2(-1.0f, 0.0f), result.MinimumTranslationVector);
+        }
+
+        [Fact]
+        public void TryGetCollisionCircleAabb_CircleCenterInsideBox_MovesCircleThroughNearestFace()
+        {
+            Vector2 circleCenter = new Vector2(8.0f, 5.0f);
+            float circleRadius = 2.0f;
+            Vector2 boxMin = Vector2.Zero;
+            Vector2 boxMax = new Vector2(10.0f, 10.0f);
+
+            bool intersects = Collision2D.TryGetCollisionCircleAabb(circleCenter, circleRadius, boxMin, boxMax, out CollisionResult2D result);
+
+            Assert.True(intersects);
+            Assert.Equal(Vector2.UnitX, result.Normal);
+            Assert.Equal(4.0f, result.PenetrationDepth);
+            Assert.Equal(new Vector2(4.0f, 0.0f), result.MinimumTranslationVector);
+        }
+
+        #endregion
+
         #region IntersectsCircleAabb Tests
 
         [Fact]
@@ -3088,6 +3735,119 @@ namespace MonoGame.Extended.Tests
             bool result = Collision2D.IntersectsCircleAabb(circleCenter, circleRadius, boxMin, boxMax);
 
             Assert.False(result);
+        }
+
+        #endregion
+
+        #region TryGetCollisionCircleObb Tests
+
+        [Fact]
+        public void TryGetCollisionCircleObb_Overlapping_ReturnsTrueAndCollisionResult()
+        {
+            Vector2 circleCenter = new Vector2(9.0f, 0.0f);
+            float circleRadius = 5.0f;
+            Vector2 obbCenter = Vector2.Zero;
+            Vector2 obbAxisX = Vector2.UnitX;
+            Vector2 obbAxisY = Vector2.UnitY;
+            Vector2 obbHalfExtents = new Vector2(5.0f, 5.0f);
+
+            bool intersects = Collision2D.TryGetCollisionCircleObb(circleCenter, circleRadius, obbCenter, obbAxisX, obbAxisY, obbHalfExtents, out CollisionResult2D result);
+
+            Assert.True(intersects);
+            Assert.True(result.Intersects);
+            Assert.Equal(Vector2.UnitX, result.Normal);
+            Assert.Equal(1.0f, result.PenetrationDepth);
+            Assert.Equal(new Vector2(1.0f, 0.0f), result.MinimumTranslationVector);
+        }
+
+        [Fact]
+        public void TryGetCollisionCircleObb_Separated_ReturnsFalseAndNone()
+        {
+            Vector2 circleCenter = new Vector2(11.0f, 0.0f);
+            float circleRadius = 5.0f;
+            Vector2 obbCenter = Vector2.Zero;
+            Vector2 obbAxisX = Vector2.UnitX;
+            Vector2 obbAxisY = Vector2.UnitY;
+            Vector2 obbHalfExtents = new Vector2(5.0f, 5.0f);
+
+            bool intersects = Collision2D.TryGetCollisionCircleObb(circleCenter, circleRadius, obbCenter, obbAxisX, obbAxisY, obbHalfExtents, out CollisionResult2D result);
+
+            Assert.False(intersects);
+            Assert.False(result.Intersects);
+            Assert.Equal(CollisionResult2D.None, result);
+        }
+
+        [Fact]
+        public void TryGetCollisionCircleObb_Touching_ReturnsTrueAndZeroDepth()
+        {
+            Vector2 circleCenter = new Vector2(10.0f, 0.0f);
+            float circleRadius = 5.0f;
+            Vector2 obbCenter = Vector2.Zero;
+            Vector2 obbAxisX = Vector2.UnitX;
+            Vector2 obbAxisY = Vector2.UnitY;
+            Vector2 obbHalfExtents = new Vector2(5.0f, 5.0f);
+
+            bool intersects = Collision2D.TryGetCollisionCircleObb(circleCenter, circleRadius, obbCenter, obbAxisX, obbAxisY, obbHalfExtents, out CollisionResult2D result);
+
+            Assert.True(intersects);
+            Assert.True(result.Intersects);
+            Assert.Equal(Vector2.UnitX, result.Normal);
+            Assert.Equal(0.0f, result.PenetrationDepth);
+            Assert.Equal(Vector2.Zero, result.MinimumTranslationVector);
+        }
+
+        [Fact]
+        public void TryGetCollisionCircleObb_CircleOnLeft_MovesCircleLeft()
+        {
+            Vector2 circleCenter = new Vector2(-9.0f, 0.0f);
+            float circleRadius = 5.0f;
+            Vector2 obbCenter = Vector2.Zero;
+            Vector2 obbAxisX = Vector2.UnitX;
+            Vector2 obbAxisY = Vector2.UnitY;
+            Vector2 obbHalfExtents = new Vector2(5.0f, 5.0f);
+
+            bool intersects = Collision2D.TryGetCollisionCircleObb(circleCenter, circleRadius, obbCenter, obbAxisX, obbAxisY, obbHalfExtents, out CollisionResult2D result);
+
+            Assert.True(intersects);
+            Assert.Equal(-Vector2.UnitX, result.Normal);
+            Assert.Equal(1.0f, result.PenetrationDepth);
+            Assert.Equal(new Vector2(-1.0f, 0.0f), result.MinimumTranslationVector);
+        }
+
+        [Fact]
+        public void TryGetCollisionCircleObb_CircleCenterInsideObb_MovesCircleThroughNearestFace()
+        {
+            Vector2 circleCenter = new Vector2(3.0f, 0.0f);
+            float circleRadius = 2.0f;
+            Vector2 obbCenter = Vector2.Zero;
+            Vector2 obbAxisX = Vector2.UnitX;
+            Vector2 obbAxisY = Vector2.UnitY;
+            Vector2 obbHalfExtents = new Vector2(5.0f, 5.0f);
+
+            bool intersects = Collision2D.TryGetCollisionCircleObb(circleCenter, circleRadius, obbCenter, obbAxisX, obbAxisY, obbHalfExtents, out CollisionResult2D result);
+
+            Assert.True(intersects);
+            Assert.Equal(Vector2.UnitX, result.Normal);
+            Assert.Equal(4.0f, result.PenetrationDepth);
+            Assert.Equal(new Vector2(4.0f, 0.0f), result.MinimumTranslationVector);
+        }
+
+        [Fact]
+        public void TryGetCollisionCircleObb_RotatedObb_ReturnsWorldSpaceCollisionResult()
+        {
+            Vector2 circleCenter = new Vector2(0.0f, 9.0f);
+            float circleRadius = 5.0f;
+            Vector2 obbCenter = Vector2.Zero;
+            Vector2 obbAxisX = Vector2.UnitY;
+            Vector2 obbAxisY = -Vector2.UnitX;
+            Vector2 obbHalfExtents = new Vector2(5.0f, 5.0f);
+
+            bool intersects = Collision2D.TryGetCollisionCircleObb(circleCenter, circleRadius, obbCenter, obbAxisX, obbAxisY, obbHalfExtents, out CollisionResult2D result);
+
+            Assert.True(intersects);
+            Assert.Equal(Vector2.UnitY, result.Normal);
+            Assert.Equal(1.0f, result.PenetrationDepth);
+            Assert.Equal(new Vector2(0.0f, 1.0f), result.MinimumTranslationVector);
         }
 
         #endregion
@@ -3180,6 +3940,323 @@ namespace MonoGame.Extended.Tests
 
         #endregion
 
+        #region TryGetCollisionCircleCapsule Tests
+
+        [Fact]
+        public void TryGetCollisionCircleCapsule_Overlapping_ReturnsTrueAndCollisionResult()
+        {
+            Vector2 circleCenter = Vector2.Zero;
+            float circleRadius = 5.0f;
+            Vector2 capsuleA = new Vector2(6.0f, 0.0f);
+            Vector2 capsuleB = new Vector2(14.0f, 0.0f);
+            float capsuleRadius = 2.0f;
+
+            bool intersects = Collision2D.TryGetCollisionCircleCapsule(circleCenter, circleRadius, capsuleA, capsuleB, capsuleRadius, out CollisionResult2D result);
+
+            Assert.True(intersects);
+            Assert.True(result.Intersects);
+            Assert.Equal(-Vector2.UnitX, result.Normal);
+            Assert.Equal(1.0f, result.PenetrationDepth);
+            Assert.Equal(new Vector2(-1.0f, 0.0f), result.MinimumTranslationVector);
+        }
+
+        [Fact]
+        public void TryGetCollisionCircleCapsule_Separated_ReturnsFalseAndNone()
+        {
+            Vector2 circleCenter = Vector2.Zero;
+            float circleRadius = 5.0f;
+            Vector2 capsuleA = new Vector2(8.0f, 0.0f);
+            Vector2 capsuleB = new Vector2(14.0f, 0.0f);
+            float capsuleRadius = 2.0f;
+
+            bool intersects = Collision2D.TryGetCollisionCircleCapsule(circleCenter, circleRadius, capsuleA, capsuleB, capsuleRadius, out CollisionResult2D result);
+
+            Assert.False(intersects);
+            Assert.False(result.Intersects);
+            Assert.Equal(CollisionResult2D.None, result);
+        }
+
+        [Fact]
+        public void TryGetCollisionCircleCapsule_Touching_ReturnsTrueAndZeroDepth()
+        {
+            Vector2 circleCenter = Vector2.Zero;
+            float circleRadius = 5.0f;
+            Vector2 capsuleA = new Vector2(7.0f, 0.0f);
+            Vector2 capsuleB = new Vector2(14.0f, 0.0f);
+            float capsuleRadius = 2.0f;
+
+            bool intersects = Collision2D.TryGetCollisionCircleCapsule(circleCenter, circleRadius, capsuleA, capsuleB, capsuleRadius, out CollisionResult2D result);
+
+            Assert.True(intersects);
+            Assert.True(result.Intersects);
+            Assert.Equal(-Vector2.UnitX, result.Normal);
+            Assert.Equal(0.0f, result.PenetrationDepth);
+            Assert.Equal(Vector2.Zero, result.MinimumTranslationVector);
+        }
+
+        [Fact]
+        public void TryGetCollisionCircleCapsule_CapsuleOnLeft_MovesCircleRight()
+        {
+            Vector2 circleCenter = Vector2.Zero;
+            float circleRadius = 5.0f;
+            Vector2 capsuleA = new Vector2(-14.0f, 0.0f);
+            Vector2 capsuleB = new Vector2(-6.0f, 0.0f);
+            float capsuleRadius = 2.0f;
+
+            bool intersects = Collision2D.TryGetCollisionCircleCapsule(circleCenter, circleRadius, capsuleA, capsuleB, capsuleRadius, out CollisionResult2D result);
+
+            Assert.True(intersects);
+            Assert.Equal(Vector2.UnitX, result.Normal);
+            Assert.Equal(1.0f, result.PenetrationDepth);
+            Assert.Equal(new Vector2(1.0f, 0.0f), result.MinimumTranslationVector);
+        }
+
+        [Fact]
+        public void TryGetCollisionCircleCapsule_CircleCenterOnCapsuleSegment_UsesPerpendicularNormal()
+        {
+            Vector2 circleCenter = Vector2.Zero;
+            float circleRadius = 1.0f;
+            Vector2 capsuleA = new Vector2(-5.0f, 0.0f);
+            Vector2 capsuleB = new Vector2(5.0f, 0.0f);
+            float capsuleRadius = 2.0f;
+
+            bool intersects = Collision2D.TryGetCollisionCircleCapsule(circleCenter, circleRadius, capsuleA, capsuleB, capsuleRadius, out CollisionResult2D result);
+
+            Assert.True(intersects);
+            Assert.Equal(Vector2.UnitY, result.Normal);
+            Assert.Equal(3.0f, result.PenetrationDepth);
+            Assert.Equal(new Vector2(0.0f, 3.0f), result.MinimumTranslationVector);
+        }
+
+        [Fact]
+        public void TryGetCollisionCircleCapsule_DegenerateCapsule_UsesStableNormal()
+        {
+            Vector2 circleCenter = Vector2.Zero;
+            float circleRadius = 5.0f;
+            Vector2 capsuleA = Vector2.Zero;
+            Vector2 capsuleB = Vector2.Zero;
+            float capsuleRadius = 2.0f;
+
+            bool intersects = Collision2D.TryGetCollisionCircleCapsule(circleCenter, circleRadius, capsuleA, capsuleB, capsuleRadius, out CollisionResult2D result);
+
+            Assert.True(intersects);
+            Assert.Equal(Vector2.UnitX, result.Normal);
+            Assert.Equal(7.0f, result.PenetrationDepth);
+            Assert.Equal(new Vector2(7.0f, 0.0f), result.MinimumTranslationVector);
+        }
+
+        #endregion
+
+        #region CollisionResult2D MTV Separation Tests
+
+        [Fact]
+        public void TryGetCollisionAabbObb_WhenMinimumTranslationVectorAppliedThenRemovesPenetration()
+        {
+            Vector2 aabbCenter = Vector2.Zero;
+            Vector2 aabbHalfExtents = new Vector2(2.0f, 2.0f);
+            Vector2 obbCenter = new Vector2(3.0f, 0.0f);
+            Vector2 obbAxisX = Vector2.UnitX;
+            Vector2 obbAxisY = Vector2.UnitY;
+            Vector2 obbHalfExtents = new Vector2(2.0f, 2.0f);
+
+            bool intersects = Collision2D.TryGetCollisionAabbObb(aabbCenter, aabbHalfExtents, obbCenter, obbAxisX, obbAxisY, obbHalfExtents, out CollisionResult2D result);
+            Vector2 movedAabbCenter = aabbCenter + result.MinimumTranslationVector;
+            bool resolvedIntersects = Collision2D.TryGetCollisionAabbObb(movedAabbCenter, aabbHalfExtents, obbCenter, obbAxisX, obbAxisY, obbHalfExtents, out CollisionResult2D resolvedResult);
+
+            Assert.True(intersects);
+            Assert.True(resolvedIntersects);
+            Assert.Equal(0.0f, resolvedResult.PenetrationDepth);
+            Assert.Equal(Vector2.Zero, resolvedResult.MinimumTranslationVector);
+        }
+
+        [Fact]
+        public void TryGetCollisionCircleCircle_WhenMinimumTranslationVectorAppliedThenRemovesPenetration()
+        {
+            Vector2 aCenter = Vector2.Zero;
+            float aRadius = 5.0f;
+            Vector2 bCenter = new Vector2(8.0f, 0.0f);
+            float bRadius = 5.0f;
+
+            bool intersects = Collision2D.TryGetCollisionCircleCircle(aCenter, aRadius, bCenter, bRadius, out CollisionResult2D result);
+            Vector2 movedCenter = aCenter + result.MinimumTranslationVector;
+            bool resolvedIntersects = Collision2D.TryGetCollisionCircleCircle(movedCenter, aRadius, bCenter, bRadius, out CollisionResult2D resolvedResult);
+
+            Assert.True(intersects);
+            Assert.True(resolvedIntersects);
+            Assert.Equal(0.0f, resolvedResult.PenetrationDepth);
+            Assert.Equal(Vector2.Zero, resolvedResult.MinimumTranslationVector);
+        }
+
+        [Fact]
+        public void TryGetCollisionCircleAabb_WhenMinimumTranslationVectorAppliedThenRemovesPenetration()
+        {
+            Vector2 circleCenter = new Vector2(14.0f, 5.0f);
+            float circleRadius = 5.0f;
+            Vector2 boxMin = Vector2.Zero;
+            Vector2 boxMax = new Vector2(10.0f, 10.0f);
+
+            bool intersects = Collision2D.TryGetCollisionCircleAabb(circleCenter, circleRadius, boxMin, boxMax, out CollisionResult2D result);
+            Vector2 movedCircleCenter = circleCenter + result.MinimumTranslationVector;
+            bool resolvedIntersects = Collision2D.TryGetCollisionCircleAabb(movedCircleCenter, circleRadius, boxMin, boxMax, out CollisionResult2D resolvedResult);
+
+            Assert.True(intersects);
+            Assert.True(resolvedIntersects);
+            Assert.Equal(0.0f, resolvedResult.PenetrationDepth);
+            Assert.Equal(Vector2.Zero, resolvedResult.MinimumTranslationVector);
+        }
+
+        [Fact]
+        public void TryGetCollisionCircleCapsule_WhenMinimumTranslationVectorAppliedThenRemovesPenetration()
+        {
+            Vector2 circleCenter = Vector2.Zero;
+            float circleRadius = 5.0f;
+            Vector2 capsuleA = new Vector2(6.0f, 0.0f);
+            Vector2 capsuleB = new Vector2(14.0f, 0.0f);
+            float capsuleRadius = 2.0f;
+
+            bool intersects = Collision2D.TryGetCollisionCircleCapsule(circleCenter, circleRadius, capsuleA, capsuleB, capsuleRadius, out CollisionResult2D result);
+            Vector2 movedCircleCenter = circleCenter + result.MinimumTranslationVector;
+            bool resolvedIntersects = Collision2D.TryGetCollisionCircleCapsule(movedCircleCenter, circleRadius, capsuleA, capsuleB, capsuleRadius, out CollisionResult2D resolvedResult);
+
+            Assert.True(intersects);
+            Assert.True(resolvedIntersects);
+            Assert.Equal(0.0f, resolvedResult.PenetrationDepth);
+            Assert.Equal(Vector2.Zero, resolvedResult.MinimumTranslationVector);
+        }
+
+        [Fact]
+        public void TryGetCollisionConvexPolygonConvexPolygon_WhenMinimumTranslationVectorAppliedThenRemovesPenetration()
+        {
+            Vector2[] aVertices =
+            {
+                new Vector2(-2.0f, -2.0f),
+                new Vector2(2.0f, -2.0f),
+                new Vector2(2.0f, 2.0f),
+                new Vector2(-2.0f, 2.0f)
+            };
+            Vector2[] aNormals =
+            {
+                -Vector2.UnitY,
+                Vector2.UnitX,
+                Vector2.UnitY,
+                -Vector2.UnitX
+            };
+            Vector2[] bVertices =
+            {
+                new Vector2(1.0f, -2.0f),
+                new Vector2(5.0f, -2.0f),
+                new Vector2(5.0f, 2.0f),
+                new Vector2(1.0f, 2.0f)
+            };
+            Vector2[] bNormals =
+            {
+                -Vector2.UnitY,
+                Vector2.UnitX,
+                Vector2.UnitY,
+                -Vector2.UnitX
+            };
+
+            bool intersects = Collision2D.TryGetCollisionConvexPolygonConvexPolygon(aVertices, aNormals, bVertices, bNormals, out CollisionResult2D result);
+            for (int i = 0; i < aVertices.Length; i++)
+            {
+                aVertices[i] += result.MinimumTranslationVector;
+            }
+            bool resolvedIntersects = Collision2D.TryGetCollisionConvexPolygonConvexPolygon(aVertices, aNormals, bVertices, bNormals, out CollisionResult2D resolvedResult);
+
+            Assert.True(intersects);
+            Assert.True(resolvedIntersects);
+            Assert.Equal(0.0f, resolvedResult.PenetrationDepth);
+            Assert.Equal(Vector2.Zero, resolvedResult.MinimumTranslationVector);
+        }
+
+        #endregion
+
+        #region CollisionResult2D Reversed Input Tests
+
+        [Fact]
+        public void TryGetCollisionCircleCircle_WhenInputsAreReversedThenMinimumTranslationVectorIsOpposite()
+        {
+            Vector2 aCenter = Vector2.Zero;
+            float aRadius = 5.0f;
+            Vector2 bCenter = new Vector2(8.0f, 0.0f);
+            float bRadius = 5.0f;
+
+            bool intersects = Collision2D.TryGetCollisionCircleCircle(aCenter, aRadius, bCenter, bRadius, out CollisionResult2D result);
+            bool reversedIntersects = Collision2D.TryGetCollisionCircleCircle(bCenter, bRadius, aCenter, aRadius, out CollisionResult2D reversedResult);
+
+            Assert.True(intersects);
+            Assert.True(reversedIntersects);
+            Assert.Equal(-result.Normal, reversedResult.Normal);
+            Assert.Equal(result.PenetrationDepth, reversedResult.PenetrationDepth);
+            Assert.Equal(-result.MinimumTranslationVector, reversedResult.MinimumTranslationVector);
+        }
+
+        [Fact]
+        public void TryGetCollisionObbObb_WhenInputsAreReversedThenMinimumTranslationVectorIsOpposite()
+        {
+            Vector2 aCenter = Vector2.Zero;
+            Vector2 aAxisX = Vector2.UnitX;
+            Vector2 aAxisY = Vector2.UnitY;
+            Vector2 aHalf = new Vector2(2.0f, 2.0f);
+            Vector2 bCenter = new Vector2(3.0f, 0.0f);
+            Vector2 bAxisX = Vector2.UnitX;
+            Vector2 bAxisY = Vector2.UnitY;
+            Vector2 bHalf = new Vector2(2.0f, 2.0f);
+
+            bool intersects = Collision2D.TryGetCollisionObbObb(aCenter, aAxisX, aAxisY, aHalf, bCenter, bAxisX, bAxisY, bHalf, out CollisionResult2D result);
+            bool reversedIntersects = Collision2D.TryGetCollisionObbObb(bCenter, bAxisX, bAxisY, bHalf, aCenter, aAxisX, aAxisY, aHalf, out CollisionResult2D reversedResult);
+
+            Assert.True(intersects);
+            Assert.True(reversedIntersects);
+            Assert.Equal(-result.Normal, reversedResult.Normal);
+            Assert.Equal(result.PenetrationDepth, reversedResult.PenetrationDepth);
+            Assert.Equal(-result.MinimumTranslationVector, reversedResult.MinimumTranslationVector);
+        }
+
+        [Fact]
+        public void TryGetCollisionConvexPolygonConvexPolygon_WhenInputsAreReversedThenMinimumTranslationVectorIsOpposite()
+        {
+            Vector2[] aVertices =
+            {
+                new Vector2(-2.0f, -2.0f),
+                new Vector2(2.0f, -2.0f),
+                new Vector2(2.0f, 2.0f),
+                new Vector2(-2.0f, 2.0f)
+            };
+            Vector2[] aNormals =
+            {
+                -Vector2.UnitY,
+                Vector2.UnitX,
+                Vector2.UnitY,
+                -Vector2.UnitX
+            };
+            Vector2[] bVertices =
+            {
+                new Vector2(1.0f, -2.0f),
+                new Vector2(5.0f, -2.0f),
+                new Vector2(5.0f, 2.0f),
+                new Vector2(1.0f, 2.0f)
+            };
+            Vector2[] bNormals =
+            {
+                -Vector2.UnitY,
+                Vector2.UnitX,
+                Vector2.UnitY,
+                -Vector2.UnitX
+            };
+
+            bool intersects = Collision2D.TryGetCollisionConvexPolygonConvexPolygon(aVertices, aNormals, bVertices, bNormals, out CollisionResult2D result);
+            bool reversedIntersects = Collision2D.TryGetCollisionConvexPolygonConvexPolygon(bVertices, bNormals, aVertices, aNormals, out CollisionResult2D reversedResult);
+
+            Assert.True(intersects);
+            Assert.True(reversedIntersects);
+            Assert.Equal(-result.Normal, reversedResult.Normal);
+            Assert.Equal(result.PenetrationDepth, reversedResult.PenetrationDepth);
+            Assert.Equal(-result.MinimumTranslationVector, reversedResult.MinimumTranslationVector);
+        }
+
+        #endregion
+
         #region IntersectsCircleCapsule Tests
 
         [Fact]
@@ -3208,6 +4285,127 @@ namespace MonoGame.Extended.Tests
             bool result = Collision2D.IntersectsCircleCapsule(circleCenter, circleRadius, capsuleA, capsuleB, capsuleRadius);
 
             Assert.False(result);
+        }
+
+        #endregion
+
+        #region TryGetCollisionObbObb Tests
+
+        [Fact]
+        public void TryGetCollisionObbObb_Overlapping_ReturnsTrueAndCollisionResult()
+        {
+            Vector2 aCenter = Vector2.Zero;
+            Vector2 aAxisX = Vector2.UnitX;
+            Vector2 aAxisY = Vector2.UnitY;
+            Vector2 aHalf = new Vector2(2.0f, 2.0f);
+            Vector2 bCenter = new Vector2(3.0f, 0.0f);
+            Vector2 bAxisX = Vector2.UnitX;
+            Vector2 bAxisY = Vector2.UnitY;
+            Vector2 bHalf = new Vector2(2.0f, 2.0f);
+
+            bool intersects = Collision2D.TryGetCollisionObbObb(
+                aCenter,
+                aAxisX,
+                aAxisY,
+                aHalf,
+                bCenter,
+                bAxisX,
+                bAxisY,
+                bHalf,
+                out CollisionResult2D result);
+
+            Assert.True(intersects);
+            Assert.True(result.Intersects);
+            Assert.Equal(-Vector2.UnitX, result.Normal);
+            Assert.Equal(1.0f, result.PenetrationDepth);
+            Assert.Equal(new Vector2(-1.0f, 0.0f), result.MinimumTranslationVector);
+        }
+
+        [Fact]
+        public void TryGetCollisionObbObb_Separated_ReturnsFalseAndNone()
+        {
+            Vector2 aCenter = Vector2.Zero;
+            Vector2 aAxisX = Vector2.UnitX;
+            Vector2 aAxisY = Vector2.UnitY;
+            Vector2 aHalf = new Vector2(1.0f, 1.0f);
+            Vector2 bCenter = new Vector2(5.0f, 0.0f);
+            Vector2 bAxisX = Vector2.UnitX;
+            Vector2 bAxisY = Vector2.UnitY;
+            Vector2 bHalf = new Vector2(1.0f, 1.0f);
+
+            bool intersects = Collision2D.TryGetCollisionObbObb(
+                aCenter,
+                aAxisX,
+                aAxisY,
+                aHalf,
+                bCenter,
+                bAxisX,
+                bAxisY,
+                bHalf,
+                out CollisionResult2D result);
+
+            Assert.False(intersects);
+            Assert.False(result.Intersects);
+            Assert.Equal(CollisionResult2D.None, result);
+        }
+
+        [Fact]
+        public void TryGetCollisionObbObb_Touching_ReturnsTrueAndZeroDepth()
+        {
+            Vector2 aCenter = Vector2.Zero;
+            Vector2 aAxisX = Vector2.UnitX;
+            Vector2 aAxisY = Vector2.UnitY;
+            Vector2 aHalf = new Vector2(1.0f, 1.0f);
+            Vector2 bCenter = new Vector2(2.0f, 0.0f);
+            Vector2 bAxisX = Vector2.UnitX;
+            Vector2 bAxisY = Vector2.UnitY;
+            Vector2 bHalf = new Vector2(1.0f, 1.0f);
+
+            bool intersects = Collision2D.TryGetCollisionObbObb(
+                aCenter,
+                aAxisX,
+                aAxisY,
+                aHalf,
+                bCenter,
+                bAxisX,
+                bAxisY,
+                bHalf,
+                out CollisionResult2D result);
+
+            Assert.True(intersects);
+            Assert.True(result.Intersects);
+            Assert.Equal(-Vector2.UnitX, result.Normal);
+            Assert.Equal(0.0f, result.PenetrationDepth);
+            Assert.Equal(Vector2.Zero, result.MinimumTranslationVector);
+        }
+
+        [Fact]
+        public void TryGetCollisionObbObb_SecondObbOnLeft_MovesFirstObbRight()
+        {
+            Vector2 aCenter = Vector2.Zero;
+            Vector2 aAxisX = Vector2.UnitX;
+            Vector2 aAxisY = Vector2.UnitY;
+            Vector2 aHalf = new Vector2(2.0f, 2.0f);
+            Vector2 bCenter = new Vector2(-3.0f, 0.0f);
+            Vector2 bAxisX = Vector2.UnitX;
+            Vector2 bAxisY = Vector2.UnitY;
+            Vector2 bHalf = new Vector2(2.0f, 2.0f);
+
+            bool intersects = Collision2D.TryGetCollisionObbObb(
+                aCenter,
+                aAxisX,
+                aAxisY,
+                aHalf,
+                bCenter,
+                bAxisX,
+                bAxisY,
+                bHalf,
+                out CollisionResult2D result);
+
+            Assert.True(intersects);
+            Assert.Equal(Vector2.UnitX, result.Normal);
+            Assert.Equal(1.0f, result.PenetrationDepth);
+            Assert.Equal(new Vector2(1.0f, 0.0f), result.MinimumTranslationVector);
         }
 
         #endregion
@@ -3282,6 +4480,159 @@ namespace MonoGame.Extended.Tests
             bool result = Collision2D.IntersectsObbCapsule(obbCenter, obbAxisX, obbAxisY, obbHalfExtents, capsuleA, capsuleB, capsuleRadius);
 
             Assert.False(result);
+        }
+
+        #endregion
+
+        #region TryGetCollisionObbConvexPolygon Tests
+
+        [Fact]
+        public void TryGetCollisionObbConvexPolygon_Overlapping_ReturnsTrueAndCollisionResult()
+        {
+            Vector2 obbCenter = Vector2.Zero;
+            Vector2 obbAxisX = Vector2.UnitX;
+            Vector2 obbAxisY = Vector2.UnitY;
+            Vector2 obbHalfExtents = new Vector2(2.0f, 2.0f);
+            Vector2[] vertices =
+            {
+                new Vector2(1.0f, -2.0f),
+                new Vector2(5.0f, -2.0f),
+                new Vector2(5.0f, 2.0f),
+                new Vector2(1.0f, 2.0f)
+            };
+            Vector2[] normals =
+            {
+                -Vector2.UnitY,
+                Vector2.UnitX,
+                Vector2.UnitY,
+                -Vector2.UnitX
+            };
+
+            bool intersects = Collision2D.TryGetCollisionObbConvexPolygon(
+                obbCenter,
+                obbAxisX,
+                obbAxisY,
+                obbHalfExtents,
+                vertices,
+                normals,
+                out CollisionResult2D result);
+
+            Assert.True(intersects);
+            Assert.True(result.Intersects);
+            Assert.Equal(-Vector2.UnitX, result.Normal);
+            Assert.Equal(1.0f, result.PenetrationDepth);
+            Assert.Equal(new Vector2(-1.0f, 0.0f), result.MinimumTranslationVector);
+        }
+
+        [Fact]
+        public void TryGetCollisionObbConvexPolygon_Separated_ReturnsFalseAndNone()
+        {
+            Vector2 obbCenter = Vector2.Zero;
+            Vector2 obbAxisX = Vector2.UnitX;
+            Vector2 obbAxisY = Vector2.UnitY;
+            Vector2 obbHalfExtents = new Vector2(1.0f, 1.0f);
+            Vector2[] vertices =
+            {
+                new Vector2(4.0f, -1.0f),
+                new Vector2(6.0f, -1.0f),
+                new Vector2(6.0f, 1.0f),
+                new Vector2(4.0f, 1.0f)
+            };
+            Vector2[] normals =
+            {
+                -Vector2.UnitY,
+                Vector2.UnitX,
+                Vector2.UnitY,
+                -Vector2.UnitX
+            };
+
+            bool intersects = Collision2D.TryGetCollisionObbConvexPolygon(
+                obbCenter,
+                obbAxisX,
+                obbAxisY,
+                obbHalfExtents,
+                vertices,
+                normals,
+                out CollisionResult2D result);
+
+            Assert.False(intersects);
+            Assert.False(result.Intersects);
+            Assert.Equal(CollisionResult2D.None, result);
+        }
+
+        [Fact]
+        public void TryGetCollisionObbConvexPolygon_Touching_ReturnsTrueAndZeroDepth()
+        {
+            Vector2 obbCenter = Vector2.Zero;
+            Vector2 obbAxisX = Vector2.UnitX;
+            Vector2 obbAxisY = Vector2.UnitY;
+            Vector2 obbHalfExtents = new Vector2(1.0f, 1.0f);
+            Vector2[] vertices =
+            {
+                new Vector2(1.0f, -1.0f),
+                new Vector2(3.0f, -1.0f),
+                new Vector2(3.0f, 1.0f),
+                new Vector2(1.0f, 1.0f)
+            };
+            Vector2[] normals =
+            {
+                -Vector2.UnitY,
+                Vector2.UnitX,
+                Vector2.UnitY,
+                -Vector2.UnitX
+            };
+
+            bool intersects = Collision2D.TryGetCollisionObbConvexPolygon(
+                obbCenter,
+                obbAxisX,
+                obbAxisY,
+                obbHalfExtents,
+                vertices,
+                normals,
+                out CollisionResult2D result);
+
+            Assert.True(intersects);
+            Assert.True(result.Intersects);
+            Assert.Equal(-Vector2.UnitX, result.Normal);
+            Assert.Equal(0.0f, result.PenetrationDepth);
+            Assert.Equal(Vector2.Zero, result.MinimumTranslationVector);
+        }
+
+        [Fact]
+        public void TryGetCollisionObbConvexPolygon_PolygonOnLeft_MovesObbRight()
+        {
+            Vector2 obbCenter = Vector2.Zero;
+            Vector2 obbAxisX = Vector2.UnitX;
+            Vector2 obbAxisY = Vector2.UnitY;
+            Vector2 obbHalfExtents = new Vector2(2.0f, 2.0f);
+            Vector2[] vertices =
+            {
+                new Vector2(-5.0f, -2.0f),
+                new Vector2(-1.0f, -2.0f),
+                new Vector2(-1.0f, 2.0f),
+                new Vector2(-5.0f, 2.0f)
+            };
+            Vector2[] normals =
+            {
+                -Vector2.UnitY,
+                Vector2.UnitX,
+                Vector2.UnitY,
+                -Vector2.UnitX
+            };
+
+            bool intersects = Collision2D.TryGetCollisionObbConvexPolygon(
+                obbCenter,
+                obbAxisX,
+                obbAxisY,
+                obbHalfExtents,
+                vertices,
+                normals,
+                out CollisionResult2D result);
+
+            Assert.True(intersects);
+            Assert.Equal(Vector2.UnitX, result.Normal);
+            Assert.Equal(1.0f, result.PenetrationDepth);
+            Assert.Equal(new Vector2(1.0f, 0.0f), result.MinimumTranslationVector);
         }
 
         #endregion
@@ -3430,6 +4781,191 @@ namespace MonoGame.Extended.Tests
             bool result = Collision2D.IntersectsCapsuleConvexPolygon(capsuleA, capsuleB, capsuleRadius, vertices, normals);
 
             Assert.False(result);
+        }
+
+        #endregion
+
+        #region TryGetCollisionConvexPolygonConvexPolygon Tests
+
+        [Fact]
+        public void TryGetCollisionConvexPolygonConvexPolygon_Overlapping_ReturnsTrueAndCollisionResult()
+        {
+            Vector2[] aVertices =
+            {
+                new Vector2(-2.0f, -2.0f),
+                new Vector2(2.0f, -2.0f),
+                new Vector2(2.0f, 2.0f),
+                new Vector2(-2.0f, 2.0f)
+            };
+            Vector2[] aNormals =
+            {
+                -Vector2.UnitY,
+                Vector2.UnitX,
+                Vector2.UnitY,
+                -Vector2.UnitX
+            };
+            Vector2[] bVertices =
+            {
+                new Vector2(1.0f, -2.0f),
+                new Vector2(5.0f, -2.0f),
+                new Vector2(5.0f, 2.0f),
+                new Vector2(1.0f, 2.0f)
+            };
+            Vector2[] bNormals =
+            {
+                -Vector2.UnitY,
+                Vector2.UnitX,
+                Vector2.UnitY,
+                -Vector2.UnitX
+            };
+
+            bool intersects = Collision2D.TryGetCollisionConvexPolygonConvexPolygon(
+                aVertices,
+                aNormals,
+                bVertices,
+                bNormals,
+                out CollisionResult2D result);
+
+            Assert.True(intersects);
+            Assert.True(result.Intersects);
+            Assert.Equal(-Vector2.UnitX, result.Normal);
+            Assert.Equal(1.0f, result.PenetrationDepth);
+            Assert.Equal(new Vector2(-1.0f, 0.0f), result.MinimumTranslationVector);
+        }
+
+        [Fact]
+        public void TryGetCollisionConvexPolygonConvexPolygon_Separated_ReturnsFalseAndNone()
+        {
+            Vector2[] aVertices =
+            {
+                new Vector2(-1.0f, -1.0f),
+                new Vector2(1.0f, -1.0f),
+                new Vector2(1.0f, 1.0f),
+                new Vector2(-1.0f, 1.0f)
+            };
+            Vector2[] aNormals =
+            {
+                -Vector2.UnitY,
+                Vector2.UnitX,
+                Vector2.UnitY,
+                -Vector2.UnitX
+            };
+            Vector2[] bVertices =
+            {
+                new Vector2(4.0f, -1.0f),
+                new Vector2(6.0f, -1.0f),
+                new Vector2(6.0f, 1.0f),
+                new Vector2(4.0f, 1.0f)
+            };
+            Vector2[] bNormals =
+            {
+                -Vector2.UnitY,
+                Vector2.UnitX,
+                Vector2.UnitY,
+                -Vector2.UnitX
+            };
+
+            bool intersects = Collision2D.TryGetCollisionConvexPolygonConvexPolygon(
+                aVertices,
+                aNormals,
+                bVertices,
+                bNormals,
+                out CollisionResult2D result);
+
+            Assert.False(intersects);
+            Assert.False(result.Intersects);
+            Assert.Equal(CollisionResult2D.None, result);
+        }
+
+        [Fact]
+        public void TryGetCollisionConvexPolygonConvexPolygon_Touching_ReturnsTrueAndZeroDepth()
+        {
+            Vector2[] aVertices =
+            {
+                new Vector2(-1.0f, -1.0f),
+                new Vector2(1.0f, -1.0f),
+                new Vector2(1.0f, 1.0f),
+                new Vector2(-1.0f, 1.0f)
+            };
+            Vector2[] aNormals =
+            {
+                -Vector2.UnitY,
+                Vector2.UnitX,
+                Vector2.UnitY,
+                -Vector2.UnitX
+            };
+            Vector2[] bVertices =
+            {
+                new Vector2(1.0f, -1.0f),
+                new Vector2(3.0f, -1.0f),
+                new Vector2(3.0f, 1.0f),
+                new Vector2(1.0f, 1.0f)
+            };
+            Vector2[] bNormals =
+            {
+                -Vector2.UnitY,
+                Vector2.UnitX,
+                Vector2.UnitY,
+                -Vector2.UnitX
+            };
+
+            bool intersects = Collision2D.TryGetCollisionConvexPolygonConvexPolygon(
+                aVertices,
+                aNormals,
+                bVertices,
+                bNormals,
+                out CollisionResult2D result);
+
+            Assert.True(intersects);
+            Assert.True(result.Intersects);
+            Assert.Equal(-Vector2.UnitX, result.Normal);
+            Assert.Equal(0.0f, result.PenetrationDepth);
+            Assert.Equal(Vector2.Zero, result.MinimumTranslationVector);
+        }
+
+        [Fact]
+        public void TryGetCollisionConvexPolygonConvexPolygon_SecondPolygonOnLeft_MovesFirstPolygonRight()
+        {
+            Vector2[] aVertices =
+            {
+                new Vector2(-2.0f, -2.0f),
+                new Vector2(2.0f, -2.0f),
+                new Vector2(2.0f, 2.0f),
+                new Vector2(-2.0f, 2.0f)
+            };
+            Vector2[] aNormals =
+            {
+                -Vector2.UnitY,
+                Vector2.UnitX,
+                Vector2.UnitY,
+                -Vector2.UnitX
+            };
+            Vector2[] bVertices =
+            {
+                new Vector2(-5.0f, -2.0f),
+                new Vector2(-1.0f, -2.0f),
+                new Vector2(-1.0f, 2.0f),
+                new Vector2(-5.0f, 2.0f)
+            };
+            Vector2[] bNormals =
+            {
+                -Vector2.UnitY,
+                Vector2.UnitX,
+                Vector2.UnitY,
+                -Vector2.UnitX
+            };
+
+            bool intersects = Collision2D.TryGetCollisionConvexPolygonConvexPolygon(
+                aVertices,
+                aNormals,
+                bVertices,
+                bNormals,
+                out CollisionResult2D result);
+
+            Assert.True(intersects);
+            Assert.Equal(Vector2.UnitX, result.Normal);
+            Assert.Equal(1.0f, result.PenetrationDepth);
+            Assert.Equal(new Vector2(1.0f, 0.0f), result.MinimumTranslationVector);
         }
 
         #endregion

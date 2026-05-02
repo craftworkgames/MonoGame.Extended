@@ -1,18 +1,32 @@
-﻿namespace MonoGame.Extended.Collisions.Layers;
-
 using System;
 
+namespace MonoGame.Extended.Collisions.Layers;
+
 /// <summary>
-/// Thrown when the collision system has no layer defined with the specified name
+/// The exception that is thrown when a collision layer name is not registered in a collision world.
 /// </summary>
 public class UndefinedLayerException : Exception
 {
     /// <summary>
-    /// Thrown when the collision system has no layer defined with the specified name
+    /// Gets the layer name that could not be resolved.
     /// </summary>
-    /// <param name="layerName">The undefined layer name</param>
+    public string LayerName { get; }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="UndefinedLayerException"/> class.
+    /// </summary>
+    /// <param name="layerName">The layer name that could not be resolved.</param>
+    /// <exception cref="ArgumentException"><paramref name="layerName"/> is null, empty, or whitespace.</exception>
     public UndefinedLayerException(string layerName)
-        : base($"Layer with name '{layerName}' is undefined")
+        : base(CreateMessage(layerName))
     {
+        LayerName = layerName;
+    }
+
+    private static string CreateMessage(string layerName)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(layerName);
+
+        return $"Layer '{layerName}' is not defined.";
     }
 }

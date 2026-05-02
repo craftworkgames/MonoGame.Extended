@@ -520,6 +520,72 @@ namespace MonoGame.Extended.Tests
 
         #endregion
 
+        #region TryGetCollision Tests
+
+        [Fact]
+        public void TryGetCollision_WithBox_ReturnsReceiverMinimumTranslationVector()
+        {
+            BoundingPolygon2D polygon = CreateRectanglePolygon(new Vector2(1.0f, -2.0f), new Vector2(5.0f, 2.0f));
+            BoundingBox2D box = new BoundingBox2D(new Vector2(-2.0f, -2.0f), new Vector2(2.0f, 2.0f));
+
+            bool intersects = polygon.TryGetCollision(box, out CollisionResult2D result);
+
+            Assert.True(intersects);
+            Assert.True(result.Intersects);
+            Assert.Equal(Vector2.UnitX, result.Normal);
+            Assert.Equal(1.0f, result.PenetrationDepth);
+            Assert.Equal(new Vector2(1.0f, 0.0f), result.MinimumTranslationVector);
+        }
+
+        [Fact]
+        public void TryGetCollision_WithOrientedBox_ReturnsReceiverMinimumTranslationVector()
+        {
+            BoundingPolygon2D polygon = CreateRectanglePolygon(new Vector2(1.0f, -2.0f), new Vector2(5.0f, 2.0f));
+            OrientedBoundingBox2D obb = new OrientedBoundingBox2D(
+                Vector2.Zero,
+                Vector2.UnitX,
+                Vector2.UnitY,
+                new Vector2(2.0f, 2.0f));
+
+            bool intersects = polygon.TryGetCollision(obb, out CollisionResult2D result);
+
+            Assert.True(intersects);
+            Assert.True(result.Intersects);
+            Assert.Equal(Vector2.UnitX, result.Normal);
+            Assert.Equal(1.0f, result.PenetrationDepth);
+            Assert.Equal(new Vector2(1.0f, 0.0f), result.MinimumTranslationVector);
+        }
+
+        [Fact]
+        public void TryGetCollision_WithPolygon_ReturnsReceiverMinimumTranslationVector()
+        {
+            BoundingPolygon2D polygon = CreateRectanglePolygon(new Vector2(-2.0f, -2.0f), new Vector2(2.0f, 2.0f));
+            BoundingPolygon2D other = CreateRectanglePolygon(new Vector2(1.0f, -2.0f), new Vector2(5.0f, 2.0f));
+
+            bool intersects = polygon.TryGetCollision(other, out CollisionResult2D result);
+
+            Assert.True(intersects);
+            Assert.True(result.Intersects);
+            Assert.Equal(-Vector2.UnitX, result.Normal);
+            Assert.Equal(1.0f, result.PenetrationDepth);
+            Assert.Equal(new Vector2(-1.0f, 0.0f), result.MinimumTranslationVector);
+        }
+
+        [Fact]
+        public void TryGetCollision_WithSeparatedPolygon_ReturnsFalseAndNone()
+        {
+            BoundingPolygon2D polygon = CreateRectanglePolygon(new Vector2(-1.0f, -1.0f), new Vector2(1.0f, 1.0f));
+            BoundingPolygon2D other = CreateRectanglePolygon(new Vector2(4.0f, -1.0f), new Vector2(6.0f, 1.0f));
+
+            bool intersects = polygon.TryGetCollision(other, out CollisionResult2D result);
+
+            Assert.False(intersects);
+            Assert.False(result.Intersects);
+            Assert.Equal(CollisionResult2D.None, result);
+        }
+
+        #endregion
+
         #region Deconstruct Test
 
         [Fact]
@@ -537,6 +603,30 @@ namespace MonoGame.Extended.Tests
 
             Assert.Equal(vertices, v);
             Assert.NotNull(n);
+        }
+
+        #endregion
+
+        #region Private Methods
+
+        private static BoundingPolygon2D CreateRectanglePolygon(Vector2 min, Vector2 max)
+        {
+            Vector2[] vertices =
+            {
+                new Vector2(min.X, min.Y),
+                new Vector2(max.X, min.Y),
+                new Vector2(max.X, max.Y),
+                new Vector2(min.X, max.Y)
+            };
+            Vector2[] normals =
+            {
+                -Vector2.UnitY,
+                Vector2.UnitX,
+                Vector2.UnitY,
+                -Vector2.UnitX
+            };
+
+            return new BoundingPolygon2D(vertices, normals);
         }
 
         #endregion

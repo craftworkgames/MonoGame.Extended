@@ -410,6 +410,76 @@ namespace MonoGame.Extended
         }
 
         /// <summary>
+        /// Tests whether this circle intersects with another circle, and returns collision resolution data when they intersect.
+        /// </summary>
+        /// <param name="other">The other circle to test against.</param>
+        /// <param name="result">
+        /// When this method returns <see langword="true"/>, contains the collision result whose minimum translation vector
+        /// moves this circle out of <paramref name="other"/>. When this method returns <see langword="false"/>, contains
+        /// <see cref="CollisionResult2D.None"/>.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the circles overlap or touch; otherwise, <see langword="false"/>.
+        /// </returns>
+        public readonly bool TryGetCollision(BoundingCircle2D other, out CollisionResult2D result)
+        {
+            return Collision2D.TryGetCollisionCircleCircle(Center, Radius, other.Center, other.Radius, out result);
+        }
+
+        /// <summary>
+        /// Tests whether this circle intersects with an axis-aligned bounding box, and returns collision resolution data
+        /// when they intersect.
+        /// </summary>
+        /// <param name="box">The bounding box to test against.</param>
+        /// <param name="result">
+        /// When this method returns <see langword="true"/>, contains the collision result whose minimum translation vector
+        /// moves this circle out of <paramref name="box"/>. When this method returns <see langword="false"/>, contains
+        /// <see cref="CollisionResult2D.None"/>.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the circle and bounding box overlap or touch; otherwise, <see langword="false"/>.
+        /// </returns>
+        public readonly bool TryGetCollision(BoundingBox2D box, out CollisionResult2D result)
+        {
+            return Collision2D.TryGetCollisionCircleAabb(Center, Radius, box.Min, box.Max, out result);
+        }
+
+        /// <summary>
+        /// Tests whether this circle intersects with a capsule, and returns collision resolution data when they intersect.
+        /// </summary>
+        /// <param name="capsule">The capsule to test against.</param>
+        /// <param name="result">
+        /// When this method returns <see langword="true"/>, contains the collision result whose minimum translation vector
+        /// moves this circle out of <paramref name="capsule"/>. When this method returns <see langword="false"/>, contains
+        /// <see cref="CollisionResult2D.None"/>.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the circle and capsule overlap or touch; otherwise, <see langword="false"/>.
+        /// </returns>
+        public readonly bool TryGetCollision(BoundingCapsule2D capsule, out CollisionResult2D result)
+        {
+            return Collision2D.TryGetCollisionCircleCapsule(Center, Radius, capsule.PointA, capsule.PointB, capsule.Radius, out result);
+        }
+
+        /// <summary>
+        /// Tests whether this circle intersects with an oriented bounding box, and returns collision resolution data
+        /// when they intersect.
+        /// </summary>
+        /// <param name="obb">The oriented bounding box to test against.</param>
+        /// <param name="result">
+        /// When this method returns <see langword="true"/>, contains the collision result whose minimum translation vector
+        /// moves this circle out of <paramref name="obb"/>. When this method returns <see langword="false"/>, contains
+        /// <see cref="CollisionResult2D.None"/>.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the circle and box overlap or touch; otherwise, <see langword="false"/>.
+        /// </returns>
+        public readonly bool TryGetCollision(OrientedBoundingBox2D obb, out CollisionResult2D result)
+        {
+            return Collision2D.TryGetCollisionCircleObb(Center, Radius, obb.Center, obb.AxisX, obb.AxisY, obb.HalfExtents, out result);
+        }
+
+        /// <summary>
         /// Applies a matrix transformation to this circle and creates a new transformed circle.
         /// </summary>
         /// <param name="matrix">The transformation matrix to apply.</param>

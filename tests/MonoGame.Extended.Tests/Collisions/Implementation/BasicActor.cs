@@ -1,33 +1,52 @@
-﻿using System;
 using Microsoft.Xna.Framework;
 
-namespace MonoGame.Extended.Collisions.Tests
+namespace MonoGame.Extended.Collisions.Tests;
+
+public class BasicActor : ICollisionActor
 {
-    public class BasicActor : ICollisionActor
+    private static int s_nextId = 1;
+
+    public int Id { get; } = s_nextId++;
+
+    public Vector2 Position { get; private set; }
+
+    public CollisionShape2D Shape { get; private set; }
+
+    public BasicActor()
     {
-        public Vector2 Position { get; set; }
-        public IShapeF Bounds { get; set; }
-        public Vector2 Velocity { get; set; }
+        SetBounds(BoundingBox2D.CreateFromPositionAndSize(Vector2.Zero, new Vector2(1f, 1f)));
+    }
 
-        public BasicActor()
-        {
-            Bounds = new RectangleF(0f, 0f, 1f, 1f);
-        }
-        public void OnCollision(CollisionEventArgs collisionInfo)
-        {
-            Bounds.Position -= collisionInfo.PenetrationVector;
-            Position -= collisionInfo.PenetrationVector;
+    public BasicActor(BoundingBox2D bounds)
+    {
+        SetBounds(bounds);
+    }
 
-            if (collisionInfo.Other is BasicActor)
-            {
-                CollisionCount++;
-            }
-            else
-            {
-                Console.WriteLine(collisionInfo.Other.GetType().Name);
-            }
-        }
+    public BasicActor(BoundingCircle2D bounds)
+    {
+        SetBounds(bounds);
+    }
 
-        public int CollisionCount { get; set; }
+    public BasicActor(OrientedBoundingBox2D bounds)
+    {
+        SetBounds(bounds);
+    }
+
+    public void SetBounds(BoundingBox2D bounds)
+    {
+        Position = bounds.Min;
+        Shape = new CollisionShape2D(bounds);
+    }
+
+    public void SetBounds(BoundingCircle2D bounds)
+    {
+        Position = bounds.Center;
+        Shape = new CollisionShape2D(bounds);
+    }
+
+    public void SetBounds(OrientedBoundingBox2D bounds)
+    {
+        Position = bounds.Center;
+        Shape = new CollisionShape2D(bounds);
     }
 }

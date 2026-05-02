@@ -414,6 +414,30 @@ namespace MonoGame.Extended
         }
 
         /// <summary>
+        /// Tests whether this capsule intersects with a circle, and returns collision resolution data when they intersect.
+        /// </summary>
+        /// <param name="circle">The circle to test against.</param>
+        /// <param name="result">
+        /// When this method returns <see langword="true"/>, contains the collision result whose minimum translation vector
+        /// moves this capsule out of <paramref name="circle"/>. When this method returns <see langword="false"/>, contains
+        /// <see cref="CollisionResult2D.None"/>.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the capsule and circle overlap or touch; otherwise, <see langword="false"/>.
+        /// </returns>
+        public readonly bool TryGetCollision(BoundingCircle2D circle, out CollisionResult2D result)
+        {
+            if (!Collision2D.TryGetCollisionCircleCapsule(circle.Center, circle.Radius, PointA, PointB, Radius, out CollisionResult2D circleResult))
+            {
+                result = CollisionResult2D.None;
+                return false;
+            }
+
+            result = circleResult.Invert();
+            return true;
+        }
+
+        /// <summary>
         /// Applies a matrix transformation to this capsule and creates a new transformed capsule.
         /// </summary>
         /// <param name="matrix">The transformation matrix to apply.</param>
