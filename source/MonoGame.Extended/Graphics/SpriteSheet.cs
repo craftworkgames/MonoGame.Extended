@@ -73,6 +73,8 @@ public class SpriteSheet
 
     public SpriteSheetAnimation GetAnimation(string name) => _animations[name];
 
+    public bool TryGetAnimation(string name, out SpriteSheetAnimation animation) => _animations.TryGetValue(name, out animation);
+
     /// <summary>
     /// Removes the animation definition with the specified name.
     /// </summary>
