@@ -286,6 +286,197 @@ public readonly struct CollisionShape2D
     }
 
     /// <summary>
+    /// Determines whether this collision shape is intersected by the specified ray.
+    /// </summary>
+    /// <param name="ray">The ray to test against.</param>
+    /// <returns>
+    /// <see langword="true"/> if the ray intersects the shape in its forward direction;
+    /// otherwise, <see langword="false"/>.
+    /// </returns>
+    /// <remarks>
+    /// This method delegates to the existing ray–shape intersection APIs.
+    /// If this shape is <c>None</c>, it returns <see langword="false"/>.
+    /// </remarks>
+    public bool Intersects(Ray2D ray)
+    {
+        if (this._kind == CollisionShapeKind2D.None)
+            return false;
+        switch (this._kind)
+        {
+            case CollisionShapeKind2D.Box:
+                return ray.Intersects(this._boundingBox);
+            case CollisionShapeKind2D.Circle:
+                return ray.Intersects(this.Circle);
+            case CollisionShapeKind2D.OrientedBox:
+                return ray.Intersects(this.OrientedBox);
+            case CollisionShapeKind2D.Capsule:
+                return ray.Intersects(this.Capsule);
+            case CollisionShapeKind2D.Polygon:
+                return ray.Intersects(this.Polygon);
+            default:
+                return false;
+        }
+    }
+
+    /// <summary>
+    /// Determines whether this collision shape is intersected by the specified ray and
+    /// computes the parametric distances to the entry and exit intersection points.
+    /// </summary>
+    /// <param name="ray">The ray to test against.</param>
+    /// <param name="tMin">
+    /// When this method returns <see langword="true"/>, contains the parametric distance
+    /// along the ray to the entry intersection point, where the point equals
+    /// <c>ray.Origin + tMin * ray.Direction</c>. If the ray origin lies inside the shape,
+    /// this value is <c>0</c>.
+    /// When this method returns <see langword="false"/>, contains <c>0.0f</c>.
+    /// </param>
+    /// <param name="tMax">
+    /// When this method returns <see langword="true"/>, contains the parametric distance
+    /// along the ray to the exit intersection point. This value is always ≥ <paramref name="tMin"/>.
+    /// When this method returns <see langword="false"/>, contains <c>0.0f</c>.
+    /// </param>
+    /// <returns>
+    /// <see langword="true"/> if the ray intersects the shape in its forward direction;
+    /// otherwise, <see langword="false"/>.
+    /// </returns>
+    /// <remarks>
+    /// This method delegates to the existing ray–shape intersection APIs.
+    /// If this shape is <c>None</c>, it returns <see langword="false"/> and the out parameters
+    /// are left at their initial value of <c>0.0f</c>.
+    /// </remarks>
+    public bool Intersects(Ray2D ray, out float? tMin, out float? tMax)
+    {
+        tMin = tMax = new float?(0.0f);
+        if (this._kind == CollisionShapeKind2D.None)
+            return false;
+        switch (this._kind)
+        {
+            case CollisionShapeKind2D.Box:
+                return ray.Intersects(this._boundingBox, out tMin, out tMax);
+            case CollisionShapeKind2D.Circle:
+                return ray.Intersects(this.Circle, out tMin, out tMax);
+            case CollisionShapeKind2D.OrientedBox:
+                return ray.Intersects(this.OrientedBox, out tMin, out tMax);
+            case CollisionShapeKind2D.Capsule:
+                return ray.Intersects(this.Capsule, out tMin, out tMax);
+            default:
+                return false;
+        }
+    }
+
+    /// <summary>
+    /// Determines whether this collision shape is intersected by the specified infinite line.
+    /// </summary>
+    /// <param name="line">The line to test against.</param>
+    /// <returns>
+    /// <see langword="true"/> if the line passes through or touches the shape;
+    /// otherwise, <see langword="false"/>.
+    /// </returns>
+    /// <remarks>
+    /// This method delegates to the existing line–shape intersection APIs.
+    /// If this shape is <c>None</c>, it returns <see langword="false"/>.
+    /// </remarks>
+    public bool Intersects(Line2D line)
+    {
+        if (this._kind == CollisionShapeKind2D.None)
+            return false;
+        switch (this._kind)
+        {
+            case CollisionShapeKind2D.Box:
+                return line.Intersects(this._boundingBox);
+            case CollisionShapeKind2D.Circle:
+                return line.Intersects(this.Circle);
+            case CollisionShapeKind2D.OrientedBox:
+                return line.Intersects(this.OrientedBox);
+            case CollisionShapeKind2D.Capsule:
+                return line.Intersects(this.Capsule);
+            case CollisionShapeKind2D.Polygon:
+                return line.Intersects(this.Polygon);
+            default:
+                return false;
+        }
+    }
+
+    /// <summary>
+    /// Determines whether this collision shape is intersected by the specified line segment.
+    /// </summary>
+    /// <param name="lineSegment">The line segment to test against.</param>
+    /// <returns>
+    /// <see langword="true"/> if the segment intersects the shape; otherwise, <see langword="false"/>.
+    /// </returns>
+    /// <remarks>
+    /// This method delegates to the existing segment–shape intersection APIs.
+    /// If this shape is <c>None</c>, it returns <see langword="false"/>.
+    /// </remarks>
+    public bool Intersects(LineSegment2D lineSegment)
+    {
+        if (this._kind == CollisionShapeKind2D.None)
+            return false;
+        switch (this._kind)
+        {
+            case CollisionShapeKind2D.Box:
+                return lineSegment.Intersects(this._boundingBox);
+            case CollisionShapeKind2D.Circle:
+                return lineSegment.Intersects(this.Circle);
+            case CollisionShapeKind2D.OrientedBox:
+                return lineSegment.Intersects(this.OrientedBox);
+            case CollisionShapeKind2D.Capsule:
+                return lineSegment.Intersects(this.Capsule);
+            case CollisionShapeKind2D.Polygon:
+                return lineSegment.Intersects(this.Polygon);
+            default:
+                return false;
+        }
+    }
+
+    /// <summary>
+    /// Determines whether this collision shape is intersected by the specified line segment
+    /// and computes the parametric distances to the entry and exit intersection points.
+    /// </summary>
+    /// <param name="lineSegment">The line segment to test against.</param>
+    /// <param name="tMin">
+    /// When this method returns <see langword="true"/>, contains the parametric distance
+    /// along the segment to the entry intersection point, in the range [0, 1] where 0
+    /// represents the start and 1 represents the end.
+    /// When this method returns <see langword="false"/>, contains <c>0.0f</c>.
+    /// </param>
+    /// <param name="tMax">
+    /// When this method returns <see langword="true"/>, contains the parametric distance
+    /// along the segment to the exit intersection point, in the range [0, 1] where 0
+    /// represents the start and 1 represents the end.
+    /// When this method returns <see langword="false"/>, contains <c>0.0f</c>.
+    /// </param>
+    /// <returns>
+    /// <see langword="true"/> if the segment intersects the shape; otherwise, <see langword="false"/>.
+    /// </returns>
+    /// <remarks>
+    /// This method delegates to the existing segment–shape intersection APIs.
+    /// If this shape is <c>None</c>, it returns <see langword="false"/> and the out parameters
+    /// are left at their initial value of <c>0.0f</c>.
+    /// For degenerate (zero‑length) segments, returns <see langword="true"/> with
+    /// <c>tMin = tMax = 0</c> if the start point lies inside the shape.
+    /// </remarks>
+    public bool Intersects(LineSegment2D lineSegment, out float? tMin, out float? tMax)
+    {
+        tMin = tMax = new float?(0.0f);
+        if (this._kind == CollisionShapeKind2D.None)
+            return false;
+        switch (this._kind)
+        {
+            case CollisionShapeKind2D.Box:
+                return lineSegment.Intersects(this._boundingBox, out tMin, out tMax);
+            case CollisionShapeKind2D.Circle:
+                return lineSegment.Intersects(this.Circle, out tMin, out tMax);
+            case CollisionShapeKind2D.OrientedBox:
+                return lineSegment.Intersects(this.OrientedBox, out tMin, out tMax);
+            case CollisionShapeKind2D.Capsule:
+                return lineSegment.Intersects(this.Capsule, out tMin, out tMax);
+            default:
+                return false;
+        }
+    }
+
+    /// <summary>
     /// Tests whether this collision shape intersects with another collision shape, and returns collision resolution data
     /// when the represented shape pair supports it.
     /// </summary>
