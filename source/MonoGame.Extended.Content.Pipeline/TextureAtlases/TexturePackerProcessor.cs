@@ -18,17 +18,23 @@ public class TexturePackerProcessor : ContentProcessor<ContentImporterResult<Tex
         if (input.Data.Meta.Image != null)
         {
             // Validates the texture exists and can be processed (fails build if missing)
-            var externalRef = new ExternalReference<Texture2DContent>(input.Data.Meta.Image);
-            context.BuildAndLoadAsset<Texture2DContent, Texture2DContent>(externalRef, nameof(TextureProcessor));
+            ExternalReference<TextureContent> externalRef = new ExternalReference<TextureContent>(input.Data.Meta.Image);
+            context.BuildAndLoadAsset<TextureContent, TextureContent>(
+                externalRef,
+                new TextureImporter(),
+                new TextureProcessor());
 
         }
         else if (input.Data.Meta.DataFormat == "monogame-extended")
         {
-            foreach (var texture in input.Data.Textures)
+            foreach (TexturePackerTexture texture in input.Data.Textures)
             {
                 string texturePath = Path.Combine(Path.GetDirectoryName(input.FilePath), texture.FileName);
-                var externalRef = new ExternalReference<Texture2DContent>(texturePath);
-                context.BuildAndLoadAsset<Texture2DContent, Texture2DContent>(externalRef, nameof(TextureProcessor));
+                ExternalReference<TextureContent> externalRef = new ExternalReference<TextureContent>(texturePath);
+                context.BuildAndLoadAsset<TextureContent, TextureContent>(
+                    externalRef,
+                    new TextureImporter(),
+                    new TextureProcessor());
             }
         }
         return new TexturePackerProcessorResult(input.Data);

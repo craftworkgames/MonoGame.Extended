@@ -20,15 +20,18 @@ public class ParticleEffectProcessor : ContentProcessor<ContentImporterResult<Pa
             foreach (string texturePath in fileContent.TextureReferences)
             {
                 ContentLogger.Log($"Validating texture '{texturePath}'");
-                ExternalReference<Texture2DContent> externalRef = new ExternalReference<Texture2DContent>(texturePath);
-                context.BuildAndLoadAsset<Texture2DContent, Texture2DContent>(externalRef, nameof(TextureProcessor));
+                ExternalReference<TextureContent> externalRef = new ExternalReference<TextureContent>(texturePath);
+                context.BuildAndLoadAsset<TextureContent, TextureContent>(
+                    externalRef,
+                    new TextureImporter(),
+                    new TextureProcessor());
             }
 
             ContentLogger.Log("Processed particle effect");
 
             return new ParticleEffectProcessorResult(fileContent);
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             context.Logger.LogImportantMessage(e.Message);
             throw;
