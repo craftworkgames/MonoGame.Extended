@@ -1,6 +1,7 @@
 using System;
 using Microsoft.Xna.Framework.Content.Pipeline;
 using Microsoft.Xna.Framework.Content.Pipeline.Graphics;
+using Microsoft.Xna.Framework.Content.Pipeline.Processors;
 using MonoGame.Extended.Tilemaps;
 
 namespace MonoGame.Extended.Content.Pipeline.Tilemaps.Tiled;
@@ -25,7 +26,11 @@ public sealed class TilemapTilesetProcessor : ContentProcessor<TilemapTilesetCon
         if (!string.IsNullOrWhiteSpace(contentItem.Data.TexturePath))
         {
             ContentLogger.Log($"Building texture '{contentItem.Data.TexturePath}'");
-            contentItem.BuildExternalReference<Texture2DContent>(context, contentItem.Data.TexturePath);
+            contentItem.BuildExternalReference<TextureContent, Texture2DContent>(
+                context,
+                contentItem.Data.TexturePath,
+                new TextureImporter(),
+                new TextureProcessor());
         }
 
         foreach (TilemapTileEntryData tile in contentItem.Data.Tiles)
@@ -33,7 +38,11 @@ public sealed class TilemapTilesetProcessor : ContentProcessor<TilemapTilesetCon
             if (!string.IsNullOrWhiteSpace(tile.ImagePath))
             {
                 ContentLogger.Log($"Building tile image '{tile.ImagePath}'");
-                contentItem.BuildExternalReference<Texture2DContent>(context, tile.ImagePath);
+                contentItem.BuildExternalReference<TextureContent, Texture2DContent>(
+                    context,
+                    tile.ImagePath,
+                    new TextureImporter(),
+                    new TextureProcessor());
             }
         }
 
