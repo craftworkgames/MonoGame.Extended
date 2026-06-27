@@ -26,11 +26,18 @@ public sealed class TilemapTilesetProcessor : ContentProcessor<TilemapTilesetCon
         if (!string.IsNullOrWhiteSpace(contentItem.Data.TexturePath))
         {
             ContentLogger.Log($"Building texture '{contentItem.Data.TexturePath}'");
+
+#if KNI || FNA
+            // KNI and FNA do not use the new external ref calls from MonoGame's new
+            // content builder project
+            contentItem.BuildExternalReference<Texture2DContent>(context, contentItem.Data.TexturePath);
+#else
             contentItem.BuildExternalReference<TextureContent, Texture2DContent>(
                 context,
                 contentItem.Data.TexturePath,
                 new TextureImporter(),
                 new TextureProcessor());
+#endif
         }
 
         foreach (TilemapTileEntryData tile in contentItem.Data.Tiles)
@@ -38,11 +45,18 @@ public sealed class TilemapTilesetProcessor : ContentProcessor<TilemapTilesetCon
             if (!string.IsNullOrWhiteSpace(tile.ImagePath))
             {
                 ContentLogger.Log($"Building tile image '{tile.ImagePath}'");
+
+#if KNI || FNA
+                // KNI and FNA do not use the new external ref calls from MonoGame's new
+                // content builder project
+                contentItem.BuildExternalReference<Texture2DContent>(context, tile.ImagePath);
+#else                
                 contentItem.BuildExternalReference<TextureContent, Texture2DContent>(
                     context,
                     tile.ImagePath,
                     new TextureImporter(),
                     new TextureProcessor());
+#endif
             }
         }
 

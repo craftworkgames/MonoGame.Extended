@@ -27,6 +27,7 @@ namespace MonoGame.Extended.Content.Pipeline
             _externalReferences.Add(source, externalReference);
         }
 
+#if !KNI && !FNA
         /// <summary>
         /// Builds an external asset reference using explicit importer and processor instances.
         /// </summary>
@@ -56,6 +57,7 @@ namespace MonoGame.Extended.Content.Pipeline
                 context.BuildAsset<TInput, TOutput>(sourceAsset, importer, processor);
             _externalReferences.Add(source, externalReference);
         }
+#endif
 
         public ExternalReference<TInput> GetExternalReference<TInput>(string source)
         {
