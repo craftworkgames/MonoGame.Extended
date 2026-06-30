@@ -71,9 +71,17 @@ public class TilemapTilesetCollection : IReadOnlyList<TilemapTileset>
     /// Gets the tileset that contains the specified global tile ID.
     /// </summary>
     /// <param name="globalTileId">The global tile ID.</param>
-    /// <returns>The tileset containing the tile, or <see langword="null"/> if not found.</returns>
+    /// <returns>
+    /// The tileset containing the tile, or <see langword="null"/> if the ID is 0
+    /// or no tileset contains it.
+    /// </returns>
     public TilemapTileset GetTilesetForGid(int globalTileId)
     {
+        if (globalTileId == 0)
+        {
+            return null;
+        }
+
         for (int i = 0; i < _tilesets.Count; i++)
         {
             if (_tilesets[i].ContainsGlobalId(globalTileId))
@@ -89,11 +97,20 @@ public class TilemapTilesetCollection : IReadOnlyList<TilemapTileset>
     /// Gets the local tile ID within a tileset from a global tile ID.
     /// </summary>
     /// <param name="globalTileId">The global tile ID.</param>
-    /// <param name="tileset">When this method returns, contains the tileset that owns the tile.</param>
+    /// <param name="tileset">
+    /// When this method returns, contains the tileset that owns the tile, or
+    /// <see langword="null"/> when <paramref name="globalTileId"/> is 0.
+    /// </param>
     /// <returns>The local tile ID within the tileset.</returns>
     /// <exception cref="InvalidOperationException">No tileset contains the specified global tile ID.</exception>
     public int GetLocalId(int globalTileId, out TilemapTileset tileset)
     {
+        if (globalTileId == 0)
+        {
+            tileset = null;
+            return 0;
+        }
+
         TilemapTileset foundTileset = GetTilesetForGid(globalTileId);
 
         if (foundTileset == null)

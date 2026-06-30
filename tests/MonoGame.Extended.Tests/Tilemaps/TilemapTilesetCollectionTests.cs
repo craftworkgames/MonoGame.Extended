@@ -195,4 +195,39 @@ public sealed class TilemapTilesetCollectionTests
         Assert.Equal(tileset, outTileset);
     }
 
+    // Regression tests for issue #1157
+    // Empty Tiled gid 0 must be treated as the empty no tile
+    [Fact]
+    public void GetTilesetForGid_WithEmptyTileGid_ReturnsNull()
+    {
+        TilemapTilesetCollection collection = new TilemapTilesetCollection();
+        TilemapTileset tileset = new TilemapTileset("Tileset", CreateDummyTexture(), 32, 32, 100, 10)
+        {
+            FirstGlobalId = 1
+        };
+        collection.Add(tileset);
+
+        TilemapTileset result = collection.GetTilesetForGid(0);
+
+        Assert.Null(result);
+    }
+
+    // Regression tests for issue #1157
+    // Empty Tiled gid 0 must be treated as the empty no tile
+    [Fact]
+    public void GetLocalId_WithEmptyTileGid_ReturnsZeroAndNullTileset()
+    {
+        TilemapTilesetCollection collection = new TilemapTilesetCollection();
+        TilemapTileset tileset = new TilemapTileset("Tileset", CreateDummyTexture(), 32, 32, 100, 10)
+        {
+            FirstGlobalId = 1
+        };
+        collection.Add(tileset);
+
+        int localId = collection.GetLocalId(0, out TilemapTileset outTileset);
+
+        Assert.Equal(0, localId);
+        Assert.Null(outTileset);
+    }
+
 }

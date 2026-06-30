@@ -60,7 +60,10 @@ public readonly struct TilemapTile
     /// Gets the local tile ID within the specified tileset.
     /// </summary>
     /// <param name="tilesets">The collection of tilesets.</param>
-    /// <param name="tileset">When this method returns, contains the tileset that owns this tile.</param>
+    /// <param name="tileset">
+    /// When this method returns, contains the tileset that owns this tile, or
+    /// <see langword="null"/> when this tile represents the empty tile sentinel.
+    /// </param>
     /// <returns>The local tile ID within the tileset.</returns>
     public int GetLocalId(TilemapTilesetCollection tilesets, out TilemapTileset tileset)
     {
