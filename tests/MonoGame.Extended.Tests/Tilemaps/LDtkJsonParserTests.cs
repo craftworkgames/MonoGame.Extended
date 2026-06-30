@@ -335,6 +335,73 @@ public class LDtkJsonParserTests
         Assert.Contains(tilemaps, t => t.Name == "Tiles_and_intgrid");
     }
 
+    // Regression test for issue #1159
+    // Previously the LDtk parser would only use the defaultGridSize and ignore the actual
+    // level grid size if it was different, leading to incorrect rendering.
+    [Fact]
+    public void ParseFromStream_WithLayerGridSizeDifferentFromDefault_UsesLayerGridSize()
+    {
+        LDtkJsonParser parser = new LDtkJsonParser();
+        string json = @"{
+            ""jsonVersion"": ""1.5.3"",
+            ""defaultGridSize"": 16,
+            ""levels"": [
+                {
+                    ""identifier"": ""Level_0"",
+                    ""iid"": ""test-iid"",
+                    ""uid"": 1,
+                    ""worldX"": 0,
+                    ""worldY"": 0,
+                    ""worldDepth"": 0,
+                    ""pxWid"": 640,
+                    ""pxHei"": 480,
+                    ""__bgColor"": ""#40465B"",
+                    ""layerInstances"": [
+                        {
+                            ""__identifier"": ""Tiles"",
+                            ""__type"": ""Tiles"",
+                            ""__cWid"": 27,
+                            ""__cHei"": 20,
+                            ""__gridSize"": 24,
+                            ""__opacity"": 1.0,
+                            ""__pxTotalOffsetX"": 0,
+                            ""__pxTotalOffsetY"": 0,
+                            ""__tilesetDefUid"": null,
+                            ""iid"": ""layer-iid"",
+                            ""levelId"": 1,
+                            ""layerDefUid"": 1,
+                            ""pxOffsetX"": 0,
+                            ""pxOffsetY"": 0,
+                            ""visible"": true,
+                            ""gridTiles"": [],
+                            ""autoLayerTiles"": [],
+                            ""entityInstances"": [],
+                            ""intGridCsv"": []
+                        }
+                    ]
+                }
+            ],
+            ""defs"": {
+                ""layers"": [],
+                ""entities"": [],
+                ""tilesets"": [],
+                ""enums"": []
+            }
+        }";
+
+        byte[] bytes = System.Text.Encoding.UTF8.GetBytes(json);
+
+        using MemoryStream stream = new MemoryStream(bytes);
+
+        Tilemap tilemap = parser.ParseFromStream(stream, _graphicsDevice, ".");
+
+        Assert.Equal(27, tilemap.Width);
+        Assert.Equal(20, tilemap.Height);
+        Assert.Equal(24, tilemap.TileWidth);
+        Assert.Equal(24, tilemap.TileHeight);
+
+    }
+
     // ---- Exception quality ----
 
     [Fact]

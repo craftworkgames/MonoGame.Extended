@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Text.Json;
 using Microsoft.Xna.Framework;
+using MonoGame.Extended.Collisions.Layers;
 using MonoGame.Extended.Tilemaps.LDtk.Document;
 using MonoGame.Extended.Tilemaps.Parsers;
 
@@ -15,12 +16,13 @@ internal static class LDtkTilemapDataConverter
         ArgumentNullException.ThrowIfNull(level);
         ArgumentNullException.ThrowIfNull(project);
 
-        int tileSize = project.DefaultGridSize > 0 ? project.DefaultGridSize : 16;
+        int tileSize = GetLevelGridSize(level, project);
+        Point levelSize = GetLevelSize(level, tileSize);
 
         TilemapData data = new TilemapData();
         data.Name = level.Identifier ?? "Untitled";
-        data.Width = level.PxWid / tileSize;
-        data.Height = level.PxHei / tileSize;
+        data.Width = levelSize.X;
+        data.Height = levelSize.Y;
         data.TileWidth = tileSize;
         data.TileHeight = tileSize;
         // LDtk only supports orthogonal maps.
@@ -37,6 +39,48 @@ internal static class LDtkTilemapDataConverter
 
         return data;
     }
+
+    private static int GetLevelGridSize(LDtkLevel level, LDtkProject project)
+    {
+        if (level.LayerInstances != null)
+        {
+            foreach (LDtkLayerInstance layer in level.LayerInstances)
+            {
+                if (layer.Type == "Entities" || layer.GridSize <= 0)
+                {
+                    continue;
+                }
+
+                return layer.GridSize;
+            }
+        }
+
+        return project.DefaultGridSize > 0 ? project.DefaultGridSize : 16;
+    }
+
+    private static Point GetLevelSize(LDtkLevel level, int tileSize)
+    {
+        if (level.LayerInstances != null)
+        {
+            foreach (LDtkLayerInstance layer in level.LayerInstances)
+            {
+                if (layer.Type == "Entities" || layer.CWid <= 0 || layer.CHei <= 0)
+                {
+                    continue;
+                }
+
+                // TODO: For now, treating LDtk levels as single-grid maps. 
+                //       Might need to revisit if mixed-grid levels cause issues with
+                //       per-layer cell sizes.
+                return new Point(layer.CWid, layer.CHei);
+            }
+        }
+
+        int x = tileSize <= 0 ? 0 : (tileSize + level.PxWid - 1) / tileSize;
+        int y = tileSize <= 0 ? 0 : (tileSize + level.PxHei - 1) / tileSize;
+        return new Point(x, y);
+    }
+
 
     #region Tilesets
 
