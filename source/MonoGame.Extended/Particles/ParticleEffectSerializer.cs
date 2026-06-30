@@ -190,6 +190,11 @@ public static class ParticleEffectSerializer
             path = Path.GetRelativePath(baseDirectory, path);
         }
 
+        // Path needs to be normalized before loading
+        // Reference issue #1162
+        path = MonoGame.Extended.Content.ContentReaderExtensions.RemoveExtension(path.Replace('\\', '/'));
+        path = MonoGame.Extended.Content.ContentReaderExtensions.ShortenRelativePath(path);
+
         Texture2D texture = content.Load<Texture2D>(path);
         if(string.IsNullOrEmpty(texture.Name))
         {
