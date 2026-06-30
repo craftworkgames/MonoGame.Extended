@@ -458,7 +458,10 @@ public class TilemapRendererTests
             tileCount: 10,
             columns: 10,
             spacing: 0,
-            margin: 0);
+            margin: 0)
+        {
+            FirstGlobalId = 1
+        };
 
         tilemap.Tilesets.Add(tileset);
 
@@ -484,7 +487,10 @@ public class TilemapRendererTests
             tileCount: 4,
             columns: 2,
             spacing: 0,
-            margin: 0);
+            margin: 0)
+        {
+            FirstGlobalId = 1
+        };
 
         tilemap.Tilesets.Add(tileset);
 

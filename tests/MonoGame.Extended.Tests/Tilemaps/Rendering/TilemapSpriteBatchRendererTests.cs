@@ -281,7 +281,10 @@ public class TilemapSpriteBatchRendererTests
             tileCount: 10,
             columns: 10,
             spacing: 0,
-            margin: 0);
+            margin: 0)
+        {
+            FirstGlobalId = 1
+        };
 
         tilemap.Tilesets.Add(tileset);
 
@@ -307,7 +310,10 @@ public class TilemapSpriteBatchRendererTests
             tileCount: 4,
             columns: 2,
             spacing: 0,
-            margin: 0);
+            margin: 0)
+        {
+            FirstGlobalId = 1
+        };
 
         tilemap.Tilesets.Add(tileset);
 
@@ -345,7 +351,10 @@ public class TilemapSpriteBatchRendererTests
             tileCount: 2,
             columns: 2,
             spacing: 0,
-            margin: 0);
+            margin: 0)
+        {
+            FirstGlobalId = 1
+        };
 
         TilemapTileData tileData = new TilemapTileData(localId: 0);
         tileData.Animation = new TilemapTileAnimation(new[]

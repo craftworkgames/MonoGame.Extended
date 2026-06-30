@@ -751,7 +751,10 @@ public class TilemapIntegrationTests
             tileCount: 2,
             columns: 2,
             spacing: 0,
-            margin: 0);
+            margin: 0)
+        {
+            FirstGlobalId = 1
+        };
 
         tilemap.Tilesets.Add(tileset);
 
@@ -800,7 +803,10 @@ public class TilemapIntegrationTests
             tileCount: 1,
             columns: 1,
             spacing: 0,
-            margin: 0);
+            margin: 0)
+        {
+            FirstGlobalId = 1
+        };
 
         tilemap.Tilesets.Add(tileset);
 
@@ -876,7 +882,10 @@ public class TilemapIntegrationTests
             tileCount: 2,
             columns: 2,
             spacing: 0,
-            margin: 0);
+            margin: 0)
+        {
+            FirstGlobalId = 1
+        };
 
         tilemap.Tilesets.Add(tileset);
 
@@ -916,7 +925,10 @@ public class TilemapIntegrationTests
             tileCount: 2,
             columns: 2,
             spacing: 0,
-            margin: 0);
+            margin: 0)
+        {
+            FirstGlobalId = 1
+        };
 
         tilemap.Tilesets.Add(tileset);
 
@@ -959,7 +971,10 @@ public class TilemapIntegrationTests
             tileCount: 2,
             columns: 2,
             spacing: 0,
-            margin: 0);
+            margin: 0)
+        {
+            FirstGlobalId = 1
+        };
 
         TilemapTileData tileData = new TilemapTileData(localId: 0);
         tileData.Animation = new TilemapTileAnimation(new[]
