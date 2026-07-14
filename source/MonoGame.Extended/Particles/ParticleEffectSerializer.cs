@@ -196,10 +196,7 @@ public static class ParticleEffectSerializer
         path = MonoGame.Extended.Content.ContentReaderExtensions.ShortenRelativePath(path);
 
         Texture2D texture = content.Load<Texture2D>(path);
-        if(string.IsNullOrEmpty(texture.Name))
-        {
-            texture.Name = name;
-        }
+        texture.Name = name;
 
         Rectangle bounds = reader.GetAttributeRectangle(nameof(Texture2DRegion.Bounds), default);
 
