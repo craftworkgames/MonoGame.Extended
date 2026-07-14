@@ -345,6 +345,7 @@ public sealed unsafe class ParticleEmitter : IDisposable
             particle->Color[2] = color.Z;
 
             particle->Opacity = Parameters.Opacity.Value;
+            particle->InitialOpacity = particle->Opacity;
 
             Vector2 scale = Parameters.Scale.Value;
             particle->Scale[0] = scale.X;

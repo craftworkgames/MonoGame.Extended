@@ -57,6 +57,11 @@ public unsafe struct Particle
     public float Opacity;
 
     /// <summary>
+    /// The opacity (alpha) value assigned to this particle at release time.
+    /// </summary>
+    public float InitialOpacity;
+
+    /// <summary>
     /// The rotation of this particle in radians.
     /// </summary>
     public float Rotation;
