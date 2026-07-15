@@ -14,6 +14,8 @@ for file in "$FX_DIR"/*.fx; do
         
         $MGFXC "$FX_DIR/$filename.fx" "$FX_DIR/$filename.ogl.mgfxo" /Profile:OpenGL
         $MGFXC "$FX_DIR/$filename.fx" "$FX_DIR/$filename.dx11.mgfxo" /Profile:DirectX_11
+        $MGFXC "$FX_DIR/$filename.fx" "$FX_DIR/$filename.dx12.mgfxo" /Profile:DirectX_12
+        $MGFXC "$FX_DIR/$filename.fx" "$FX_DIR/$filename.vk.mgfxo" /Profile:Vulkan
     fi
 done
 
