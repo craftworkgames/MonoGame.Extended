@@ -1,8 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Xml;
-using System.Xml.Serialization;
+using System.Xml.Linq;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Content;
 using MonoGame.Extended.Tilemaps.Parsers;
@@ -134,19 +133,13 @@ public class TiledTmxParser : ITilemapParser
     {
         try
         {
-            XmlSerializer serializer = new XmlSerializer(typeof(TiledMapXml));
-
-            // DtdProcessing.Ignore suppresses the security warning Tiled's DTD declarations trigger.
-            XmlReaderSettings settings = new XmlReaderSettings
+            XDocument document = XDocument.Load(stream);
+            if (document.Root == null)
             {
-                DtdProcessing = DtdProcessing.Ignore,
-                XmlResolver = null
-            };
-
-            using (XmlReader reader = XmlReader.Create(stream, settings))
-            {
-                return (TiledMapXml)serializer.Deserialize(reader);
+                throw new TilemapParseException("TMX document has no XML root element.");
             }
+
+            return TiledXmlParser.ParseMap(document.Root);
         }
         catch (Exception ex)
         {
@@ -176,18 +169,13 @@ public class TiledTmxParser : ITilemapParser
             {
                 try
                 {
-                    XmlSerializer serializer = new XmlSerializer(typeof(TiledTilesetXml));
-
-                    XmlReaderSettings settings = new XmlReaderSettings
+                    XDocument document = XDocument.Load(stream);
+                    if (document.Root == null)
                     {
-                        DtdProcessing = DtdProcessing.Ignore,
-                        XmlResolver = null
-                    };
-
-                    using (XmlReader reader = XmlReader.Create(stream, settings))
-                    {
-                        tilesetXml = (TiledTilesetXml)serializer.Deserialize(reader);
+                        throw new TilemapParseException("TSX document has no XML root element.");
                     }
+
+                    tilesetXml = TiledXmlParser.ParseTileset(document.Root);
                 }
                 catch (Exception ex)
                 {
