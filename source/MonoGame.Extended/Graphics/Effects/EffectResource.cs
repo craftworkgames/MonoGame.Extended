@@ -2,7 +2,6 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
-using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace MonoGame.Extended.Graphics.Effects
@@ -67,81 +66,9 @@ namespace MonoGame.Extended.Graphics.Effects
                 return _detectedShaderProfile;
             }
 
-            // use reflection to figure out if Shader.Profile is OpenGL (0) or DirectX (1),
-            // may need to be changed / fixed for future shader profiles
-            Assembly frameworkAssembly = typeof(Game).GetTypeInfo().Assembly;
-            Debug.Assert(frameworkAssembly != null);
-
-            Type shaderType = frameworkAssembly.GetType("Microsoft.Xna.Framework.Graphics.Shader");
-            if (shaderType != null)
-            {
-                TypeInfo shaderTypeInfo = shaderType.GetTypeInfo();
-                Debug.Assert(shaderTypeInfo != null);
-
-                // https://github.com/MonoGame/MonoGame/blob/develop/MonoGame.Framework/Graphics/Shader/Shader.cs#L47
-                PropertyInfo profileProperty = shaderTypeInfo.GetDeclaredProperty("Profile");
-                if (profileProperty?.GetValue(null) is object profileValue)
-                {
-                    switch (Convert.ToInt32(profileValue))
-                    {
-                        case 0:
-                            return _detectedShaderProfile ??= "ogl";
-                        case 1:
-                            return _detectedShaderProfile ??= "dx11";
-                        case 2:
-                            return _detectedShaderProfile ??= "dx12";
-                        case 80:
-                            return _detectedShaderProfile ??= "vk";
-                    }
-                }
-            }
-
-            // Check assemblies as a fallback.
-            if (IsOpenGlAssembly(graphicsDevice.GetType().Assembly))
-            {
-                return _detectedShaderProfile ??= "ogl";
-            }
-
-            if (IsDirectX12Assembly(graphicsDevice.GetType().Assembly))
-            {
-                return _detectedShaderProfile ??= "dx12";
-            }
-
-            if (IsDirectX11Assembly(graphicsDevice.GetType().Assembly))
-            {
-                return _detectedShaderProfile ??= "dx11";
-            }
-
-            if (IsVulkanAssembly(graphicsDevice.GetType().Assembly))
-            {
-                return _detectedShaderProfile ??= "vk";
-            }
-
-            foreach (Assembly loadedAssembly in AppDomain.CurrentDomain.GetAssemblies())
-            {
-                if (IsOpenGlAssembly(loadedAssembly))
-                {
-                    return _detectedShaderProfile ??= "ogl";
-                }
-
-                if (IsDirectX12Assembly(loadedAssembly))
-                {
-                    return _detectedShaderProfile ??= "dx12";
-                }
-
-                if (IsDirectX11Assembly(loadedAssembly))
-                {
-                    return _detectedShaderProfile ??= "dx11";
-                }
-
-                if (IsVulkanAssembly(loadedAssembly))
-                {
-                    return _detectedShaderProfile ??= "vk";
-                }
-            }
-
             // Perform a bytecode compatibility test.
-            // This is the fallback that will work in the case of AOT.
+            // This is the only AOT-compatible approach right now.
+            // TODO: We should revisit this once we have a publicly available ShaderProfile property.
             string[] profilesToTest = ["dx12", "dx11", "ogl", "vk"];
             foreach (string profile in profilesToTest)
             {
@@ -176,56 +103,6 @@ namespace MonoGame.Extended.Graphics.Effects
 #endif
 
             throw new InvalidOperationException("Unable to determine the shader profile for the current graphics platform.");
-        }
-
-        private static bool IsOpenGlAssembly(Assembly assembly)
-        {
-            string assemblyName = assembly.GetName().Name ?? string.Empty;
-            if (assemblyName.Contains("DesktopGL", StringComparison.OrdinalIgnoreCase) ||
-                assemblyName.Contains("SDL2.GL", StringComparison.OrdinalIgnoreCase))
-            {
-                return true;
-            }
-
-            return assembly.GetType("Microsoft.Xna.Platform.Graphics.ConcreteGraphicsContextGL") != null;
-        }
-
-        private static bool IsDirectX11Assembly(Assembly assembly)
-        {
-            string assemblyName = assembly.GetName().Name ?? string.Empty;
-            if (assemblyName.Contains("WindowsDX", StringComparison.OrdinalIgnoreCase) ||
-                assemblyName.Contains("DX11", StringComparison.OrdinalIgnoreCase))
-            {
-                return true;
-            }
-
-            return assembly.GetType("Microsoft.Xna.Platform.Graphics.ConcreteGraphicsContextD3D") != null ||
-                   assembly.GetType("Microsoft.Xna.Platform.Graphics.ConcreteGraphicsContextDX") != null ||
-                   assembly.GetType("Microsoft.Xna.Platform.Graphics.ConcreteGraphicsContextDirectX") != null;
-        }
-
-        private static bool IsDirectX12Assembly(Assembly assembly)
-        {
-            string assemblyName = assembly.GetName().Name ?? string.Empty;
-            if (assemblyName.Contains("WindowsDX12", StringComparison.OrdinalIgnoreCase) ||
-                assemblyName.Contains("DX12", StringComparison.OrdinalIgnoreCase))
-            {
-                return true;
-            }
-
-            return false;
-        }
-
-        private static bool IsVulkanAssembly(Assembly assembly)
-        {
-            string assemblyName = assembly.GetName().Name ?? string.Empty;
-            if (assemblyName.Contains("DesktopVK", StringComparison.OrdinalIgnoreCase) ||
-                assemblyName.Contains("Vulkan", StringComparison.OrdinalIgnoreCase))
-            {
-                return true;
-            }
-
-            return false;
         }
 
         private readonly string _resourceName;
