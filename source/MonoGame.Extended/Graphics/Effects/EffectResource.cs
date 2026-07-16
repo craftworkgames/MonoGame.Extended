@@ -31,6 +31,7 @@ namespace MonoGame.Extended.Graphics.Effects
         private static EffectResource _defaultEffectDx12;
         private static EffectResource _defaultEffectOgl;
         private static EffectResource _defaultEffectVk;
+        private static string _detectedShaderProfile;
 
         /// <summary>
         ///     Gets the <see cref="Effects.DefaultEffect" /> embedded into the MonoGame.Extended.Graphics library.
@@ -61,6 +62,11 @@ namespace MonoGame.Extended.Graphics.Effects
         {
             ArgumentNullException.ThrowIfNull(graphicsDevice);
 
+            if (_detectedShaderProfile != null)
+            {
+                return _detectedShaderProfile;
+            }
+
             // use reflection to figure out if Shader.Profile is OpenGL (0) or DirectX (1),
             // may need to be changed / fixed for future shader profiles
             Assembly frameworkAssembly = typeof(Game).GetTypeInfo().Assembly;
@@ -79,57 +85,89 @@ namespace MonoGame.Extended.Graphics.Effects
                     switch (Convert.ToInt32(profileValue))
                     {
                         case 0:
-                            return "ogl";
+                            return _detectedShaderProfile ??= "ogl";
                         case 1:
-                            return "dx11";
+                            return _detectedShaderProfile ??= "dx11";
                         case 2:
-                            return "dx12";
+                            return _detectedShaderProfile ??= "dx12";
                         case 80:
-                            return "vk";
+                            return _detectedShaderProfile ??= "vk";
                     }
                 }
             }
 
+            // Check assemblies as a fallback.
             if (IsOpenGlAssembly(graphicsDevice.GetType().Assembly))
             {
-                return "ogl";
+                return _detectedShaderProfile ??= "ogl";
             }
 
             if (IsDirectX12Assembly(graphicsDevice.GetType().Assembly))
             {
-                return "dx12";
+                return _detectedShaderProfile ??= "dx12";
             }
 
             if (IsDirectX11Assembly(graphicsDevice.GetType().Assembly))
             {
-                return "dx11";
+                return _detectedShaderProfile ??= "dx11";
             }
 
             if (IsVulkanAssembly(graphicsDevice.GetType().Assembly))
             {
-                return "vk";
+                return _detectedShaderProfile ??= "vk";
             }
 
             foreach (Assembly loadedAssembly in AppDomain.CurrentDomain.GetAssemblies())
             {
                 if (IsOpenGlAssembly(loadedAssembly))
                 {
-                    return "ogl";
+                    return _detectedShaderProfile ??= "ogl";
                 }
 
                 if (IsDirectX12Assembly(loadedAssembly))
                 {
-                    return "dx12";
+                    return _detectedShaderProfile ??= "dx12";
                 }
 
                 if (IsDirectX11Assembly(loadedAssembly))
                 {
-                    return "dx11";
+                    return _detectedShaderProfile ??= "dx11";
                 }
 
                 if (IsVulkanAssembly(loadedAssembly))
                 {
-                    return "vk";
+                    return _detectedShaderProfile ??= "vk";
+                }
+            }
+
+            // Perform a bytecode compatibility test.
+            // This is the fallback that will work in the case of AOT.
+            string[] profilesToTest = ["dx12", "dx11", "ogl", "vk"];
+            foreach (string profile in profilesToTest)
+            {
+                try
+                {
+                    Debug.WriteLine($"Testing shader profile: {profile}");
+
+                    // Load the embedded resource bytecode for this profile.
+                    string resourceName = $"MonoGame.Extended.Graphics.Effects.Resources.DefaultEffect.{profile}.mgfxo";
+                    byte[] bytecode = new EffectResource(resourceName).Bytecode;
+
+                    // Attempt to create an Effect.
+                    // If the GraphicsDevice is Vulkan, and we feed it OpenGL bytecode, 
+                    // the underlying driver will throw an exception.
+                    Effect testEffect = new Effect(graphicsDevice, bytecode);
+
+                    // If we reach here, the GraphicsDevice successfully parsed the bytecode.
+                    return _detectedShaderProfile ??= profile;
+                }
+                catch
+                {
+                    // Bytecode was rejected by the current graphics backend:
+                    // Try the next possibility.
+                    Debug.WriteLine($"Shader profile was rejected: {profile}");
+
+                    continue;
                 }
             }
 
