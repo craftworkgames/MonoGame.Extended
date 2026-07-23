@@ -186,7 +186,16 @@ public readonly struct TilemapPropertyValue
             throw new InvalidOperationException($"Cannot access property of type {Type} as Color.");
         }
 
-        return new Color(_valueData.ColorPackedValue);
+        Color result;
+
+#if FNA
+        result = default;
+        result.PackedValue = _valueData.ColorPackedValue;
+#else
+        result = new Color(_valueData.ColorPackedValue);
+#endif
+
+        return result;
     }
 
     /// <summary>

@@ -26,6 +26,7 @@ namespace MonoGame.Extended.Graphics.Effects
     /// </remarks>
     public class EffectResource
     {
+        private static EffectResource _defaultEffectFna;
         private static EffectResource _defaultEffectDx11;
         private static EffectResource _defaultEffectOgl;
 
@@ -34,6 +35,9 @@ namespace MonoGame.Extended.Graphics.Effects
         /// </summary>
         public static EffectResource GetDefaultEffect(GraphicsDevice graphicsDevice)
         {
+#if FNA
+            return _defaultEffectFna ??= new EffectResource("MonoGame.Extended.Graphics.Effects.Resources.DefaultEffect.fxb");
+#else
             string shaderExtension = DetermineShaderExtension(graphicsDevice);
             switch (shaderExtension)
             {
@@ -44,6 +48,7 @@ namespace MonoGame.Extended.Graphics.Effects
                 default:
                     throw new InvalidOperationException($"Unsupported shader extension '{shaderExtension}'.");
             }
+#endif
         }
 
         private static string DetermineShaderExtension(GraphicsDevice graphicsDevice)
