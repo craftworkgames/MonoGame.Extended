@@ -2,12 +2,18 @@
 using System.Globalization;
 using System.Linq;
 using System.Xml.Linq;
+using MonoGame.Extended.Tilemaps.Tiled.Document;
 
-namespace MonoGame.Extended.Tilemaps.Tiled.Document
+namespace MonoGame.Extended.Tilemaps.Tiled
 {
-    internal static class TiledXmlParser
+    internal static class TiledXElementParser
     {
-        public static TiledMapXml ParseMap(XElement element)
+        /// <summary>
+        /// Parses Tiled tilemaps using <see cref="XDocument"/>.
+        /// </summary>
+        /// <param name="element">Root XElement of the tilemap.</param>
+        /// <returns>The parsed tilemap.</returns>
+        public static TiledMapXml ParseTilemap(XElement element)
         {
             var map = new TiledMapXml
             {
@@ -75,6 +81,11 @@ namespace MonoGame.Extended.Tilemaps.Tiled.Document
             return map;
         }
 
+        /// <summary>
+        /// Parses Tiled tilesets using <see cref="XDocument"/>.
+        /// </summary>
+        /// <param name="element">Root XElement of the tileset.</param>
+        /// <returns>The parsed tileset.</returns>
         public static TiledTilesetXml ParseTileset(XElement element)
         {
             var tileset = new TiledTilesetXml();
