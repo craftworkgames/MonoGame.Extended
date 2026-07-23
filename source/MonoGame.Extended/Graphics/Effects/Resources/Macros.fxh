@@ -5,7 +5,37 @@
 // Copyright (C) Microsoft Corporation. All rights reserved.
 //-----------------------------------------------------------------------------
 
-#if SM4
+#if SM6
+
+// Macros for targetting shader model 6.0 (DX12 and Vulkan)
+
+#define POSITION_INPUT_SEMANTIC POSITION0
+#define POSITION_OUTPUT_SEMANTIC SV_Position
+#define PIXEL_TARGET_SEMANTIC SV_Target0
+
+#define TECHNIQUE(name, vsname, psname ) \
+	technique name { pass { VertexShader = compile vs_6_0 vsname (); PixelShader = compile ps_6_0 psname(); } }
+
+#define BEGIN_CONSTANTS     cbuffer Parameters : register(b0) {
+#define MATRIX_CONSTANTS
+#define END_CONSTANTS       };
+
+#define _vs(r)
+#define _ps(r)
+#define _cb(r)
+
+#define DECLARE_TEXTURE(Name, index) \
+    Texture2D<float4> Name : register(t##index); \
+    sampler Name##Sampler : register(s##index)
+
+#define DECLARE_CUBEMAP(Name, index) \
+    TextureCube<float4> Name : register(t##index); \
+    sampler Name##Sampler : register(s##index)
+
+#define SAMPLE_TEXTURE(Name, texCoord)  Name.Sample(Name##Sampler, texCoord)
+#define SAMPLE_CUBEMAP(Name, texCoord)  Name.Sample(Name##Sampler, texCoord)
+
+#elif SM4
 
 // Macros for targetting shader model 4.0 (DX11)
 
