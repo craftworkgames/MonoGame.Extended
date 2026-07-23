@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <DefineConstants>$(DefineConstants);KNI</DefineConstants>
@@ -8,6 +8,8 @@
 
     <ItemGroup>
       <None Remove="Graphics\Effects\Resources\DefaultEffect.dx11.mgfxo" />
+      <None Remove="Graphics\Effects\Resources\DefaultEffect.dx12.mgfxo" />
+      <None Remove="Graphics\Effects\Resources\DefaultEffect.vk.mgfxo" />
       <None Remove="Graphics\Effects\Resources\DefaultEffect.fx" />
       <None Remove="Graphics\Effects\Resources\DefaultEffect.ogl.mgfxo" />
       <None Remove="Graphics\Effects\Resources\Macros.fxh" />
@@ -16,6 +18,8 @@
 
     <ItemGroup>
         <EmbeddedResource Include="Graphics\Effects\Resources\DefaultEffect.dx11.mgfxo" />
+        <EmbeddedResource Include="Graphics\Effects\Resources\DefaultEffect.dx12.mgfxo" />
+        <EmbeddedResource Include="Graphics\Effects\Resources\DefaultEffect.vk.mgfxo" />
         <EmbeddedResource Include="Graphics\Effects\Resources\DefaultEffect.fx" />
         <EmbeddedResource Include="Graphics\Effects\Resources\DefaultEffect.ogl.mgfxo" />
         <EmbeddedResource Include="Graphics\Effects\Resources\Macros.fxh" />
