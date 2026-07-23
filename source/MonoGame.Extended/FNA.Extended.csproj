@@ -6,6 +6,20 @@
         <PackageTags>fna extended pipeline bmfont tiled texture atlas input viewport fps shapes sprite</PackageTags>
     </PropertyGroup>
 
+    <ItemGroup>
+      <None Remove="Graphics\Effects\Resources\DefaultEffect.fxb" />
+      <None Remove="Graphics\Effects\Resources\DefaultEffect.fx" />
+      <None Remove="Graphics\Effects\Resources\Macros.fxh" />
+      <None Remove="Graphics\Effects\Resources\Structures.fxh" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <EmbeddedResource Include="Graphics\Effects\Resources\DefaultEffect.fxb" />
+        <EmbeddedResource Include="Graphics\Effects\Resources\DefaultEffect.fx" />
+        <EmbeddedResource Include="Graphics\Effects\Resources\Macros.fxh" />
+        <EmbeddedResource Include="Graphics\Effects\Resources\Structures.fxh" />
+    </ItemGroup>
+
     <!-- Allow Test project to access internals -->
     <ItemGroup>
         <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">

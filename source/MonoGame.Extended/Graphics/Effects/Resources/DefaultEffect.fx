@@ -1,4 +1,4 @@
-﻿#include "Macros.fxh"
+#include "Macros.fxh"
 #include "Structures.fxh"
 
 DECLARE_TEXTURE(Texture, 0);
@@ -20,7 +20,7 @@ VertexShaderOutputPosition VertexShaderFunctionPosition(VertexShaderInputPositio
 	return output;
 }
 
-float4 PixelShaderFunctionPosition(VertexShaderOutputPosition input) : SV_Target0
+float4 PixelShaderFunctionPosition(VertexShaderOutputPosition input) : PIXEL_TARGET_SEMANTIC
 {
 	return DiffuseColor;
 }
@@ -33,7 +33,7 @@ VertexShaderOutputPositionTexture VertexShaderFunctionPositionTexture(VertexShad
 	return output;
 }
 
-float4 PixelShaderFunctionPositionTexture(VertexShaderOutputPositionTexture input) : SV_Target0
+float4 PixelShaderFunctionPositionTexture(VertexShaderOutputPositionTexture input) : PIXEL_TARGET_SEMANTIC
 {
 	return SAMPLE_TEXTURE(Texture, input.TextureCoordinate) * DiffuseColor;
 }
@@ -46,7 +46,7 @@ VertexShaderOutputPositionColor VertexShaderFunctionPositionColor(VertexShaderIn
 	return output;
 }
 
-float4 PixelShaderFunctionPositionColor(VertexShaderOutputPositionColor input) : SV_Target0
+float4 PixelShaderFunctionPositionColor(VertexShaderOutputPositionColor input) : PIXEL_TARGET_SEMANTIC
 {
 	return input.Color * DiffuseColor;
 }
@@ -60,7 +60,7 @@ VertexShaderOutputPositionColorTexture VertexShaderFunctionPositionColorTexture(
 	return output;
 }
 
-float4 PixelShaderFunctionPositionColorTexture(VertexShaderOutputPositionColorTexture input) : SV_Target0
+float4 PixelShaderFunctionPositionColorTexture(VertexShaderOutputPositionColorTexture input) : PIXEL_TARGET_SEMANTIC
 {
 	float4 textureColor = SAMPLE_TEXTURE(Texture, input.TextureCoordinate);
 	return textureColor * input.Color * DiffuseColor;
