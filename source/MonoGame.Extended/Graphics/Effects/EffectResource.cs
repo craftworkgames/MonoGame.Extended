@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
@@ -28,7 +28,9 @@ namespace MonoGame.Extended.Graphics.Effects
     {
         private static EffectResource _defaultEffectFna;
         private static EffectResource _defaultEffectDx11;
+        private static EffectResource _defaultEffectDx12;
         private static EffectResource _defaultEffectOgl;
+        private static EffectResource _defaultEffectVk;
 
         /// <summary>
         ///     Gets the <see cref="Effects.DefaultEffect" /> embedded into the MonoGame.Extended.Graphics library.
@@ -43,8 +45,12 @@ namespace MonoGame.Extended.Graphics.Effects
             {
                 case "dx11":
                     return _defaultEffectDx11 ??= new EffectResource("MonoGame.Extended.Graphics.Effects.Resources.DefaultEffect.dx11.mgfxo");
+                case "dx12":
+                    return _defaultEffectDx12 ??= new EffectResource("MonoGame.Extended.Graphics.Effects.Resources.DefaultEffect.dx12.mgfxo");
                 case "ogl":
                     return _defaultEffectOgl ??= new EffectResource("MonoGame.Extended.Graphics.Effects.Resources.DefaultEffect.ogl.mgfxo");
+                case "vk":
+                    return _defaultEffectVk ??= new EffectResource("MonoGame.Extended.Graphics.Effects.Resources.DefaultEffect.vk.mgfxo");
                 default:
                     throw new InvalidOperationException($"Unsupported shader extension '{shaderExtension}'.");
             }
@@ -76,6 +82,10 @@ namespace MonoGame.Extended.Graphics.Effects
                             return "ogl";
                         case 1:
                             return "dx11";
+                        case 2:
+                            return "dx12";
+                        case 80:
+                            return "vk";
                     }
                 }
             }
@@ -85,9 +95,19 @@ namespace MonoGame.Extended.Graphics.Effects
                 return "ogl";
             }
 
-            if (IsDirectXAssembly(graphicsDevice.GetType().Assembly))
+            if (IsDirectX12Assembly(graphicsDevice.GetType().Assembly))
+            {
+                return "dx12";
+            }
+
+            if (IsDirectX11Assembly(graphicsDevice.GetType().Assembly))
             {
                 return "dx11";
+            }
+
+            if (IsVulkanAssembly(graphicsDevice.GetType().Assembly))
+            {
+                return "vk";
             }
 
             foreach (Assembly loadedAssembly in AppDomain.CurrentDomain.GetAssemblies())
@@ -97,9 +117,19 @@ namespace MonoGame.Extended.Graphics.Effects
                     return "ogl";
                 }
 
-                if (IsDirectXAssembly(loadedAssembly))
+                if (IsDirectX12Assembly(loadedAssembly))
+                {
+                    return "dx12";
+                }
+
+                if (IsDirectX11Assembly(loadedAssembly))
                 {
                     return "dx11";
+                }
+
+                if (IsVulkanAssembly(loadedAssembly))
+                {
+                    return "vk";
                 }
             }
 
@@ -122,7 +152,7 @@ namespace MonoGame.Extended.Graphics.Effects
             return assembly.GetType("Microsoft.Xna.Platform.Graphics.ConcreteGraphicsContextGL") != null;
         }
 
-        private static bool IsDirectXAssembly(Assembly assembly)
+        private static bool IsDirectX11Assembly(Assembly assembly)
         {
             string assemblyName = assembly.GetName().Name ?? string.Empty;
             if (assemblyName.Contains("WindowsDX", StringComparison.OrdinalIgnoreCase) ||
@@ -134,6 +164,30 @@ namespace MonoGame.Extended.Graphics.Effects
             return assembly.GetType("Microsoft.Xna.Platform.Graphics.ConcreteGraphicsContextD3D") != null ||
                    assembly.GetType("Microsoft.Xna.Platform.Graphics.ConcreteGraphicsContextDX") != null ||
                    assembly.GetType("Microsoft.Xna.Platform.Graphics.ConcreteGraphicsContextDirectX") != null;
+        }
+
+        private static bool IsDirectX12Assembly(Assembly assembly)
+        {
+            string assemblyName = assembly.GetName().Name ?? string.Empty;
+            if (assemblyName.Contains("WindowsDX12", StringComparison.OrdinalIgnoreCase) ||
+                assemblyName.Contains("DX12", StringComparison.OrdinalIgnoreCase))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        private static bool IsVulkanAssembly(Assembly assembly)
+        {
+            string assemblyName = assembly.GetName().Name ?? string.Empty;
+            if (assemblyName.Contains("DesktopVK", StringComparison.OrdinalIgnoreCase) ||
+                assemblyName.Contains("Vulkan", StringComparison.OrdinalIgnoreCase))
+            {
+                return true;
+            }
+
+            return false;
         }
 
         private readonly string _resourceName;
