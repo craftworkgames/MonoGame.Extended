@@ -15,5 +15,7 @@
 
         <Exec Command="$(MgfxcTool) &quot;%(FxFiles.FullPath)&quot; &quot;$(FxDir)\%(FxFiles.Filename).ogl.mgfxo&quot; /Profile:OpenGL" />
         <Exec Command="$(MgfxcTool) &quot;%(FxFiles.FullPath)&quot; &quot;$(FxDir)\%(FxFiles.Filename).dx11.mgfxo&quot; /Profile:DirectX_11" />
+        <Exec Command="$(MgfxcTool) &quot;%(FxFiles.FullPath)&quot; &quot;$(FxDir)\%(FxFiles.Filename).dx12.mgfxo&quot; /Profile:DirectX_12" />
+        <Exec Command="$(MgfxcTool) &quot;%(FxFiles.FullPath)&quot; &quot;$(FxDir)\%(FxFiles.Filename).vk.mgfxo&quot; /Profile:Vulkan" />
     </Target>
 </Project>
