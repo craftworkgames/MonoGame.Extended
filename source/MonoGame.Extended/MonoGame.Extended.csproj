@@ -5,6 +5,11 @@
         <PackageTags>monogame extended pipeline bmfont tiled texture atlas input viewport fps shapes sprite</PackageTags>
     </PropertyGroup>
 
+    <!--Enable AOT compatibility checks -->
+    <PropertyGroup>
+      <IsAotCompatible>true</IsAotCompatible>
+    </PropertyGroup>
+
     <!-- Remove the following dependency files from view in the Solution Explorer panel -->
     <ItemGroup>
       <None Remove="Graphics\Effects\Resources\DefaultEffect.dx11.mgfxo" />
