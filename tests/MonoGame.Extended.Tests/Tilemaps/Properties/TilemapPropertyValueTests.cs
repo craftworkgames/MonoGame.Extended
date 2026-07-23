@@ -89,6 +89,17 @@ public sealed class TilemapPropertyValueTests
         Assert.Throws<InvalidOperationException>(() => value.AsColor());
     }
 
+    [Fact]
+    public void AsColor_WithColorType_ReturnsOriginalColor()
+    {
+        Color expected = new Color(12, 34, 56, 78);
+        TilemapPropertyValue value = TilemapPropertyValue.CreateColor(expected);
+
+        Color actual = value.AsColor();
+
+        Assert.Equal(expected.PackedValue, actual.PackedValue);
+    }
+
     #endregion
 
     #region AsFile Tests

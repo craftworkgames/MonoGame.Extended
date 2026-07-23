@@ -344,6 +344,8 @@ public sealed class TilemapWorldRenderer : IDisposable
             _graphicsDevice.DrawIndexedPrimitives(
                 PrimitiveType.TriangleList,
                 baseVertex: 0,
+                minVertexIndex: 0,
+                numVertices: model.VertexBuffer.VertexCount,
                 startIndex: 0,
                 primitiveCount: model.PrimitiveCount);
         }

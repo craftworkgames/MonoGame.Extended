@@ -1180,6 +1180,8 @@ public sealed class TilemapRenderer : IDisposable
             _graphicsDevice.DrawIndexedPrimitives(
                 PrimitiveType.TriangleList,
                 baseVertex: 0,
+                minVertexIndex: 0,
+                numVertices: model.VertexBuffer.VertexCount,
                 startIndex: 0,
                 primitiveCount: model.PrimitiveCount);
         }
@@ -1201,7 +1203,13 @@ public sealed class TilemapRenderer : IDisposable
         foreach (EffectPass pass in _effect.CurrentTechnique.Passes)
         {
             pass.Apply();
-            _graphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, 2);
+            _graphicsDevice.DrawIndexedPrimitives(
+                PrimitiveType.TriangleList,
+                baseVertex: 0,
+                minVertexIndex: 0,
+                numVertices: model.VertexBuffer.VertexCount,
+                startIndex: 0,
+                primitiveCount: 2);
         }
 
         _graphicsDevice.SamplerStates[0] = previous;
