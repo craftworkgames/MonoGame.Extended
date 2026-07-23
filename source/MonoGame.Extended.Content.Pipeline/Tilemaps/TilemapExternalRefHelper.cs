@@ -1,7 +1,9 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Content.Pipeline;
 using Microsoft.Xna.Framework.Content.Pipeline.Graphics;
+using Microsoft.Xna.Framework.Content.Pipeline.Processors;
 using MonoGame.Extended.Tilemaps;
+using MonoGame.Extended.Content.Pipeline.Tilemaps.Tiled;
 
 namespace MonoGame.Extended.Content.Pipeline.Tilemaps;
 
@@ -56,7 +58,18 @@ internal static class TilemapExternalRefHelper
         if (item.GetExternalReference<Texture2DContent>(path) == null)
         {
             ContentLogger.Log($"Building texture reference '{path}'");
+
+#if KNI || FNA
+            // KNI and FNA do not use the new external ref calls from MonoGame's new
+            // content builder project
             item.BuildExternalReference<Texture2DContent>(ctx, path);
+#else
+            item.BuildExternalReference<TextureContent, Texture2DContent>(
+                ctx,
+                path,
+                new TextureImporter(),
+                new TextureProcessor());
+#endif
         }
     }
 
@@ -65,7 +78,18 @@ internal static class TilemapExternalRefHelper
         if (item.GetExternalReference<TilemapTilesetData>(path) == null)
         {
             ContentLogger.Log($"Building external tileset reference '{path}'");
+
+#if KNI || FNA
+            // KNI and FNA do not use the new external ref calls from MonoGame's new
+            // content builder project            
             item.BuildExternalReference<TilemapTilesetData>(ctx, path);
+#else
+            item.BuildExternalReference<TilemapTilesetContentItem, TilemapTilesetData>(
+                ctx,
+                path,
+                new TilemapTilesetImporter(),
+                new TilemapTilesetProcessor());
+#endif
         }
     }
 }
