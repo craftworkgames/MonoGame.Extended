@@ -7,21 +7,17 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <None Remove="Graphics\Effects\Resources\DefaultEffect.kni.dx11.mgfxo" />
       <None Remove="Graphics\Effects\Resources\DefaultEffect.fx" />
-      <None Remove="Graphics\Effects\Resources\DefaultEffect.kni.ogl.mgfxo" />
+      <None Remove="Graphics\Effects\Resources\DefaultEffect.knifxo" />
       <None Remove="Graphics\Effects\Resources\Macros.fxh" />
       <None Remove="Graphics\Effects\Resources\Structures.fxh" />
     </ItemGroup>
 
     <ItemGroup>
-        <EmbeddedResource Include="Graphics\Effects\Resources\DefaultEffect.kni.dx11.mgfxo">
-            <LogicalName>MonoGame.Extended.Graphics.Effects.Resources.DefaultEffect.dx11.mgfxo</LogicalName>
+        <EmbeddedResource Include="Graphics\Effects\Resources\DefaultEffect.knifxo">
+            <LogicalName>MonoGame.Extended.Graphics.Effects.Resources.DefaultEffect.fxo</LogicalName>
         </EmbeddedResource>
         <EmbeddedResource Include="Graphics\Effects\Resources\DefaultEffect.fx" />
-        <EmbeddedResource Include="Graphics\Effects\Resources\DefaultEffect.kni.ogl.mgfxo">
-            <LogicalName>MonoGame.Extended.Graphics.Effects.Resources.DefaultEffect.ogl.mgfxo</LogicalName>
-        </EmbeddedResource>
         <EmbeddedResource Include="Graphics\Effects\Resources\Macros.fxh" />
         <EmbeddedResource Include="Graphics\Effects\Resources\Structures.fxh" />
     </ItemGroup>

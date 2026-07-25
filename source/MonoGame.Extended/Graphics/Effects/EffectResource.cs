@@ -26,6 +26,7 @@ namespace MonoGame.Extended.Graphics.Effects
     public class EffectResource
     {
         private static EffectResource _defaultEffectFna;
+        private static EffectResource _defaultEffectKni;
         private static EffectResource _defaultEffectDx11;
         private static EffectResource _defaultEffectDx12;
         private static EffectResource _defaultEffectOgl;
@@ -39,6 +40,8 @@ namespace MonoGame.Extended.Graphics.Effects
         {
 #if FNA
             return _defaultEffectFna ??= new EffectResource("MonoGame.Extended.Graphics.Effects.Resources.DefaultEffect.fxb");
+#elif KNI
+            return _defaultEffectKni ??= new EffectResource("MonoGame.Extended.Graphics.Effects.Resources.DefaultEffect.fxo");
 #else
             string shaderExtension = DetermineShaderExtension(graphicsDevice);
             switch (shaderExtension)
@@ -97,10 +100,6 @@ namespace MonoGame.Extended.Graphics.Effects
                     continue;
                 }
             }
-
-#if KNI
-            return "ogl";
-#endif
 
             throw new InvalidOperationException("Unable to determine the shader profile for the current graphics platform.");
         }

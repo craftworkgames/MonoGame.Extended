@@ -6,12 +6,6 @@ MANIFEST=".config/dotnet-tools.json"
 INPUT="Graphics/Effects/Resources/DefaultEffect.fx"
 OUTPUT_PREFIX="Graphics/Effects/Resources/DefaultEffect"
 
-echo "Switching dotnet-mgfxc to 3.8.5..."
-sed -i.bak \
-    's/"version": "3.8.4"/"version": "3.8.5"/' \
-    "$MANIFEST"
-rm -f "${MANIFEST}.bak"
-
 echo "Restoring .NET tools..."
 dotnet tool restore
 
@@ -20,19 +14,6 @@ dotnet mgfxc "$INPUT" "${OUTPUT_PREFIX}.ogl.mgfxo"  /Profile:OpenGL
 dotnet mgfxc "$INPUT" "${OUTPUT_PREFIX}.dx11.mgfxo" /Profile:DirectX_11
 dotnet mgfxc "$INPUT" "${OUTPUT_PREFIX}.dx12.mgfxo" /Profile:DirectX_12
 dotnet mgfxc "$INPUT" "${OUTPUT_PREFIX}.vk.mgfxo"   /Profile:Vulkan
-
-echo "Switching dotnet-mgfxc to 3.8.4 for KNI compatibility..."
-sed -i.bak \
-    's/"version": "3.8.5"/"version": "3.8.4"/' \
-    "$MANIFEST"
-rm -f "${MANIFEST}.bak"
-
-echo "Restoring .NET tools..."
-dotnet tool restore
-
-echo "Compiling KNI-compatible shaders..."
-dotnet mgfxc "$INPUT" "${OUTPUT_PREFIX}.kni.ogl.mgfxo"  /Profile:OpenGL
-dotnet mgfxc "$INPUT" "${OUTPUT_PREFIX}.kni.dx11.mgfxo" /Profile:DirectX_11
 
 echo "Finding fxc.exe..."
 
@@ -70,13 +51,30 @@ fi
 MSYS2_ARG_CONV_EXCL="*" \
     "$FXC" /Tfx_2_0 /Fo"$WINDOWS_OUTPUT" "$WINDOWS_INPUT"
 
-echo "Switching dotnet-mgfxc back to 3.8.5..."
-sed -i.bak \
-    's/"version": "3.8.4"/"version": "3.8.5"/' \
-    "$MANIFEST"
-rm -f "${MANIFEST}.bak"
+echo "Finding knifxc.exe..."
 
-echo "Restoring .NET tools..."
-dotnet tool restore
+KNIFXC="${KNIFXC:-}"
+
+if [ -z "$KNIFXC" ]; then
+    KNIFXC="$(command -v KNIFXC.exe 2>/dev/null || true)"
+fi
+
+if [ -z "$KNIFXC" ]; then
+    for candidate in /c/Program\ Files\ \(x86\)/KNI/*/Tools/KNIFXC.exe; do
+        if [ -x "$candidate" ]; then
+            KNIFXC="$candidate"
+            break
+        fi
+    done
+fi
+
+if [ -z "$KNIFXC" ]; then
+    echo "Error: Could not find KNIFXC.exe."
+    echo "Set the KNIFXC environment variable to its full path."
+    exit 1
+fi
+
+echo "Compiling KNI-compatible shader..."
+"$KNIFXC" "$INPUT" "${OUTPUT_PREFIX}.knifxo"  /Backend:DirectX11 /Backend:OpenGL /Backend:GLES
 
 echo "Done."
