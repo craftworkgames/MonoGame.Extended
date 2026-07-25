@@ -10,7 +10,7 @@
     <PropertyGroup>
         <Version>6.1.0</Version>
         <MonoGameVersion>3.8.5</MonoGameVersion>
-        <KNIVersion>4.0.9001</KNIVersion>
+        <KNIVersion>4.2.9001</KNIVersion>
     </PropertyGroup>
 
     <PropertyGroup>
