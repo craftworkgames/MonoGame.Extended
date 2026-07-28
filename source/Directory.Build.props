@@ -13,7 +13,7 @@
 
     <!-- MonoGame Framework References (Standard) -->
     <ItemGroup Condition="!$(DefineConstants.Contains('FNA')) AND !$(DefineConstants.Contains('KNI'))">
-        <PackageReference Include="MonoGame.Framework.DesktopGL"
+        <PackageReference Include="MonoGame.Framework.Native"
                           Version="$(MonoGameVersion)"
                           PrivateAssets="All" />
     </ItemGroup>

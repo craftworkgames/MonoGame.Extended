@@ -1,8 +1,8 @@
 using System;
-using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Framework.Utilities;
 
 namespace MonoGame.Extended.Graphics.Effects
 {
@@ -25,12 +25,7 @@ namespace MonoGame.Extended.Graphics.Effects
     /// </remarks>
     public class EffectResource
     {
-        private static EffectResource _defaultEffectFna;
-        private static EffectResource _defaultEffectDx11;
-        private static EffectResource _defaultEffectDx12;
-        private static EffectResource _defaultEffectOgl;
-        private static EffectResource _defaultEffectVk;
-        private static string _detectedShaderProfile;
+        private static EffectResource _defaultEffect;
 
         /// <summary>
         ///     Gets the <see cref="Effects.DefaultEffect" /> embedded into the MonoGame.Extended.Graphics library.
@@ -38,71 +33,24 @@ namespace MonoGame.Extended.Graphics.Effects
         public static EffectResource GetDefaultEffect(GraphicsDevice graphicsDevice)
         {
 #if FNA
-            return _defaultEffectFna ??= new EffectResource("MonoGame.Extended.Graphics.Effects.Resources.DefaultEffect.fxb");
+            return _defaultEffect ??= new EffectResource("MonoGame.Extended.Graphics.Effects.Resources.DefaultEffect.fxb");
+#elif KNI
+            return _defaultEffect ??= new EffectResource("MonoGame.Extended.Graphics.Effects.Resources.DefaultEffect.ogl.mgfxo");
 #else
-            string shaderExtension = DetermineShaderExtension(graphicsDevice);
-            switch (shaderExtension)
+            switch (PlatformInfo.GraphicsBackend)
             {
-                case "dx11":
-                    return _defaultEffectDx11 ??= new EffectResource("MonoGame.Extended.Graphics.Effects.Resources.DefaultEffect.dx11.mgfxo");
-                case "dx12":
-                    return _defaultEffectDx12 ??= new EffectResource("MonoGame.Extended.Graphics.Effects.Resources.DefaultEffect.dx12.mgfxo");
-                case "ogl":
-                    return _defaultEffectOgl ??= new EffectResource("MonoGame.Extended.Graphics.Effects.Resources.DefaultEffect.ogl.mgfxo");
-                case "vk":
-                    return _defaultEffectVk ??= new EffectResource("MonoGame.Extended.Graphics.Effects.Resources.DefaultEffect.vk.mgfxo");
+                case GraphicsBackend.DirectX:
+                    return _defaultEffect ??= new EffectResource("MonoGame.Extended.Graphics.Effects.Resources.DefaultEffect.dx11.mgfxo");
+                case GraphicsBackend.DirectX12:
+                    return _defaultEffect ??= new EffectResource("MonoGame.Extended.Graphics.Effects.Resources.DefaultEffect.dx12.mgfxo");
+                case GraphicsBackend.OpenGL:
+                    return _defaultEffect ??= new EffectResource("MonoGame.Extended.Graphics.Effects.Resources.DefaultEffect.ogl.mgfxo");
+                case GraphicsBackend.Vulkan:
+                    return _defaultEffect ??= new EffectResource("MonoGame.Extended.Graphics.Effects.Resources.DefaultEffect.vk.mgfxo");
                 default:
-                    throw new InvalidOperationException($"Unsupported shader extension '{shaderExtension}'.");
+                    throw new InvalidOperationException($"Unsupported shader extension '{PlatformInfo.GraphicsBackend}'.");
             }
 #endif
-        }
-
-        private static string DetermineShaderExtension(GraphicsDevice graphicsDevice)
-        {
-            ArgumentNullException.ThrowIfNull(graphicsDevice);
-
-            if (_detectedShaderProfile != null)
-            {
-                return _detectedShaderProfile;
-            }
-
-            // Perform a bytecode compatibility test.
-            // As far as I can see, this is the only AOT-compatible approach right now.
-            // TODO: We should revisit this once we have a publicly available ShaderProfile property.
-            string[] profilesToTest = ["dx12", "dx11", "ogl", "vk"];
-            foreach (string profile in profilesToTest)
-            {
-                try
-                {
-                    Debug.WriteLine($"Testing shader profile: {profile}");
-
-                    // Load the embedded resource bytecode for this profile.
-                    string resourceName = $"MonoGame.Extended.Graphics.Effects.Resources.DefaultEffect.{profile}.mgfxo";
-                    byte[] bytecode = new EffectResource(resourceName).Bytecode;
-
-                    // Attempt to create an Effect.
-                    // If the GraphicsDevice is Vulkan, and we feed it OpenGL bytecode, 
-                    // the underlying driver will throw an exception.
-                    Effect testEffect = new Effect(graphicsDevice, bytecode);
-
-                    // If we reach here, the GraphicsDevice successfully parsed the bytecode.
-                    return _detectedShaderProfile ??= profile;
-                }
-                catch
-                {
-                    // Bytecode was rejected by the current graphics backend:
-                    // Try the next possibility.
-                    Debug.WriteLine($"Shader profile was rejected: {profile}");
-
-                    continue;
-                }
-            }
-
-#if KNI
-            return "ogl";
-#endif
-
-            throw new InvalidOperationException("Unable to determine the shader profile for the current graphics platform.");
         }
 
         private readonly string _resourceName;
