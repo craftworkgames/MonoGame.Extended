@@ -2,7 +2,10 @@ using System;
 using System.IO;
 using System.Reflection;
 using Microsoft.Xna.Framework.Graphics;
+
+#if !FNA && !KNI
 using MonoGame.Framework.Utilities;
+#endif
 
 namespace MonoGame.Extended.Graphics.Effects
 {
