@@ -17,13 +17,6 @@ namespace MonoGame.Extended.Tilemaps.LDtk;
 /// </summary>
 public class LDtkJsonParser : ITilemapParser
 {
-    private static readonly JsonSerializerOptions s_jsonOptions = new JsonSerializerOptions
-    {
-        PropertyNameCaseInsensitive = true,
-        PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-        NumberHandling = System.Text.Json.Serialization.JsonNumberHandling.AllowReadingFromString
-    };
-
     private readonly string _baseDirectory;
     private readonly ExternalResourceResolver _resourceResolver;
 
@@ -121,7 +114,7 @@ public class LDtkJsonParser : ITilemapParser
 
         try
         {
-            LDtkProject project = JsonSerializer.Deserialize<LDtkProject>(stream, s_jsonOptions);
+            LDtkProject project = JsonSerializer.Deserialize(stream, LDtkJsonSerializerContext.Default.LDtkProject);
 
             if (project == null)
             {
@@ -454,7 +447,7 @@ public class LDtkJsonParser : ITilemapParser
     private LDtkProject LoadProject(string filePath)
     {
         using Stream stream = OpenProjectStream(filePath);
-        LDtkProject project = JsonSerializer.Deserialize<LDtkProject>(stream, s_jsonOptions);
+        LDtkProject project = JsonSerializer.Deserialize(stream, LDtkJsonSerializerContext.Default.LDtkProject);
 
         if (project == null)
         {
@@ -509,7 +502,7 @@ public class LDtkJsonParser : ITilemapParser
         try
         {
             using Stream stream = _resourceResolver(levelPath);
-            return JsonSerializer.Deserialize<LDtkLevel>(stream, s_jsonOptions);
+            return JsonSerializer.Deserialize(stream, LDtkJsonSerializerContext.Default.LDtkLevel);
         }
         catch (TilemapParseException)
         {
