@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace MonoGame.Extended.Tilemaps.Ogmo.Document;
@@ -21,7 +22,7 @@ internal sealed class OgmoLevel
     public float OffsetY { get; set; }
 
     [JsonPropertyName("values")]
-    public Dictionary<string, object> Values { get; set; }
+    public Dictionary<string, JsonElement> Values { get; set; }
 
     [JsonPropertyName("layers")]
     public List<OgmoLayerData> Layers { get; set; }

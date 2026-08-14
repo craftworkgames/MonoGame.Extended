@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace MonoGame.Extended.Tilemaps.Ogmo.Document;
@@ -12,7 +13,7 @@ internal sealed class OgmoValueTemplate
     public string Definition { get; set; }
 
     [JsonPropertyName("defaults")]
-    public object Defaults { get; set; }
+    public JsonElement? Defaults { get; set; }
 
     [JsonPropertyName("bounded")]
     public bool Bounded { get; set; }

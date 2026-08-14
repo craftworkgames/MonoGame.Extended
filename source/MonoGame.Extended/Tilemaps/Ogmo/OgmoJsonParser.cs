@@ -16,13 +16,6 @@ namespace MonoGame.Extended.Tilemaps.Ogmo;
 /// </summary>
 public sealed class OgmoJsonParser : ITilemapParser
 {
-    private static readonly JsonSerializerOptions s_jsonOptions = new JsonSerializerOptions
-    {
-        PropertyNameCaseInsensitive = true,
-        AllowTrailingCommas = true,
-        ReadCommentHandling = JsonCommentHandling.Skip
-    };
-
     private readonly string _projectPath;
     private readonly string _baseDirectory;
     private readonly ExternalResourceResolver _resourceResolver;
@@ -128,7 +121,7 @@ public sealed class OgmoJsonParser : ITilemapParser
 
         try
         {
-            OgmoLevel level = JsonSerializer.Deserialize<OgmoLevel>(stream, s_jsonOptions);
+            OgmoLevel level = JsonSerializer.Deserialize(stream, OgmoJsonSerializerContext.Default.OgmoLevel);
 
             if (level == null)
             {
@@ -160,7 +153,7 @@ public sealed class OgmoJsonParser : ITilemapParser
         try
         {
             using Stream stream = OpenProjectStream(projectPath);
-            OgmoProject project = JsonSerializer.Deserialize<OgmoProject>(stream, s_jsonOptions);
+            OgmoProject project = JsonSerializer.Deserialize(stream, OgmoJsonSerializerContext.Default.OgmoProject);
 
             if (project == null)
             {
@@ -178,7 +171,7 @@ public sealed class OgmoJsonParser : ITilemapParser
     private OgmoLevel LoadLevel(string levelPath)
     {
         using Stream stream = OpenLevelStream(levelPath);
-        OgmoLevel level = JsonSerializer.Deserialize<OgmoLevel>(stream, s_jsonOptions);
+        OgmoLevel level = JsonSerializer.Deserialize(stream, OgmoJsonSerializerContext.Default.OgmoLevel);
 
         if (level == null)
         {
