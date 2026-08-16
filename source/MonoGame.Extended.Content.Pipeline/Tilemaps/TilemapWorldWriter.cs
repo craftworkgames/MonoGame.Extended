@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework.Content.Pipeline;
 using Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler;
 using MonoGame.Extended.Tilemaps;
+using MonoGame.Extended.Tilemaps.Content;
 
 namespace MonoGame.Extended.Content.Pipeline.Tilemaps;
 
@@ -39,6 +40,6 @@ internal sealed class TilemapWorldWriter : ContentTypeWriter<TilemapWorldContent
     /// <inheritdoc/>
     public override string GetRuntimeReader(TargetPlatform targetPlatform)
     {
-        return "MonoGame.Extended.Tilemaps.Content.TilemapWorldReader, MonoGame.Extended";
+        return TilemapWorldReader.NativeAotRegistrationKey;
     }
 }
