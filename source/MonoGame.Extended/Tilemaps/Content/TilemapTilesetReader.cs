@@ -11,10 +11,10 @@ namespace MonoGame.Extended.Tilemaps.Content
     /// </summary>
     public sealed class TilemapTilesetReader : ContentTypeReader<TilemapTileset>
     {
-#if !FNA && !KNI
         internal static readonly string NativeAotRegistrationKey =
             "MonoGame.Extended.Tilemaps.Content.TilemapTilesetReader, MonoGame.Extended";
 
+#if !FNA && !KNI
         /// <summary>
         /// Registers this <see cref="ContentTypeReader"/> with the <see cref="ContentTypeReaderManager"/>
         /// so it is resolved without reflection.
