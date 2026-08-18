@@ -10,7 +10,7 @@ namespace MonoGame.Extended.Tilemaps.Content;
 public sealed class TilemapWorldReader : ContentTypeReader<TilemapWorld>
 {
     internal static readonly string NativeAotRegistrationKey =
-        "MonoGame.Extended.Tilemaps.Content.TilemapWorldReader, MonoGame.Extended";
+        $"{typeof(TilemapWorldReader).FullName}, {typeof(TilemapWorldReader).Assembly.GetName().Name}";
 
 #if !FNA && !KNI
     /// <summary>
