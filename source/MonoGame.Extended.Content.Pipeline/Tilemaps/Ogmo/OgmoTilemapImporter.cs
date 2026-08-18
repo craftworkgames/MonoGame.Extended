@@ -4,6 +4,7 @@ using System.IO;
 using System.Text.Json;
 using Microsoft.Xna.Framework.Content.Pipeline;
 using MonoGame.Extended.Tilemaps;
+using MonoGame.Extended.Tilemaps.Ogmo;
 using MonoGame.Extended.Tilemaps.Ogmo.Converters;
 using MonoGame.Extended.Tilemaps.Ogmo.Document;
 using MonoGame.Extended.Tilemaps.Parsers;
@@ -25,13 +26,6 @@ namespace MonoGame.Extended.Content.Pipeline.Tilemaps.Ogmo;
 [ContentImporter(".ogmo", DefaultProcessor = "TilemapProcessor", DisplayName = "Ogmo Tilemap Importer - MonoGame.Extended")]
 internal sealed class OgmoTilemapImporter : ContentImporter<TilemapProjectContentItem>
 {
-    private static readonly JsonSerializerOptions s_jsonOptions = new JsonSerializerOptions
-    {
-        PropertyNameCaseInsensitive = true,
-        AllowTrailingCommas = true,
-        ReadCommentHandling = JsonCommentHandling.Skip
-    };
-
     /// <inheritdoc/>
     public override TilemapProjectContentItem Import(string filePath, ContentImporterContext context)
     {
@@ -60,7 +54,7 @@ internal sealed class OgmoTilemapImporter : ContentImporter<TilemapProjectConten
         try
         {
             string json = File.ReadAllText(filePath);
-            OgmoProject project = JsonSerializer.Deserialize<OgmoProject>(json, s_jsonOptions);
+            OgmoProject project = JsonSerializer.Deserialize<OgmoProject>(json, OgmoJsonSerializerContext.Default.OgmoProject);
 
             if (project == null)
             {
@@ -193,7 +187,7 @@ internal sealed class OgmoTilemapImporter : ContentImporter<TilemapProjectConten
         try
         {
             string json = File.ReadAllText(levelFilePath);
-            return JsonSerializer.Deserialize<OgmoLevel>(json, s_jsonOptions);
+            return JsonSerializer.Deserialize<OgmoLevel>(json, OgmoJsonSerializerContext.Default.OgmoLevel);
         }
         catch (JsonException ex)
         {

@@ -9,6 +9,24 @@ namespace MonoGame.Extended.Tilemaps.Content;
 /// </summary>
 public sealed class TilemapWorldReader : ContentTypeReader<TilemapWorld>
 {
+    internal static readonly string NativeAotRegistrationKey =
+        $"{typeof(TilemapWorldReader).FullName}, {typeof(TilemapWorldReader).Assembly.GetName().Name}";
+
+#if !FNA && !KNI
+    /// <summary>
+    /// Registers this <see cref="ContentTypeReader"/> with the <see cref="ContentTypeReaderManager"/>
+    /// so it is resolved without reflection.
+    /// </summary>
+    /// <remarks>
+    /// Call this method once during application startup when publishing with
+    /// <c>PublishAot</c> or <c>PublishTrimmed</c>.
+    /// </remarks>
+    public static void Register() =>
+        ContentTypeReaderManager.AddTypeCreator(
+            NativeAotRegistrationKey,
+            () => new TilemapWorldReader());
+#endif
+
     /// <inheritdoc/>
     protected override TilemapWorld Read(ContentReader reader, TilemapWorld existingInstance)
     {

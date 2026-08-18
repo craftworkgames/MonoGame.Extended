@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 using Microsoft.Xna.Framework.Content.Pipeline;
 using MonoGame.Extended.Tilemaps;
+using MonoGame.Extended.Tilemaps.LDtk;
 using MonoGame.Extended.Tilemaps.LDtk.Converters;
 using MonoGame.Extended.Tilemaps.LDtk.Document;
 using MonoGame.Extended.Tilemaps.Parsers;
@@ -15,13 +15,6 @@ namespace MonoGame.Extended.Content.Pipeline.Tilemaps.LDtk;
 /// </summary>
 internal static class LDtkImportHelper
 {
-    internal static readonly JsonSerializerOptions JsonOptions = new JsonSerializerOptions
-    {
-        PropertyNameCaseInsensitive = true,
-        PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-        NumberHandling = JsonNumberHandling.AllowReadingFromString
-    };
-
     /// <summary>
     /// Loads an LDtk project, registers all asset dependencies, and converts all levels to
     /// format-agnostic <see cref="TilemapData"/>.
@@ -48,7 +41,7 @@ internal static class LDtkImportHelper
         try
         {
             string json = File.ReadAllText(filePath);
-            LDtkProject project = JsonSerializer.Deserialize<LDtkProject>(json, JsonOptions);
+            LDtkProject project = JsonSerializer.Deserialize(json, LDtkJsonSerializerContext.Default.LDtkProject);
 
             if (project == null)
             {
@@ -112,7 +105,7 @@ internal static class LDtkImportHelper
             context.AddDependency(absoluteLevelPath);
 
             string levelJson = File.ReadAllText(absoluteLevelPath);
-            LDtkLevel resolved = JsonSerializer.Deserialize<LDtkLevel>(levelJson, JsonOptions);
+            LDtkLevel resolved = JsonSerializer.Deserialize(levelJson, LDtkJsonSerializerContext.Default.LDtkLevel);
 
             if (resolved != null)
             {

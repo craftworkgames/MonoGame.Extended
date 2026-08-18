@@ -38,7 +38,7 @@ namespace MonoGame.Extended.Graphics.Effects
 #if FNA
             return _defaultEffect ??= new EffectResource("MonoGame.Extended.Graphics.Effects.Resources.DefaultEffect.fxb");
 #elif KNI
-            return _defaultEffect ??= new EffectResource("MonoGame.Extended.Graphics.Effects.Resources.DefaultEffect.ogl.mgfxo");
+            return _defaultEffect ??= new EffectResource("MonoGame.Extended.Graphics.Effects.Resources.DefaultEffect.fxo");
 #else
             switch (PlatformInfo.GraphicsBackend)
             {

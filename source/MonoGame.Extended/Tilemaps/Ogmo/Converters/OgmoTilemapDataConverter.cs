@@ -237,9 +237,9 @@ internal static class OgmoTilemapDataConverter
 
                 if (entity.Values != null)
                 {
-                    foreach (KeyValuePair<string, object> kvp in entity.Values)
+                    foreach (KeyValuePair<string, JsonElement> kvp in entity.Values)
                     {
-                        ConvertCustomValue(obj.Properties, kvp.Key, kvp.Value);
+                        ConvertJsonElement(obj.Properties, kvp.Key, kvp.Value);
                     }
                 }
 
@@ -284,9 +284,9 @@ internal static class OgmoTilemapDataConverter
 
                 if (decal.Values != null)
                 {
-                    foreach (KeyValuePair<string, object> kvp in decal.Values)
+                    foreach (KeyValuePair<string, JsonElement> kvp in decal.Values)
                     {
-                        ConvertCustomValue(obj.Properties, kvp.Key, kvp.Value);
+                        ConvertJsonElement(obj.Properties, kvp.Key, kvp.Value);
                     }
                 }
 
@@ -313,12 +313,12 @@ internal static class OgmoTilemapDataConverter
 
         if (layerData.ArrayMode == 0 && layerData.Grid != null)
         {
-            string gridJson = JsonSerializer.Serialize(layerData.Grid);
+            string gridJson = JsonSerializer.Serialize(layerData.Grid, OgmoJsonSerializerContext.Default.ListString);
             AddStringProperty(result.Properties, "Ogmo_GridValues", gridJson);
         }
         else if (layerData.ArrayMode == 1 && layerData.Grid2D != null)
         {
-            string gridJson = JsonSerializer.Serialize(layerData.Grid2D);
+            string gridJson = JsonSerializer.Serialize(layerData.Grid2D, OgmoJsonSerializerContext.Default.ListListString);
             AddStringProperty(result.Properties, "Ogmo_GridValues", gridJson);
         }
 
@@ -326,7 +326,7 @@ internal static class OgmoTilemapDataConverter
 
         if (template?.Legend != null && template.Legend.Count > 0)
         {
-            string legendJson = JsonSerializer.Serialize(template.Legend);
+            string legendJson = JsonSerializer.Serialize(template.Legend, OgmoJsonSerializerContext.Default.DictionaryStringString);
             AddStringProperty(result.Properties, "Ogmo_GridLegend", legendJson);
         }
 
@@ -347,9 +347,9 @@ internal static class OgmoTilemapDataConverter
 
         if (level.Values != null && level.Values.Count > 0)
         {
-            foreach (KeyValuePair<string, object> kvp in level.Values)
+            foreach (KeyValuePair<string, JsonElement> kvp in level.Values)
             {
-                ConvertCustomValue(data.Properties, $"Level_{kvp.Key}", kvp.Value);
+                ConvertJsonElement(data.Properties, $"Level_{kvp.Key}", kvp.Value);
             }
         }
     }
@@ -573,52 +573,14 @@ internal static class OgmoTilemapDataConverter
 
     #region Custom Value Conversion
 
-    private static void ConvertCustomValue(List<TilemapPropertyData> properties, string key, object value)
-    {
-        switch (value)
-        {
-            case null:
-                AddStringProperty(properties, key, string.Empty);
-                break;
-
-            case string str:
-                AddStringProperty(properties, key, str);
-                break;
-
-            case bool boolValue:
-                AddBoolProperty(properties, key, boolValue);
-                break;
-
-            case int intValue:
-                AddIntProperty(properties, key, intValue);
-                break;
-
-            case long longValue:
-                AddIntProperty(properties, key, (int)longValue);
-                break;
-
-            case float floatValue:
-                AddFloatProperty(properties, key, floatValue);
-                break;
-
-            case double doubleValue:
-                AddFloatProperty(properties, key, (float)doubleValue);
-                break;
-
-            case JsonElement element:
-                ConvertJsonElement(properties, key, element);
-                break;
-
-            default:
-                AddStringProperty(properties, key, value.ToString() ?? string.Empty);
-                break;
-        }
-    }
-
     private static void ConvertJsonElement(List<TilemapPropertyData> properties, string key, JsonElement element)
     {
         switch (element.ValueKind)
         {
+            case JsonValueKind.Null:
+                AddStringProperty(properties, key, string.Empty);
+                break;
+
             case JsonValueKind.True:
                 AddBoolProperty(properties, key, true);
                 break;

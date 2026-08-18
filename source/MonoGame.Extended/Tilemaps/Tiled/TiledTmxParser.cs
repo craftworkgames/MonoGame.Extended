@@ -139,7 +139,7 @@ public class TiledTmxParser : ITilemapParser
                 throw new TilemapParseException("TMX document has no XML root element.");
             }
 
-            return TiledXmlParser.ParseMap(document.Root);
+            return TiledXElementParser.ParseTilemap(document.Root);
         }
         catch (Exception ex)
         {
@@ -175,7 +175,7 @@ public class TiledTmxParser : ITilemapParser
                         throw new TilemapParseException("TSX document has no XML root element.");
                     }
 
-                    tilesetXml = TiledXmlParser.ParseTileset(document.Root);
+                    tilesetXml = TiledXElementParser.ParseTileset(document.Root);
                 }
                 catch (Exception ex)
                 {

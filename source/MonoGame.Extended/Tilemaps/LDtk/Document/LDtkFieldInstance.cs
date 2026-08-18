@@ -19,5 +19,5 @@ internal sealed class LDtkFieldInstance
     public int DefUid { get; set; }
 
     [JsonPropertyName("realEditorValues")]
-    public List<object> RealEditorValues { get; set; } = new List<object>();
+    public List<JsonElement> RealEditorValues { get; set; } = new List<JsonElement>();
 }

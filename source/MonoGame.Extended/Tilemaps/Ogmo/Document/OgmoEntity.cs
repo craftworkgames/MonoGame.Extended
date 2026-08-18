@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace MonoGame.Extended.Tilemaps.Ogmo.Document;
@@ -45,5 +46,5 @@ internal sealed class OgmoEntity
     public List<OgmoVector2> Nodes { get; set; }
 
     [JsonPropertyName("values")]
-    public Dictionary<string, object> Values { get; set; }
+    public Dictionary<string, JsonElement> Values { get; set; }
 }
