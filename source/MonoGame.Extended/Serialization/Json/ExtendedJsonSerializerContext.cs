@@ -1,5 +1,6 @@
 using System.Text.Json.Serialization;
 using Microsoft.Xna.Framework;
+using MonoGame.Extended.Graphics;
 
 namespace MonoGame.Extended.Serialization.Json;
 
@@ -39,6 +40,7 @@ namespace MonoGame.Extended.Serialization.Json;
 [JsonSerializable(typeof(Interval<int>))]
 [JsonSerializable(typeof(Interval<float>))]
 [JsonSerializable(typeof(Interval<HslColor>))]
+[JsonSerializable(typeof(Texture2DAtlas))]
 #endregion MonoGame.Extended Types
 #region Primitive types
 [JsonSerializable(typeof(int))]
