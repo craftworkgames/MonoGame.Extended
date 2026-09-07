@@ -29,6 +29,7 @@ namespace MonoGame.Extended.Serialization.Json;
     })]
 #region MonoGame Framework Types with custom converters
 [JsonSerializable(typeof(Color))]
+[JsonSerializable(typeof(Point))]
 [JsonSerializable(typeof(Vector2))]
 #endregion MonoGame Framework Types with custom converters
 #region MonoGame.Extended Types
@@ -41,6 +42,7 @@ namespace MonoGame.Extended.Serialization.Json;
 [JsonSerializable(typeof(Interval<float>))]
 [JsonSerializable(typeof(Interval<HslColor>))]
 [JsonSerializable(typeof(Texture2DAtlas))]
+[JsonSerializable(typeof(Texture2DRegion))]
 #endregion MonoGame.Extended Types
 #region Primitive types
 [JsonSerializable(typeof(int))]
