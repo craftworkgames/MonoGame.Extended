@@ -1,6 +1,8 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Text.Json.Serialization.Metadata;
 using Microsoft.Xna.Framework.Content;
+using MonoGame.Extended.Content.TexturePacker;
 
 namespace MonoGame.Extended.Serialization.Json;
 
@@ -12,7 +14,11 @@ public static class MonoGameJsonSerializerOptionsProvider
         {
             WriteIndented = true,
             DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
-            PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+            TypeInfoResolver = JsonTypeInfoResolver.Combine(
+                ExtendedJsonSerializerContext.Default,
+                TexturePackerJsonSerializerContext.Default
+            )
         };
 
         options.Converters.Add(new IntervalJsonConverter<int>());
