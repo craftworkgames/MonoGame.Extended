@@ -81,34 +81,59 @@ namespace MonoGame.Extended.Serialization.Json
                     }
                 }
 
-                // TODO: When we get to .NET Standard 2.1 it would be more robust to use
-                // [Path.GetRelativePath](https://docs.microsoft.com/en-us/dotnet/api/system.io.path.getrelativepath?view=netstandard-2.1)
-                var textureName = Path.GetFileNameWithoutExtension(textureProperty);
-                var textureDirectory = Path.GetDirectoryName(textureProperty);
-                var directory = Path.GetDirectoryName(_path);
-                var relativePath = Path.Combine(_contentManager.RootDirectory, directory ?? string.Empty, textureDirectory ?? string.Empty, textureName);
-                var resolvedAssetName = Path.GetFullPath(relativePath);
-                Texture2D texture;
-                try
-                {
-                    texture = _contentManager.Load<Texture2D>(resolvedAssetName);
-                }
-                catch (Exception ex)
+                var (texture, assetName) = LoadTexture(textureProperty);
+
+                return Texture2DAtlas.Create(
+                    assetName,
+                    texture,
+                    regionWidth,
+                    regionHeight);
+            }
+        }
+
+        private (Texture2D Texture, string AssetName) LoadTexture(string textureProperty)
+        {
+            var textureAtlasDirectory = Path.GetDirectoryName(_path) ?? string.Empty;
+            var textureDirectory = Path.GetDirectoryName(textureProperty)?.TrimStart('/', '\\') ?? string.Empty;
+            var textureName = Path.GetFileNameWithoutExtension(textureProperty);
+
+            var rootDirectory = string.IsNullOrEmpty(_contentManager.RootDirectory)
+                ? "."
+                : _contentManager.RootDirectory;
+
+            var fullRoot = Path.GetFullPath(rootDirectory);
+            var fullTexturePath = Path.GetFullPath(Path.Combine(fullRoot, textureAtlasDirectory, textureDirectory, textureName));
+            var resolvedAssetName = Path.GetRelativePath(fullRoot, fullTexturePath).Replace('\\', '/');
+
+            (Texture2D Texture, string AssetName) result;
+
+            try
+            {
+                var texture = _contentManager.Load<Texture2D>(resolvedAssetName);
+                result = (texture, resolvedAssetName);
+            }
+            catch (Exception ex)
+            {
+                var fallbackName = string.IsNullOrEmpty(textureDirectory)
+                    ? textureName
+                    : Path.Combine(textureDirectory, textureName).Replace('\\', '/');
+
+                if (!string.Equals(resolvedAssetName, fallbackName, StringComparison.OrdinalIgnoreCase))
                 {
                     Trace.TraceWarning(
-                        $"Failed to load texture with {nameof(resolvedAssetName)}: {resolvedAssetName}. Attempting to load with {nameof(textureDirectory)}: {textureDirectory} and {nameof(textureName)}: {textureName}. Exception: {ex}");
+                        $"Failed to load texture at resolved path '{resolvedAssetName}'. Attempting fallback path '{fallbackName}'. Exception: {ex.Message}");
 
-                    if (string.IsNullOrEmpty(textureDirectory))
-                    {
-                        texture = _contentManager.Load<Texture2D>(textureName);
-                    }
-                    else
-                    {
-                        texture = _contentManager.Load<Texture2D>(textureDirectory + "/" + textureName);
-                    }
+                    var texture = _contentManager.Load<Texture2D>(fallbackName);
+                    result = (texture, fallbackName);
                 }
-                return Texture2DAtlas.Create(resolvedAssetName, texture, regionWidth, regionHeight);
+                else
+                {
+                    // Bubble up the original exception if no fallback was attempted.
+                    throw;
+                }
             }
+
+            return result;
         }
 
         /// <inheritdoc />
