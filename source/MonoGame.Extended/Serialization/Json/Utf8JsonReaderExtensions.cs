@@ -75,7 +75,7 @@ public static class Utf8JsonReaderExtensions
     {
         var value = JsonSerializer.Deserialize(ref reader, typeInfo);
 
-        return [value!];
+        return [value];
     }
 
     private static T[] ReadAsJArray<T>(this ref Utf8JsonReader reader, JsonTypeInfo<T> typeInfo)
@@ -88,7 +88,7 @@ public static class Utf8JsonReaderExtensions
                 break;
             }
 
-            items.Add(JsonSerializer.Deserialize(ref reader, typeInfo)!);
+            items.Add(JsonSerializer.Deserialize(ref reader, typeInfo));
         }
 
         return [.. items];
@@ -166,7 +166,7 @@ public static class Utf8JsonReaderExtensions
                 break;
             }
 
-            items.Add(JsonSerializer.Deserialize<T>(ref reader, options)!);
+            items.Add(JsonSerializer.Deserialize<T>(ref reader, options));
         }
 
         return [.. items];

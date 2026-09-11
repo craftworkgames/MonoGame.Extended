@@ -83,6 +83,6 @@ namespace MonoGame.Extended.Content.ContentReaders
         [UnconditionalSuppressMessage("Trimming",
             "IL2026:RequiresUnreferencedCode",
             Justification = "Fallback for JIT scenarios when registered without JsonTypeInfo.")]
-        private static T? LegacyDeserialize(string json) => JsonSerializer.Deserialize<T>(json)!;
+        private static T? LegacyDeserialize(string json) => JsonSerializer.Deserialize<T>(json);
     }
 }

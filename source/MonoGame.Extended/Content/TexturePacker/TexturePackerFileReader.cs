@@ -18,6 +18,6 @@ internal static class TexturePackerFileReader
     internal static TexturePackerFileContent Read(Stream stream)
     {
         var tpFile = JsonSerializer.Deserialize(stream, TexturePackerJsonSerializerContext.Default.TexturePackerFileContent);
-        return tpFile!;
+        return tpFile;
     }
 }

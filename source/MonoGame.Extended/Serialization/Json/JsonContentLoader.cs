@@ -32,7 +32,7 @@ namespace MonoGame.Extended.Serialization.Json
         {
             using var stream = contentManager.OpenStream(path);
 
-            return JsonSerializer.Deserialize(stream, _typeInfo)!;
+            return JsonSerializer.Deserialize(stream, _typeInfo);
         }
     }
 }
